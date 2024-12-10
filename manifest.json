@@ -4,11 +4,11 @@
   "version": "1.0",
   "description": "Checks if companies on LinkedIn are recognized sponsors in the Netherlands",
   "permissions": [
-    "activeTab",
-    "storage"
+    "storage",
+    "activeTab"
   ],
   "host_permissions": [
-    "*://*.linkedin.com/*"
+    "https://ind.nl/*"
   ],
   "action": {
     "default_popup": "popup.html",
@@ -26,6 +26,6 @@
   ],
   "web_accessible_resources": [{
     "resources": ["sponsors.json"],
-    "matches": ["*://*.linkedin.com/*"]
+    "matches": ["<all_urls>"]
   }]
 } 

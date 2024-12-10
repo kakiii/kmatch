@@ -71,20 +71,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         jobElement.className = `job-item ${job.isSponsor ? 'sponsor' : 'not-sponsor'}`;
         
         jobElement.innerHTML = `
-          <div class="job-header">
-            <div class="company-info">
-              <strong>${cleanCompanyName}</strong>
-            </div>
-          </div>
-          <div class="job-title">
-            ${roleType}
-            ${job.isEnglish ? '<span class="en-badge">EN</span>' : ''}
-          </div>
-          <div class="post-info">
-            ${job.postTime ? `<span class="post-time">${job.postTime}</span>` : ''}
-            ${job.applicants ? `<span class="applicants">${job.applicants}</span>` : ''}
-          </div>
-        `;
+  <div class="job-header">
+    <div class="company-info">
+      <strong>${cleanCompanyName}</strong>
+      ${job.isEnglish ? '<span class="en-badge">EN</span>' : ''}
+    </div>
+  </div>
+  <div class="job-title">
+    ${roleType}
+  </div>
+  <div class="post-info">
+    ${job.postTime ? `<span class="post-time">${job.postTime}</span>` : ''}
+    ${job.applicants ? `<span class="applicants">${job.applicants}</span>` : ''}
+  </div>
+`;
         
         jobElement.addEventListener('click', () => {
           // Get the job URL from the job object

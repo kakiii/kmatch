@@ -68,19 +68,28 @@ function checkIfSponsor(companyName) {
       return true;
     }
 
-    // Check cleaned name matches
+    // Check cleaned name matches - but only if it's a whole word match
     const cleanBaseName = cleanCompanyName(baseName);
-    if (cleanName === cleanBaseName || cleanName.includes(cleanBaseName) || cleanBaseName.includes(cleanName)) {
+    const cleanNameWords = cleanName.split(' ');
+    const baseNameWords = cleanBaseName.split(' ');
+    
+    // Only consider it a match if all base name words are found as complete words
+    const isFullMatch = baseNameWords.every(baseWord => 
+      cleanNameWords.some(word => word === baseWord)
+    );
+
+    if (isFullMatch) {
       console.log(`Clean match found: "${cleanName}" matches base name "${baseName}"`);
       return true;
     }
 
-    // Check variations with cleaned names
+    // Check variations with cleaned names - using whole word matching
     const matchedVariation = variations.some(variant => {
       const cleanVariant = cleanCompanyName(variant);
-      return cleanName === cleanVariant || 
-             cleanName.includes(cleanVariant) || 
-             cleanVariant.includes(cleanName);
+      const variantWords = cleanVariant.split(' ');
+      return variantWords.every(variantWord => 
+        cleanNameWords.some(word => word === variantWord)
+      );
     });
 
     if (matchedVariation) {
@@ -158,15 +167,12 @@ function getAllJobsOnPage() {
   console.log('Found job cards:', jobCards.length);
 
   jobCards.forEach(card => {
-    // Get all possible job ID attributes
     const jobId = card.getAttribute('data-job-id') || 
                  card.getAttribute('data-occludable-job-id');
     
-    // Get the job link and extract ID from URL if needed
     const jobLink = card.querySelector('a[href*="/jobs/view/"]');
     const urlJobId = jobLink?.href.match(/\/view\/(\d+)/)?.[1];
     
-    // Use whichever job ID we found
     const finalJobId = jobId || urlJobId;
 
     const companyElement = card.querySelector([
@@ -183,14 +189,25 @@ function getAllJobsOnPage() {
       '[data-tracking-control-name="public_jobs_jserp_job_link"]'
     ].join(', '));
 
+    // Add employment type selector
+    const employmentTypeElement = card.querySelector([
+      '.job-card-container__metadata-wrapper',
+      '.job-card-container__metadata-item',
+      '.job-search-card__metadata-wrapper span',
+      '[data-tracking-control-name="public_jobs_jserp_job_type"]'
+    ].join(', '));
+
     if (companyElement && titleElement && finalJobId) {
       const fullCompanyName = companyElement.textContent.trim();
       const companyName = fullCompanyName.split('·')[0].trim();
+      const jobTitle = titleElement.textContent.trim();
+      const employmentType = employmentTypeElement ? employmentTypeElement.textContent.trim() : '';
       
       jobs.push({
         companyName: fullCompanyName,
         cleanCompanyName: companyName,
-        jobTitle: titleElement.textContent.trim(),
+        jobTitle,
+        employmentType,
         jobId: finalJobId,
         jobUrl: jobLink?.href || `https://www.linkedin.com/jobs/view/${finalJobId}/`,
         isSponsor: checkIfSponsor(companyName)
@@ -199,7 +216,8 @@ function getAllJobsOnPage() {
       console.log('Added job:', {
         company: companyName,
         id: finalJobId,
-        title: titleElement.textContent.trim()
+        title: jobTitle,
+        type: employmentType
       });
     }
   });
@@ -348,7 +366,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
 
       if (companyElement && titleElement) {
-        const companyName = companyElement.textContent.trim();
+        const fullCompanyName = companyElement.textContent.trim();
+        const companyName = fullCompanyName.split('·')[0].trim();
         const jobTitle = titleElement.textContent.trim();
         const url = titleElement.href || window.location.href;
         

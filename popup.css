@@ -1,0 +1,38 @@
+.job-item {
+    padding: 8px 10px;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer;
+  }
+  
+  .job-header {
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+    color: #000;
+  }
+  
+  .job-header strong {
+    font-weight: 700;  /* Even bolder */
+  }
+  
+  .job-details {
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #666;
+  }
+  
+  .sponsor {
+    background-color: #e6f3ea;
+  }
+  
+  .not-sponsor {
+    background-color: #fce8e8;
+  }
+  
+  .job-item:hover {
+    filter: brightness(0.95);
+  }

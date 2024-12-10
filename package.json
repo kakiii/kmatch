@@ -1,0 +1,16 @@
+{
+  "name": "dutch-km-",
+  "version": "1.0.0",
+  "main": "content.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "puppeteer": "^23.10.2",
+    "sharp": "^0.33.5"
+  }
+}

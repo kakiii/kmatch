@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Dutch Visa Sponsor Checker",
+  "version": "1.0",
+  "description": "Checks if companies on LinkedIn are recognized sponsors in the Netherlands",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.linkedin.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.linkedin.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [{
+    "resources": ["sponsors.json"],
+    "matches": ["*://*.linkedin.com/*"]
+  }]
+} 

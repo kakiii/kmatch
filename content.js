@@ -435,17 +435,88 @@ function injectStyles() {
       background-color: rgb(230 243 234) !important;
       transition: background-color 0.5s !important;
     }
+    
+    .language-indicator {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #0a66c2;
+      color: white;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 2px 4px;
+      border-radius: 3px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
   `;
   document.head.appendChild(style);
 }
 
+function isEnglishText(text) {
+  // Common Dutch words that would indicate non-English content
+  const dutchWords = [
+    'wij', 'zijn', 'zoeken', 'voor', 'een', 'met', 'het', 'van', 'naar',
+    'functie', 'werkzaamheden', 'taken', 'vereisten', 'over', 'ons', 'bij',
+    'stage', 'medewerker', 'stagiair', 'vacature', 'afstuderen', 'ervaring',
+    'opleiding', 'kennis', 'werk', 'bedrijf', 'solliciteren', 'tussen', 'jaar',
+    'uur', 'werken', 'binnen', 'buiten', 'door', 'deze', 'daar', 'kunnen',
+    'moet', 'zal', 'wordt', 'worden', 'als', 'maar', 'wat', 'hoe', 'waarom',
+    'wanneer', 'waar', 'wie', 'welke', 'enkele', 'veel', 'meer', 'minder'
+  ];
+  
+  const lowerText = text.toLowerCase();
+  const dutchWordCount = dutchWords.filter(word => {
+    const regex = new RegExp(`\\b${word}\\b`, 'g');
+    return lowerText.match(regex);
+  }).length;
+  
+  // If we find more than 2 Dutch words, it's likely a Dutch text
+  return dutchWordCount < 3;
+}
+
 async function styleJobCardsWithSponsorship() {
-  // Target both the container and the list item
   const jobCards = document.querySelectorAll('[data-job-id]');
-  console.log('Found job cards:', jobCards.length);
   
   for (const card of jobCards) {
-    // Get company name from multiple possible selectors
+    const titleElement = card.querySelector([
+      '.job-card-list__title',
+      '.job-card-container__link',
+      'a[href*="/jobs/view/"]'
+    ].join(', '));
+
+    if (!titleElement) continue;
+
+    // Check if English indicator already exists
+    if (!card.querySelector('.language-indicator')) {
+      titleElement.addEventListener('click', () => {
+        // Try multiple times to find the description panel
+        let attempts = 0;
+        const checkDescription = () => {
+          const firstParagraph = document.querySelector('.jobs-description p');
+          
+          if (firstParagraph) {
+            const paragraphText = firstParagraph.textContent.trim();
+            if (isEnglishText(paragraphText)) {
+              const indicator = document.createElement('span');
+              indicator.className = 'language-indicator';
+              indicator.textContent = 'EN';
+              
+              // Try to insert after the title text
+              const titleTextElement = titleElement.querySelector('strong') || titleElement;
+              titleTextElement.appendChild(indicator);
+            }
+          } else if (attempts < 5) {
+            attempts++;
+            setTimeout(checkDescription, 500);
+          }
+        };
+        
+        setTimeout(checkDescription, 500);
+      });
+    }
+    
+    // Existing sponsorship logic...
     const companyElement = card.querySelector([
       '.job-card-container__company-name',
       '.artdeco-entity-lockup__subtitle',
@@ -454,30 +525,32 @@ async function styleJobCardsWithSponsorship() {
       '[data-tracking-control-name="public_jobs_company_name"]'
     ].join(', '));
 
-    if (!companyElement) continue;
+    if (companyElement) {
+      const fullCompanyName = companyElement.textContent;
+      const companyName = fullCompanyName.split('·')[0].trim();
+      
+      const isSponsor = await checkIfSponsor(companyName);
+      if (isSponsor) {
+        // Existing sponsorship background styling
+        const elementsToStyle = [
+          card,
+          card.closest('.job-card-container'),
+          card.closest('.jobs-search-results__list-item'),
+          card.querySelector('.job-card-list__entity-lockup'),
+          card.querySelector('.artdeco-entity-lockup')
+        ].filter(Boolean);
 
-    const fullCompanyName = companyElement.textContent;
-    const companyName = fullCompanyName.split('·')[0].trim();
-    
-    console.log('Checking company:', companyName);
-    
-    const isSponsor = await checkIfSponsor(companyName);
-    console.log('Is sponsor:', isSponsor, 'for', companyName);
+        elementsToStyle.forEach(element => {
+          element.classList.add('visa-sponsor-background');
+        });
 
-    if (isSponsor) {
-      // Apply to all possible elements that need the background
-      const elementsToStyle = [
-        card,
-        card.closest('.job-card-container'),
-        card.closest('.jobs-search-results__list-item'),
-        card.querySelector('.job-card-list__entity-lockup'),
-        card.querySelector('.artdeco-entity-lockup')
-      ].filter(Boolean);
-
-      elementsToStyle.forEach(element => {
-        element.classList.add('visa-sponsor-background');
-        console.log('Added style to element for', companyName);
-      });
+        // Modify only the text content if strong element exists
+        const strongElement = titleElement.querySelector('strong');
+        if (strongElement && !strongElement.textContent.includes('[in EN]')) {
+          const currentText = strongElement.textContent;
+          strongElement.textContent = `[in EN] ${currentText}`;
+        }
+      }
     }
   }
 }

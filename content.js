@@ -367,7 +367,9 @@ function checkEnglishWords(text) {
     'arts',
     'therapie',
     'marketeer',
-    'communicatiespecialist'
+    'communicatiespecialist',
+    'strategie',
+    'stafafdelingen'
   ];
 
   const text_lower = text.toLowerCase()

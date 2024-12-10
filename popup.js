@@ -2,7 +2,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   
   if (!tab.url.includes('linkedin.com')) {
-    document.getElementById('summary').textContent = 'Please visit LinkedIn to use this extension.';
+    const summaryElement = document.getElementById('summary');
+
+    // Create the message and link
+    const message = 'Please visit LinkedIn to use this extension.';
+    const sponsorListLink = 'https://ind.nl/en/public-register-recognised-sponsors/public-register-regular-labour-and-highly-skilled-migrants';
+    const linkText = 'Complete sponsor list';
+
+    // Set the innerHTML with proper formatting
+    summaryElement.innerHTML = `
+      <p>${message}</p>
+      <p>${linkText}: <a href="${sponsorListLink}" target="_blank">${sponsorListLink}</a></p>
+    `;
     return;
   }
 

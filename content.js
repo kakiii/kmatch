@@ -36,6 +36,9 @@ const recognizedSponsors = new Map([
   ['oracle', ['Oracle Nederland B.V.', 'Oracle Corporation', 'Oracle', 'Oracle Netherlands']]
 ]);
 
+// Add this at the top with other constants
+const jobLanguageCache = new Map();
+
 function cleanCompanyName(name) {
   if (!name) return '';
   
@@ -454,72 +457,63 @@ function injectStyles() {
 }
 
 function isEnglishText(text) {
-  // Common Dutch words that would indicate non-English content
-  const dutchWords = [
-    'wij', 'zijn', 'zoeken', 'voor', 'een', 'met', 'het', 'van', 'naar',
-    'functie', 'werkzaamheden', 'taken', 'vereisten', 'over', 'ons', 'bij',
-    'stage', 'medewerker', 'stagiair', 'vacature', 'afstuderen', 'ervaring',
-    'opleiding', 'kennis', 'werk', 'bedrijf', 'solliciteren', 'tussen', 'jaar',
-    'uur', 'werken', 'binnen', 'buiten', 'door', 'deze', 'daar', 'kunnen',
-    'moet', 'zal', 'wordt', 'worden', 'als', 'maar', 'wat', 'hoe', 'waarom',
-    'wanneer', 'waar', 'wie', 'welke', 'enkele', 'veel', 'meer', 'minder'
+  // Common English job title words
+  const englishPatterns = [
+    /\b(senior|junior|lead|manager|engineer|developer|software|data|analyst|specialist|consultant|architect)\b/gi,
+    /\b(full.?stack|front.?end|back.?end|dev.?ops|product|project|sales|marketing|business)\b/gi,
+    /\b(coordinator|assistant|director|head|chief|officer|cto|ceo|cfo|vp)\b/gi
   ];
+
+  // Common Dutch job title words
+  const dutchPatterns = [
+    /\b(medewerker|adviseur|verkoper|administratief|beheerder|ondersteuning|verkoop)\b/gi,
+    /\b(leider|hoofd|directeur|ontwikkelaar|deskundige|consultant|specialist)\b/gi,
+    /\b(stagiair|ervaren|beginnend|teamleider|projectleider)\b/gi
+  ];
+
+  const englishCount = englishPatterns.reduce((count, pattern) => 
+    count + (text.match(pattern) || []).length, 0);
+  const dutchCount = dutchPatterns.reduce((count, pattern) => 
+    count + (text.match(pattern) || []).length, 0);
+
+  console.log(`Title language scores - English: ${englishCount}, Dutch: ${dutchCount}`);
   
-  const lowerText = text.toLowerCase();
-  const dutchWordCount = dutchWords.filter(word => {
-    const regex = new RegExp(`\\b${word}\\b`, 'g');
-    return lowerText.match(regex);
-  }).length;
-  
-  // If we find more than 2 Dutch words, it's likely a Dutch text
-  return dutchWordCount < 3;
+  return englishCount > dutchCount;
 }
 
 async function styleJobCardsWithSponsorship() {
-  const jobCards = document.querySelectorAll('[data-job-id]');
-  
+  const jobCards = document.querySelectorAll([
+    '[data-job-id]',
+    '.job-card-container',
+    '.jobs-search-results__list-item'
+  ].join(', '));
+
   for (const card of jobCards) {
+    // Language check
     const titleElement = card.querySelector([
       '.job-card-list__title',
       '.job-card-container__link',
-      'a[href*="/jobs/view/"]'
+      'a[href*="/jobs/view/"]',
+      '.jobs-unified-top-card__job-title'
     ].join(', '));
 
-    if (!titleElement) continue;
-
-    // Check if English indicator already exists
-    if (!card.querySelector('.language-indicator')) {
-      titleElement.addEventListener('click', () => {
-        // Try multiple times to find the description panel
-        let attempts = 0;
-        const checkDescription = () => {
-          const firstParagraph = document.querySelector('.jobs-description p');
+    if (titleElement) {
+      const titleText = titleElement.textContent.trim();
+      if (isEnglishText(titleText)) {
+        if (!card.querySelector('.language-indicator')) {
+          const indicator = document.createElement('span');
+          indicator.className = 'language-indicator';
+          indicator.textContent = 'EN';
           
-          if (firstParagraph) {
-            const paragraphText = firstParagraph.textContent.trim();
-            if (isEnglishText(paragraphText)) {
-              const indicator = document.createElement('span');
-              indicator.className = 'language-indicator';
-              indicator.textContent = 'EN';
-              
-              // Try to insert after the title text
-              const titleTextElement = titleElement.querySelector('strong') || titleElement;
-              titleTextElement.appendChild(indicator);
-            }
-          } else if (attempts < 5) {
-            attempts++;
-            setTimeout(checkDescription, 500);
-          }
-        };
-        
-        setTimeout(checkDescription, 500);
-      });
+          const titleTextElement = titleElement.querySelector('strong') || titleElement;
+          titleTextElement.appendChild(indicator);
+        }
+      }
     }
-    
-    // Existing sponsorship logic...
+
+    // Sponsorship check
     const companyElement = card.querySelector([
       '.job-card-container__company-name',
-      '.artdeco-entity-lockup__subtitle',
       '.job-card-container__primary-description',
       '.company-name',
       '[data-tracking-control-name="public_jobs_company_name"]'
@@ -529,62 +523,39 @@ async function styleJobCardsWithSponsorship() {
       const fullCompanyName = companyElement.textContent;
       const companyName = fullCompanyName.split('·')[0].trim();
       
-      const isSponsor = await checkIfSponsor(companyName);
-      if (isSponsor) {
-        // Existing sponsorship background styling
-        const elementsToStyle = [
-          card,
-          card.closest('.job-card-container'),
-          card.closest('.jobs-search-results__list-item'),
-          card.querySelector('.job-card-list__entity-lockup'),
-          card.querySelector('.artdeco-entity-lockup')
-        ].filter(Boolean);
-
-        elementsToStyle.forEach(element => {
-          element.classList.add('visa-sponsor-background');
-        });
-
-        // Modify only the text content if strong element exists
-        const strongElement = titleElement.querySelector('strong');
-        if (strongElement && !strongElement.textContent.includes('[in EN]')) {
-          const currentText = strongElement.textContent;
-          strongElement.textContent = `[in EN] ${currentText}`;
+      if (checkIfSponsor(companyName)) {
+        console.log('Found sponsor company:', companyName);
+        const mainContainer = card.closest('.jobs-search-results__list-item');
+        if (mainContainer) {
+          console.log('Applying style to:', mainContainer);
+          mainContainer.style = `
+            background-color: rgb(230 243 234) !important;
+            background: rgb(230 243 234) !important;
+          `;
         }
       }
     }
   }
 }
 
-// Inject styles immediately
+// Make sure styles are injected
 injectStyles();
 
-// Initial styling
+// Initial call
 styleJobCardsWithSponsorship();
 
-// Observer setup
-const observer = new MutationObserver((mutations) => {
-  for (const mutation of mutations) {
-    if (mutation.addedNodes.length > 0) {
-      styleJobCardsWithSponsorship();
-      break;
-    }
-  }
+// Set up observers
+const observer = new MutationObserver(() => {
+  styleJobCardsWithSponsorship();
 });
 
-// Start observing with a more specific target
-const jobListContainer = document.querySelector('.jobs-search-results__list');
-if (jobListContainer) {
-  observer.observe(jobListContainer, {
-    childList: true,
-    subtree: true
-  });
+// Observe both the list and body
+const jobsList = document.querySelector('.jobs-search-results__list');
+if (jobsList) {
+  observer.observe(jobsList, { childList: true, subtree: true });
 }
 
-// Also observe body for dynamic loading
-observer.observe(document.body, {
-  childList: true,
-  subtree: true
-});
+observer.observe(document.body, { childList: true, subtree: true });
 
 // URL change detection
 let lastUrl = location.href;

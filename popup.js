@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const sponsorJobs = response.jobs.filter(job => job.isSponsor);
       
       document.getElementById('summary').textContent = 
-        `Found ${sponsorJobs.length} out of ${response.jobs.length} companies with visa sponsorship`;
+        `Found ${sponsorJobs.length} out of ${response.jobs.length} jobs in this page with visa sponsorship`;
 
       const companyListElement = document.getElementById('company-list');
       response.jobs.forEach((job, index) => {

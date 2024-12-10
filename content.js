@@ -102,7 +102,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           companyName,
           jobTitle,
           isSponsor: checkIfSponsor(companyName),
-          url
+          url,
+          isEnglish: isEnglishText(jobTitle, card)
         });
       } else {
         console.log('Missing elements:', {
@@ -364,7 +365,9 @@ function checkEnglishWords(text) {
     'medisch',
     'zorg',
     'arts',
-    'therapie'
+    'therapie',
+    'marketeer',
+    'communicatiespecialist'
   ];
 
   const text_lower = text.toLowerCase()

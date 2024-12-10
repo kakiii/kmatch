@@ -30,9 +30,15 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="job-title">${job.jobTitle}</div>
         `;
         
-        // Add click handler to navigate to job
+        // Add click handler to scroll to job
         jobElement.addEventListener('click', () => {
-          chrome.tabs.create({ url: job.url });
+          // Send message to content script to scroll to the job
+          chrome.tabs.sendMessage(tab.id, {
+            action: "scrollToJob",
+            jobData: job
+          });
+          // Optionally close the popup
+          window.close();
         });
         
         companyListElement.appendChild(jobElement);

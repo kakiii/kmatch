@@ -144,9 +144,143 @@ function processPage() {
   });
 }
 
-// Handle messages from popup
+// Update the getAllJobsOnPage function to focus on jobIds
+function getAllJobsOnPage() {
+  const jobs = [];
+  
+  const jobCards = document.querySelectorAll([
+    '.job-card-container',
+    '.jobs-search-results__list-item',
+    '[data-job-id]',
+    '.jobs-search-result-item'
+  ].join(', '));
+  
+  console.log('Found job cards:', jobCards.length);
+
+  jobCards.forEach(card => {
+    // Get all possible job ID attributes
+    const jobId = card.getAttribute('data-job-id') || 
+                 card.getAttribute('data-occludable-job-id');
+    
+    // Get the job link and extract ID from URL if needed
+    const jobLink = card.querySelector('a[href*="/jobs/view/"]');
+    const urlJobId = jobLink?.href.match(/\/view\/(\d+)/)?.[1];
+    
+    // Use whichever job ID we found
+    const finalJobId = jobId || urlJobId;
+
+    const companyElement = card.querySelector([
+      '.job-card-container__company-name',
+      '.job-card-container__primary-description',
+      '.company-name',
+      '[data-tracking-control-name="public_jobs_company_name"]'
+    ].join(', '));
+    
+    const titleElement = card.querySelector([
+      '.job-card-container__link',
+      '.job-card-list__title',
+      '.jobs-unified-top-card__job-title',
+      '[data-tracking-control-name="public_jobs_jserp_job_link"]'
+    ].join(', '));
+
+    if (companyElement && titleElement && finalJobId) {
+      const fullCompanyName = companyElement.textContent.trim();
+      const companyName = fullCompanyName.split('·')[0].trim();
+      
+      jobs.push({
+        companyName: fullCompanyName,
+        cleanCompanyName: companyName,
+        jobTitle: titleElement.textContent.trim(),
+        jobId: finalJobId,
+        jobUrl: jobLink?.href || `https://www.linkedin.com/jobs/view/${finalJobId}/`,
+        isSponsor: checkIfSponsor(companyName)
+      });
+      
+      console.log('Added job:', {
+        company: companyName,
+        id: finalJobId,
+        title: titleElement.textContent.trim()
+      });
+    }
+  });
+
+  return jobs;
+}
+
+// Update the message listener for scrollToJob
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log('Received message:', request.action);
+  if (request.action === "scrollToJob") {
+    const { jobData } = request;
+    console.log('Requested job data:', jobData);
+
+    // Extract jobId from the URL if it's provided
+    let targetJobId = jobData.jobId;
+    if (!targetJobId && jobData.url) {
+      targetJobId = jobData.url.match(/\/view\/(\d+)/)?.[1];
+    }
+
+    if (targetJobId) {
+      console.log('Target job ID:', targetJobId);
+
+      // Update the URL with the new job ID
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set('currentJobId', targetJobId);
+      
+      // Use replaceState to update URL without navigation
+      window.history.replaceState({}, '', currentUrl.toString());
+
+      // Find the job card using the ID
+      const selectors = [
+        `[data-job-id="${targetJobId}"]`,
+        `[data-occludable-job-id="${targetJobId}"]`,
+        `a[href*="/jobs/view/${targetJobId}"]`
+      ];
+
+      let jobElement = null;
+      for (const selector of selectors) {
+        jobElement = document.querySelector(selector);
+        if (jobElement) {
+          if (!jobElement.tagName.toLowerCase() === 'a') {
+            jobElement = jobElement.closest('.job-card-container') || jobElement;
+          }
+          break;
+        }
+      }
+
+      if (jobElement) {
+        console.log('Found job element:', jobElement);
+
+        // Scroll the element into view
+        jobElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Highlight the element
+        const highlightElement = jobElement.closest('.job-card-container') || jobElement;
+        highlightElement.style.backgroundColor = '#f0f7ff';
+        highlightElement.style.transition = 'background-color 0.5s';
+
+        // Find and click the job link
+        const clickableElement = jobElement.tagName.toLowerCase() === 'a' ? 
+                               jobElement : 
+                               jobElement.querySelector('a[href*="/jobs/view/"]');
+
+        if (clickableElement) {
+          console.log('Clicking element:', clickableElement);
+          clickableElement.click();
+        }
+
+        // Remove highlight after delay
+        setTimeout(() => {
+          highlightElement.style.backgroundColor = '';
+        }, 2000);
+      } else {
+        console.log('Job element not found');
+      }
+    } else {
+      console.log('No job ID found');
+    }
+
+    return true;
+  }
 
   if (request.action === "getJobsInfo") {
     const jobs = [];

@@ -42,14 +42,11 @@ const jobLanguageCache = new Map();
 function cleanCompanyName(name) {
   if (!name) return '';
   
-  const cleaned = name.toLowerCase()
+  return name.toLowerCase()
     .replace(/b\.v\.|n\.v\.|inc\.|corp\.|corporation|ltd\.|holding|netherlands|trading|group|international/g, '')
     .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '')
     .replace(/\s+/g, ' ')
     .trim();
-    
-  console.log(`Cleaning company name: "${name}" -> "${cleaned}"`);
-  return cleaned;
 }
 
 function checkIfSponsor(companyName) {
@@ -58,35 +55,26 @@ function checkIfSponsor(companyName) {
   const cleanName = cleanCompanyName(companyName);
   const originalName = companyName.trim();
 
-  // Debug log
-  console.log(`Checking company: "${originalName}" (cleaned: "${cleanName}")`);
-
   for (const [baseName, variations] of recognizedSponsors) {
     // Check exact matches first (case insensitive)
     if (variations.some(variant => 
       variant.toLowerCase() === originalName.toLowerCase() ||
       originalName.toLowerCase().includes(variant.toLowerCase())
     )) {
-      console.log(`Match found: "${originalName}" matches a variation of "${baseName}"`);
       return true;
     }
 
-    // Check cleaned name matches - but only if it's a whole word match
+    // Rest of the function stays the same, just remove console.logs
     const cleanBaseName = cleanCompanyName(baseName);
     const cleanNameWords = cleanName.split(' ');
     const baseNameWords = cleanBaseName.split(' ');
     
-    // Only consider it a match if all base name words are found as complete words
     const isFullMatch = baseNameWords.every(baseWord => 
       cleanNameWords.some(word => word === baseWord)
     );
 
-    if (isFullMatch) {
-      console.log(`Clean match found: "${cleanName}" matches base name "${baseName}"`);
-      return true;
-    }
+    if (isFullMatch) return true;
 
-    // Check variations with cleaned names - using whole word matching
     const matchedVariation = variations.some(variant => {
       const cleanVariant = cleanCompanyName(variant);
       const variantWords = cleanVariant.split(' ');
@@ -95,13 +83,9 @@ function checkIfSponsor(companyName) {
       );
     });
 
-    if (matchedVariation) {
-      console.log(`Variation match found for "${cleanName}" under "${baseName}"`);
-      return true;
-    }
+    if (matchedVariation) return true;
   }
 
-  console.log(`No match found for: "${originalName}"`);
   return false;
 }
 
@@ -133,429 +117,162 @@ function addSponsorshipBadge(element, isSponsor) {
 }
 
 function processPage() {
-  console.log('Processing page');
-
-  const companySelectors = [
-    '.org-top-card-summary__title',
-    '.jobs-company__name',
-    '.job-card-container__company-name',
-    '.company-name-text',
-    '.job-card-container__primary-description',
-  ];
-
-  companySelectors.forEach(selector => {
-    const elements = document.querySelectorAll(selector);
-    console.log(`Found ${elements.length} elements for selector: ${selector}`);
-    
-    elements.forEach(element => {
-      const companyName = element.textContent.trim();
-      console.log('Found company:', companyName);
-      const isSponsor = checkIfSponsor(companyName);
-      addSponsorshipBadge(element, isSponsor);
-    });
-  });
+  // Process both features immediately
+  processSponsors();
+  processLanguages();
+  
+  // And again after a short delay
+  setTimeout(() => {
+    processSponsors();
+    processLanguages();
+  }, 500);
 }
 
-// Update the getAllJobsOnPage function to focus on jobIds
-function getAllJobsOnPage() {
-  const jobs = [];
+function processSponsors() {
+  console.log('Processing sponsors...');
+  const cards = document.querySelectorAll('.job-card-container, [data-job-id], .jobs-search-results__list-item');
+  console.log('Found cards:', cards.length);
   
-  const jobCards = document.querySelectorAll([
-    '.job-card-container',
-    '.jobs-search-results__list-item',
-    '[data-job-id]',
-    '.jobs-search-result-item'
-  ].join(', '));
-  
-  console.log('Found job cards:', jobCards.length);
-
-  jobCards.forEach(card => {
-    const jobId = card.getAttribute('data-job-id') || 
-                 card.getAttribute('data-occludable-job-id');
-    
-    const jobLink = card.querySelector('a[href*="/jobs/view/"]');
-    const urlJobId = jobLink?.href.match(/\/view\/(\d+)/)?.[1];
-    
-    const finalJobId = jobId || urlJobId;
-
+  cards.forEach(card => {
+    // Updated company selectors
     const companyElement = card.querySelector([
       '.job-card-container__company-name',
+      '.artdeco-entity-lockup__subtitle',
       '.job-card-container__primary-description',
       '.company-name',
+      '.job-card-list__company-name',
       '[data-tracking-control-name="public_jobs_company_name"]'
     ].join(', '));
     
+    if (companyElement) {
+      const companyName = companyElement.textContent.split('·')[0].trim();
+      if (checkIfSponsor(companyName)) {
+        card.style.backgroundColor = 'rgb(230 243 234)';
+      }
+    }
+  });
+}
+
+function processLanguages() {
+  const cards = document.querySelectorAll('.job-card-container, [data-job-id], .jobs-search-results__list-item');
+  
+  cards.forEach(card => {
+    if (card.dataset.processed) return;
+    card.dataset.processed = 'true';
+
     const titleElement = card.querySelector([
-      '.job-card-container__link',
+      '.job-card-container__link span',
       '.job-card-list__title',
       '.jobs-unified-top-card__job-title',
-      '[data-tracking-control-name="public_jobs_jserp_job_link"]'
+      '.job-card-list__title-link',
+      '[data-tracking-control-name="public_jobs_jserp_job_link"]',
+      'a[href*="/jobs/view/"] span',
+      'h3.base-search-card__title'
     ].join(', '));
 
-    // Add employment type selector
-    const employmentTypeElement = card.querySelector([
-      '.job-card-container__metadata-wrapper',
-      '.job-card-container__metadata-item',
-      '.job-search-card__metadata-wrapper span',
-      '[data-tracking-control-name="public_jobs_jserp_job_type"]'
-    ].join(', '));
-
-    if (companyElement && titleElement && finalJobId) {
-      const fullCompanyName = companyElement.textContent.trim();
-      const companyName = fullCompanyName.split('·')[0].trim();
-      const jobTitle = titleElement.textContent.trim();
-      const employmentType = employmentTypeElement ? employmentTypeElement.textContent.trim() : '';
-      
-      jobs.push({
-        companyName: fullCompanyName,
-        cleanCompanyName: companyName,
-        jobTitle,
-        employmentType,
-        jobId: finalJobId,
-        jobUrl: jobLink?.href || `https://www.linkedin.com/jobs/view/${finalJobId}/`,
-        isSponsor: checkIfSponsor(companyName)
-      });
-      
-      console.log('Added job:', {
-        company: companyName,
-        id: finalJobId,
-        title: jobTitle,
-        type: employmentType
-      });
+    if (titleElement && !titleElement.querySelector('.language-indicator')) {
+      if (isEnglishText(titleElement.textContent)) {
+        const badge = document.createElement('span');
+        badge.className = 'language-indicator';
+        badge.style.cssText = `
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          background-color: #0a66c2 !important;
+          color: white !important;
+          font-size: 11px !important;
+          font-weight: bold !important;
+          padding: 2px 4px !important;
+          border-radius: 3px !important;
+          margin-left: 6px !important;
+          vertical-align: middle !important;
+          line-height: normal !important;
+        `;
+        badge.textContent = 'EN';
+        titleElement.appendChild(document.createTextNode(' '));
+        titleElement.appendChild(badge);
+      }
     }
   });
-
-  return jobs;
 }
 
-// Update the message listener for scrollToJob
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "scrollToJob") {
-    const { jobData } = request;
-    console.log('Requested job data:', jobData);
+// Multiple trigger points
+document.addEventListener('DOMContentLoaded', processPage);
+window.addEventListener('load', processPage);
+document.addEventListener('scroll', () => {
+  requestAnimationFrame(processPage);
+});
 
-    // Extract jobId from the URL if it's provided
-    let targetJobId = jobData.jobId;
-    if (!targetJobId && jobData.url) {
-      targetJobId = jobData.url.match(/\/view\/(\d+)/)?.[1];
-    }
-
-    if (targetJobId) {
-      console.log('Target job ID:', targetJobId);
-
-      // Update the URL with the new job ID
-      const currentUrl = new URL(window.location.href);
-      currentUrl.searchParams.set('currentJobId', targetJobId);
-      
-      // Use replaceState to update URL without navigation
-      window.history.replaceState({}, '', currentUrl.toString());
-
-      // Find the job card using the ID
-      const selectors = [
-        `[data-job-id="${targetJobId}"]`,
-        `[data-occludable-job-id="${targetJobId}"]`,
-        `a[href*="/jobs/view/${targetJobId}"]`
-      ];
-
-      let jobElement = null;
-      for (const selector of selectors) {
-        jobElement = document.querySelector(selector);
-        if (jobElement) {
-          if (!jobElement.tagName.toLowerCase() === 'a') {
-            jobElement = jobElement.closest('.job-card-container') || jobElement;
-          }
-          break;
-        }
-      }
-
-      if (jobElement) {
-        console.log('Found job element:', jobElement);
-
-        // Scroll the element into view
-        jobElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-        // Highlight the element
-        const highlightElement = jobElement.closest('.job-card-container') || jobElement;
-        highlightElement.style.backgroundColor = '#f0f7ff';
-        highlightElement.style.transition = 'background-color 0.5s';
-
-        // Find and click the job link
-        const clickableElement = jobElement.tagName.toLowerCase() === 'a' ? 
-                               jobElement : 
-                               jobElement.querySelector('a[href*="/jobs/view/"]');
-
-        if (clickableElement) {
-          console.log('Clicking element:', clickableElement);
-          clickableElement.click();
-        }
-
-        // Remove highlight after delay
-        setTimeout(() => {
-          highlightElement.style.backgroundColor = '';
-        }, 2000);
-      } else {
-        console.log('Job element not found');
-      }
-    } else {
-      console.log('No job ID found');
-    }
-
-    return true;
-  }
-
-  if (request.action === "getJobsInfo") {
-    const jobs = [];
-    
-    // Expanded list of selectors for job cards
-    const jobCardSelectors = [
-      '.job-card-container',
-      '.jobs-search-results__list-item',
-      '.jobs-job-board-list__item',
-      '.job-card-list__entity-lockup',
-      '.jobs-search-results-grid__card-item'
-    ];
-    
-    // Try each selector
-    let jobCards = [];
-    jobCardSelectors.forEach(selector => {
-      const cards = document.querySelectorAll(selector);
-      console.log(`Selector ${selector} found ${cards.length} cards`);
-      if (cards.length > 0) {
-        jobCards = cards;
-      }
-    });
-
-    console.log('Total job cards found:', jobCards.length);
-
-    jobCards.forEach(card => {
-      // Expanded list of selectors for company names
-      const companySelectors = [
-        '.job-card-container__company-name',
-        '.job-card-container__primary-description',
-        '.company-name',
-        '.job-card-list__company-name',
-        '.artdeco-entity-lockup__subtitle',
-        '.job-card-container__company-link'
-      ];
-
-      // Expanded list of selectors for job titles
-      const titleSelectors = [
-        '.job-card-container__link',
-        '.job-card-list__title',
-        '.jobs-unified-top-card__job-title',
-        '.artdeco-entity-lockup__title',
-        '.job-card-list__entity-lockup a'
-      ];
-
-      let companyElement = null;
-      let titleElement = null;
-
-      // Try each company selector
-      for (const selector of companySelectors) {
-        companyElement = card.querySelector(selector);
-        if (companyElement) {
-          console.log(`Found company with selector: ${selector}`);
-          break;
-        }
-      }
-
-      // Try each title selector
-      for (const selector of titleSelectors) {
-        titleElement = card.querySelector(selector);
-        if (titleElement) {
-          console.log(`Found title with selector: ${selector}`);
-          break;
-        }
-      }
-
-      if (companyElement && titleElement) {
-        const fullCompanyName = companyElement.textContent.trim();
-        const companyName = fullCompanyName.split('·')[0].trim();
-        const jobTitle = titleElement.textContent.trim();
-        const url = titleElement.href || window.location.href;
-        
-        console.log('Found job:', { 
-          companyName, 
-          jobTitle,
-          cleanedName: cleanCompanyName(companyName),
-          isSponsor: checkIfSponsor(companyName)
-        });
-        
-        jobs.push({
-          companyName,
-          jobTitle,
-          isSponsor: checkIfSponsor(companyName),
-          url
-        });
-      } else {
-        console.log('Missing elements:', {
-          hasCompany: !!companyElement,
-          hasTitle: !!titleElement
-        });
-      }
-    });
-
-    console.log('Sending response with jobs:', jobs.length);
-    sendResponse({ jobs });
-    return true;
-  }
-
-  if (request.action === "getCompanyInfo") {
-    const selectors = [
-      '.org-top-card-summary__title',
-      '.jobs-company__name',
-      '.job-card-container__company-name',
-      '.company-name-text',
-      '.job-card-container__primary-description'
-    ];
-    
-    let companyName = null;
-    for (const selector of selectors) {
-      const element = document.querySelector(selector);
-      if (element) {
-        companyName = element.textContent.trim();
-        break;
-      }
-    }
-
-    if (companyName) {
-      sendResponse({
-        companyName,
-        isSponsor: checkIfSponsor(companyName)
-      });
-    } else {
-      sendResponse({ error: 'Company name not found' });
-    }
-    return true;
+// Observer for dynamic content
+let observerTimeout;
+const observer = new MutationObserver((mutations) => {
+  if (mutations.some(mutation => mutation.addedNodes.length > 0)) {
+    if (observerTimeout) clearTimeout(observerTimeout);
+    observerTimeout = setTimeout(() => {
+      processPage();
+    }, 100);
   }
 });
 
-// First, inject our CSS but with specific classes
-function injectStyles() {
-  const style = document.createElement('style');
-  style.textContent = `
-    .visa-sponsor-background {
-      background-color: rgb(230 243 234) !important;
-      transition: background-color 0.5s !important;
-    }
-    
-    .language-indicator {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #0a66c2;
-      color: white;
-      font-size: 11px;
-      font-weight: bold;
-      padding: 2px 4px;
-      border-radius: 3px;
-      margin-left: 6px;
-      vertical-align: middle;
-    }
-  `;
-  document.head.appendChild(style);
-}
-
-function isEnglishText(text) {
-  // Common English job title words
-  const englishPatterns = [
-    /\b(senior|junior|lead|manager|engineer|developer|software|data|analyst|specialist|consultant|architect)\b/gi,
-    /\b(full.?stack|front.?end|back.?end|dev.?ops|product|project|sales|marketing|business)\b/gi,
-    /\b(coordinator|assistant|director|head|chief|officer|cto|ceo|cfo|vp)\b/gi
-  ];
-
-  // Common Dutch job title words
-  const dutchPatterns = [
-    /\b(medewerker|adviseur|verkoper|administratief|beheerder|ondersteuning|verkoop)\b/gi,
-    /\b(leider|hoofd|directeur|ontwikkelaar|deskundige|consultant|specialist)\b/gi,
-    /\b(stagiair|ervaren|beginnend|teamleider|projectleider)\b/gi
-  ];
-
-  const englishCount = englishPatterns.reduce((count, pattern) => 
-    count + (text.match(pattern) || []).length, 0);
-  const dutchCount = dutchPatterns.reduce((count, pattern) => 
-    count + (text.match(pattern) || []).length, 0);
-
-  console.log(`Title language scores - English: ${englishCount}, Dutch: ${dutchCount}`);
-  
-  return englishCount > dutchCount;
-}
-
-async function styleJobCardsWithSponsorship() {
-  const jobCards = document.querySelectorAll([
-    '[data-job-id]',
-    '.job-card-container',
-    '.jobs-search-results__list-item'
-  ].join(', '));
-
-  for (const card of jobCards) {
-    // Language check
-    const titleElement = card.querySelector([
-      '.job-card-list__title',
-      '.job-card-container__link',
-      'a[href*="/jobs/view/"]',
-      '.jobs-unified-top-card__job-title'
-    ].join(', '));
-
-    if (titleElement) {
-      const titleText = titleElement.textContent.trim();
-      if (isEnglishText(titleText)) {
-        if (!card.querySelector('.language-indicator')) {
-          const indicator = document.createElement('span');
-          indicator.className = 'language-indicator';
-          indicator.textContent = 'EN';
-          
-          const titleTextElement = titleElement.querySelector('strong') || titleElement;
-          titleTextElement.appendChild(indicator);
-        }
-      }
-    }
-
-    // Sponsorship check
-    const companyElement = card.querySelector([
-      '.job-card-container__company-name',
-      '.job-card-container__primary-description',
-      '.company-name',
-      '[data-tracking-control-name="public_jobs_company_name"]'
-    ].join(', '));
-
-    if (companyElement) {
-      const fullCompanyName = companyElement.textContent;
-      const companyName = fullCompanyName.split('·')[0].trim();
-      
-      if (checkIfSponsor(companyName)) {
-        console.log('Found sponsor company:', companyName);
-        const mainContainer = card.closest('.jobs-search-results__list-item');
-        if (mainContainer) {
-          console.log('Applying style to:', mainContainer);
-          mainContainer.style = `
-            background-color: rgb(230 243 234) !important;
-            background: rgb(230 243 234) !important;
-          `;
-        }
-      }
-    }
-  }
-}
-
-// Make sure styles are injected
-injectStyles();
+observer.observe(document.body, {
+  childList: true,
+  subtree: true,
+  attributes: false,
+  characterData: false
+});
 
 // Initial call
-styleJobCardsWithSponsorship();
+processPage();
 
-// Set up observers
-const observer = new MutationObserver(() => {
-  styleJobCardsWithSponsorship();
+// Process on scroll (debounced)
+let scrollTimeout;
+document.addEventListener('scroll', () => {
+  if (scrollTimeout) clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(() => {
+    processLanguages();
+  }, 100);
 });
 
-// Observe both the list and body
-const jobsList = document.querySelector('.jobs-search-results__list');
-if (jobsList) {
-  observer.observe(jobsList, { childList: true, subtree: true });
-}
+function isEnglishText(text) {
+  const dutchWords = [
+    // Common Dutch words
+    'wij', 'zijn', 'zoeken', 'voor', 'een', 'met', 'het', 'van', 'naar',
+    'functie', 'werkzaamheden', 'taken', 'vereisten', 'over', 'ons', 'bij',
+    'ervaring', 'kennis', 'werk', 'jaar', 'binnen', 'team', 'als', 'wat',
+    'bieden', 'jouw', 'onze', 'deze', 'door', 'wordt', 'bent',
+    // Common Dutch job titles and related words
+    'medewerker', 'aangiftemedewerker', 'administratief', 'beheerder',
+    'adviseur', 'verkoper', 'consultant', 'manager', 'directeur', 'specialist',
+    'ondersteuning', 'assistent', 'hoofd', 'leider', 'coordinator', 'stagiair',
+    'vacature', 'gezocht', 'gevraagd'
+  ];
 
-observer.observe(document.body, { childList: true, subtree: true });
+  // Dutch word patterns and suffixes
+  const dutchPatterns = [
+    'medewerker',
+    'beheerder',
+    'adviseur',
+    'aangifte',
+    'administratie',
+    'verkoop',
+    'zorg',
+    'dienst',
+    'kundige'
+  ];
+
+  const text_lower = text.toLowerCase();
+  
+  // Check for Dutch patterns first
+  if (dutchPatterns.some(pattern => text_lower.includes(pattern))) {
+    return false;
+  }
+
+  const words = text_lower.split(/\s+/);
+  const dutchWordCount = words.filter(word => dutchWords.includes(word)).length;
+  
+  // If any Dutch words are found, consider it Dutch
+  return dutchWordCount === 0;
+}
 
 // URL change detection
 let lastUrl = location.href;

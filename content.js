@@ -427,30 +427,87 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
-// Initial check with delay
-setTimeout(processPage, 1000);
+// First, inject our CSS but with specific classes
+function injectStyles() {
+  const style = document.createElement('style');
+  style.textContent = `
+    .visa-sponsor-background {
+      background-color: rgb(230 243 234) !important;
+      transition: background-color 0.5s !important;
+    }
+  `;
+  document.head.appendChild(style);
+}
 
-// Monitor for dynamic content changes
+async function styleJobCardsWithSponsorship() {
+  // Target both the container and the list item
+  const jobCards = document.querySelectorAll('[data-job-id]');
+  console.log('Found job cards:', jobCards.length);
+  
+  for (const card of jobCards) {
+    // Get company name from multiple possible selectors
+    const companyElement = card.querySelector([
+      '.job-card-container__company-name',
+      '.artdeco-entity-lockup__subtitle',
+      '.job-card-container__primary-description',
+      '.company-name',
+      '[data-tracking-control-name="public_jobs_company_name"]'
+    ].join(', '));
+
+    if (!companyElement) continue;
+
+    const fullCompanyName = companyElement.textContent;
+    const companyName = fullCompanyName.split('·')[0].trim();
+    
+    console.log('Checking company:', companyName);
+    
+    const isSponsor = await checkIfSponsor(companyName);
+    console.log('Is sponsor:', isSponsor, 'for', companyName);
+
+    if (isSponsor) {
+      // Apply to all possible elements that need the background
+      const elementsToStyle = [
+        card,
+        card.closest('.job-card-container'),
+        card.closest('.jobs-search-results__list-item'),
+        card.querySelector('.job-card-list__entity-lockup'),
+        card.querySelector('.artdeco-entity-lockup')
+      ].filter(Boolean);
+
+      elementsToStyle.forEach(element => {
+        element.classList.add('visa-sponsor-background');
+        console.log('Added style to element for', companyName);
+      });
+    }
+  }
+}
+
+// Inject styles immediately
+injectStyles();
+
+// Initial styling
+styleJobCardsWithSponsorship();
+
+// Observer setup
 const observer = new MutationObserver((mutations) => {
-  const hasRelevantChanges = mutations.some(mutation => {
-    return Array.from(mutation.addedNodes).some(node => 
-      node.nodeType === 1 && (
-        node.matches?.('.jobs-company__name') ||
-        node.matches?.('.job-card-container__company-name') ||
-        node.matches?.('.org-top-card-summary__title') ||
-        node.querySelector?.('.jobs-company__name') ||
-        node.querySelector?.('.job-card-container__company-name') ||
-        node.querySelector?.('.org-top-card-summary__title')
-      )
-    );
-  });
-
-  if (hasRelevantChanges) {
-    console.log('Detected relevant changes, reprocessing...');
-    processPage();
+  for (const mutation of mutations) {
+    if (mutation.addedNodes.length > 0) {
+      styleJobCardsWithSponsorship();
+      break;
+    }
   }
 });
 
+// Start observing with a more specific target
+const jobListContainer = document.querySelector('.jobs-search-results__list');
+if (jobListContainer) {
+  observer.observe(jobListContainer, {
+    childList: true,
+    subtree: true
+  });
+}
+
+// Also observe body for dynamic loading
 observer.observe(document.body, {
   childList: true,
   subtree: true

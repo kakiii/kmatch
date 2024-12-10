@@ -39,6 +39,98 @@ const recognizedSponsors = new Map([
 // Add this at the top with other constants
 const jobLanguageCache = new Map();
 
+// Add this near the top of the file with other listeners
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "getJobsInfo") {
+    const cards = document.querySelectorAll('.job-card-container, [data-job-id], .jobs-search-results__list-item');
+    const jobs = Array.from(cards).map(card => {
+      const companyElement = card.querySelector([
+        '.job-card-container__company-name',
+        '.artdeco-entity-lockup__subtitle',
+        '.job-card-container__primary-description',
+        '.company-name',
+        '.job-card-list__company-name',
+        '[data-tracking-control-name="public_jobs_company_name"]'
+      ].join(', '));
+
+      const titleElement = card.querySelector([
+        '.job-card-container__link span',
+        '.job-card-list__title',
+        '.jobs-unified-top-card__job-title',
+        '.job-card-list__title-link',
+        '[data-tracking-control-name="public_jobs_jserp_job_link"]',
+        'a[href*="/jobs/view/"] span',
+        'h3.base-search-card__title'
+      ].join(', '));
+
+      const companyName = companyElement ? companyElement.textContent : '';
+      const jobTitle = titleElement ? titleElement.textContent : '';
+      const isSponsor = checkIfSponsor(companyName);
+
+      return {
+        companyName,
+        jobTitle,
+        isSponsor
+      };
+    });
+
+    sendResponse({ jobs });
+  } else if (request.action === "scrollToJob") {
+    const cards = document.querySelectorAll('.job-card-container, [data-job-id], .jobs-search-results__list-item');
+    const targetCard = Array.from(cards).find(card => {
+      const companyElement = card.querySelector([
+        '.job-card-container__company-name',
+        '.artdeco-entity-lockup__subtitle',
+        '.job-card-container__primary-description',
+        '.company-name',
+        '.job-card-list__company-name',
+        '[data-tracking-control-name="public_jobs_company_name"]'
+      ].join(', '));
+      
+      const titleElement = card.querySelector([
+        '.job-card-container__link span',
+        '.job-card-list__title',
+        '.jobs-unified-top-card__job-title',
+        '.job-card-list__title-link',
+        '[data-tracking-control-name="public_jobs_jserp_job_link"]',
+        'a[href*="/jobs/view/"] span',
+        'h3.base-search-card__title'
+      ].join(', '));
+
+      if (!companyElement || !titleElement) return false;
+
+      const matchCompany = companyElement.textContent.includes(request.jobData.companyName);
+      const matchTitle = titleElement.textContent.includes(request.jobData.jobTitle);
+      
+      return matchCompany && matchTitle;
+    });
+
+    if (targetCard) {
+      targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      targetCard.style.border = '2px solid #0a66c2';
+      targetCard.style.boxShadow = '0 0 10px rgba(10, 102, 194, 0.3)';
+      
+      // Find and click the job link
+      const jobLink = targetCard.querySelector([
+        'a.job-card-container__link',
+        'a.job-card-list__title-link',
+        'a[href*="/jobs/view/"]',
+        'a[data-tracking-control-name="public_jobs_jserp_job_link"]'
+      ].join(', '));
+
+      if (jobLink) {
+        jobLink.click();
+      }
+
+      setTimeout(() => {
+        targetCard.style.border = '';
+        targetCard.style.boxShadow = '';
+      }, 2000);
+    }
+  }
+  return true; // Keep the message channel open for async responses
+});
+
 function cleanCompanyName(name) {
   if (!name) return '';
   
@@ -171,7 +263,7 @@ function processLanguages() {
     ].join(', '));
 
     if (titleElement && !titleElement.querySelector('.language-indicator')) {
-      if (isEnglishText(titleElement.textContent)) {
+      if (isEnglishText(titleElement.textContent, card)) {
         const badge = document.createElement('span');
         badge.className = 'language-indicator';
         badge.style.cssText = `
@@ -233,36 +325,77 @@ document.addEventListener('scroll', () => {
   }, 100);
 });
 
-function isEnglishText(text) {
+function isEnglishText(text, card) {
+  // First try to find the job description
+  const descriptionElement = card.querySelector([
+    '.job-card-container__description',
+    '.job-description',
+    '.job-card-list__description',
+    '[data-job-description]',
+    '.show-more-less-html__markup'
+  ].join(', '));
+
+  // If we have a description, use that for language detection
+  if (descriptionElement) {
+    const description = descriptionElement.textContent.trim();
+    if (description) {
+      return checkEnglishWords(description);
+    }
+  }
+
+  // Fall back to title only if no description is available
+  return checkEnglishWords(text);
+}
+
+// Split out the original word checking logic
+function checkEnglishWords(text) {
   const dutchWords = [
-    // Common Dutch words
+    // Common Dutch words (removed words that are also common in English)
     'wij', 'zijn', 'zoeken', 'voor', 'een', 'met', 'het', 'van', 'naar',
-    'functie', 'werkzaamheden', 'taken', 'vereisten', 'over', 'ons', 'bij',
-    'ervaring', 'kennis', 'werk', 'jaar', 'binnen', 'team', 'als', 'wat',
+    'werkzaamheden', 'taken', 'vereisten', 'over', 'ons', 'bij',
+    'ervaring', 'kennis', 'binnen', 'als', 'wat',
     'bieden', 'jouw', 'onze', 'deze', 'door', 'wordt', 'bent',
-    // Common Dutch job titles and related words
+    // Dutch-specific job titles
     'medewerker', 'aangiftemedewerker', 'administratief', 'beheerder',
-    'adviseur', 'verkoper', 'consultant', 'manager', 'directeur', 'specialist',
-    'ondersteuning', 'assistent', 'hoofd', 'leider', 'coordinator', 'stagiair',
-    'vacature', 'gezocht', 'gevraagd'
+    'adviseur', 'verkoper', 'directeur',
+    'ondersteuning', 'assistent', 'hoofd', 'leider', 'stagiair',
+    'vacature', 'gezocht', 'gevraagd',
+    // Add medical/healthcare specific Dutch words
+    'verpleegkundig', 'specialist', 'epilepsie', 'zorg', 'arts',
+    'behandelaar', 'therapeut', 'apotheek', 'huisarts', 'tandarts',
+    'verpleging', 'verzorging', 'patiënt', 'kliniek', 'ziekenhuis',
+    'medisch', 'paramedisch', 'fysiotherapeut', 'psycholoog'
   ];
 
-  // Dutch word patterns and suffixes
   const dutchPatterns = [
     'medewerker',
     'beheerder',
     'adviseur',
     'aangifte',
     'administratie',
-    'verkoop',
     'zorg',
     'dienst',
-    'kundige'
+    'kundige',
+    'programma',
+    'werkstudent',
+    'uur/week',
+    'ontwikkelaar',   // for Front-endontwikkelaar
+    'analist',        // for Data-analist
+    'consulent',      // for marketingconsulent
+    'etalagist',      // for Etalagiste
+    'centraal',       // for Centraal Nederland
+    'consulent',
+    'verpleeg',
+    'kundig',
+    'medisch',
+    'zorg',
+    'arts',
+    'therapie'
   ];
 
-  const text_lower = text.toLowerCase();
+  const text_lower = text.toLowerCase()
+    .replace(/[\s\-\/]+/g, '');
   
-  // Check for Dutch patterns first
   if (dutchPatterns.some(pattern => text_lower.includes(pattern))) {
     return false;
   }
@@ -270,7 +403,6 @@ function isEnglishText(text) {
   const words = text_lower.split(/\s+/);
   const dutchWordCount = words.filter(word => dutchWords.includes(word)).length;
   
-  // If any Dutch words are found, consider it Dutch
   return dutchWordCount === 0;
 }
 

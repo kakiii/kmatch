@@ -50,8 +50,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (response && response.jobs) {
       const sponsorJobs = response.jobs.filter(job => job.isSponsor);
       
-      document.getElementById('summary').textContent = 
-        `Found ${sponsorJobs.length} out of ${response.jobs.length} jobs in this page with visa sponsorship`;
+      document.getElementById('summary').innerHTML = 
+        `Found ${sponsorJobs.length} out of ${response.jobs.length} jobs with visa sponsorship.<br>Scroll down the page to see more.`;
 
       const companyListElement = document.getElementById('company-list');
       response.jobs.forEach((job, index) => {
@@ -69,12 +69,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         const jobElement = document.createElement('div');
         jobElement.className = `job-item ${job.isSponsor ? 'sponsor' : 'not-sponsor'}`;
+        jobElement.style.position = 'relative';
         
         jobElement.innerHTML = `
   <div class="job-header">
     <div class="company-info">
       <strong>${cleanCompanyName}</strong>
-      ${job.isEnglish ? '<span class="en-badge">EN</span>' : ''}
+      ${job.isEnglish ? '<span class="en-badge" style="background-color: #0a66c2; color: white; padding: 2px 4px; border-radius: 3px; margin-left: 6px; vertical-align: middle;">EN</span>' : ''}
     </div>
   </div>
   <div class="job-title">

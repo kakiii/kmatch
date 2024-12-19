@@ -28,15 +28,23 @@ sponsors_data = {
 # Group similar company names
 for _, row in df.iterrows():
     company = row['Organisation']
-    # Remove periods from the company name
     company = company.replace('.', '')
-    
-    # Apply name corrections if applicable
+
+    # 应用名称修正
     if company in name_corrections:
         company = name_corrections[company]
-    
+
     words = company.lower().split(' ')
-    
+
+    # 处理以 "den"、"delta" 或 "erasmus" 开头的公司名称
+    if words[0] in ["den", "delta", "erasmus"]:
+        base_name = f"{words[0]}-" + '-'.join(words[1:])  # 使用 "den"、"delta" 或 "erasmus" 作为前缀
+        if base_name not in sponsors_data["sponsors"]:
+            sponsors_data["sponsors"][base_name] = []
+        if company not in sponsors_data["sponsors"][base_name]:  # 防止重复
+            sponsors_data["sponsors"][base_name].append(company)
+        continue
+
     # Handle companies starting with specific words separately
     if words[0] in ["world", "multi", "institute"]:
         if len(words) > 1:

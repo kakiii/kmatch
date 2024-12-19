@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2024-12-10",
+  "lastUpdated": "2024-12-11",
   "sponsors": {
     "aadee": [
       "\"Aa-Dee\" Machinefabriek en Staalbouw Nederland BV"
@@ -6552,17 +6552,37 @@
     "delrin": [
       "Delrin Netherlands BV"
     ],
-    "delta": [
-      "Delta Air Lines, Inc",
-      "Delta Capita BV",
-      "Delta Diagnostics BV",
-      "Delta Electronics (Netherlands) BV",
-      "DELTA Fiber Nederland BV",
-      "Delta Greentech (Netherlands) BV",
-      "Delta Labs BV",
-      "Delta Light Nederland BV",
-      "Delta Team Personeelsdiensten BV",
-      "Delta Travel Service BV",
+    "delta-air-lines,-inc": [
+      "Delta Air Lines, Inc"
+    ],
+    "delta-capita-bv": [
+      "Delta Capita BV"
+    ],
+    "delta-diagnostics-bv": [
+      "Delta Diagnostics BV"
+    ],
+    "delta-electronics-(netherlands)-bv": [
+      "Delta Electronics (Netherlands) BV"
+    ],
+    "delta-fiber-nederland-bv": [
+      "DELTA Fiber Nederland BV"
+    ],
+    "delta-greentech-(netherlands)-bv": [
+      "Delta Greentech (Netherlands) BV"
+    ],
+    "delta-labs-bv": [
+      "Delta Labs BV"
+    ],
+    "delta-light-nederland-bv": [
+      "Delta Light Nederland BV"
+    ],
+    "delta-team-personeelsdiensten-bv": [
+      "Delta Team Personeelsdiensten BV"
+    ],
+    "delta-travel-service-bv": [
+      "Delta Travel Service BV"
+    ],
+    "delta-wines-bv": [
       "Delta Wines BV"
     ],
     "deltan": [
@@ -6594,10 +6614,16 @@
     "demo": [
       "DEMO Consultants BV"
     ],
-    "den": [
-      "Den Haag",
-      "Den Haag Centrum voor Strategische Studies (HCSS) BV",
-      "Den Hartogh Shared Services BV",
+    "den-haag": [
+      "Den Haag"
+    ],
+    "den-haag-centrum-voor-strategische-studies-(hcss)-bv": [
+      "Den Haag Centrum voor Strategische Studies (HCSS) BV"
+    ],
+    "den-hartogh-shared-services-bv": [
+      "Den Hartogh Shared Services BV"
+    ],
+    "den-ouden-materieel-bv": [
       "Den Ouden Materieel BV"
     ],
     "denham": [
@@ -8284,11 +8310,19 @@
     "eraneos": [
       "Eraneos Analytics Netherlands BV"
     ],
-    "erasmus": [
-      "Erasmus Centre for Entrepreneurship",
-      "Erasmus Centre for Urban, Port and Transport Economics BV",
-      "Erasmus Enterprise BV",
-      "Erasmus Medisch Centrum",
+    "erasmus-centre-for-entrepreneurship": [
+      "Erasmus Centre for Entrepreneurship"
+    ],
+    "erasmus-centre-for-urban,-port-and-transport-economics-bv": [
+      "Erasmus Centre for Urban, Port and Transport Economics BV"
+    ],
+    "erasmus-enterprise-bv": [
+      "Erasmus Enterprise BV"
+    ],
+    "erasmus-medisch-centrum": [
+      "Erasmus Medisch Centrum"
+    ],
+    "erasmus-universiteit-rotterdam": [
       "Erasmus Universiteit Rotterdam"
     ],
     "eraze": [
@@ -22091,8 +22125,7 @@
       "Samvardhana Motherson Automotive Systems Group BV"
     ],
     "samyang": [
-      "Samyang Foods Europe BV",
-      "Samyang Europe"
+      "Samyang Foods Europe BV"
     ],
     "san": [
       "SAN ISN BV"
@@ -25023,14 +25056,13 @@
     "take": [
       "Take Two Interactive Benelux BV"
     ],
-    "takeaway.com": [
+    "takeawaycom": [
       "Takeawaycom Central Core BV",
       "Takeawaycom European Operations BV",
       "Takeawaycom Express Dutch Operations BV",
       "Takeawaycom Express Holding BV",
       "Takeawaycom Group BV",
-      "Takeawaycom Payments BV",
-      "Just Eat Takeaway.com"
+      "Takeawaycom Payments BV"
     ],
     "takeda": [
       "Takeda Nederland BV"

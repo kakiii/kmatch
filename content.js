@@ -238,29 +238,69 @@ function processLanguages() {
     ].join(', '));
 
     if (titleElement && !titleElement.querySelector('.language-indicator')) {
+      // Get company name for sponsor check
+      const companyElement = card.querySelector([
+        '.job-card-container__company-name',
+        '.artdeco-entity-lockup__subtitle',
+        '.job-card-container__primary-description',
+        '.company-name',
+        '.job-card-list__company-name',
+        '[data-tracking-control-name="public_jobs_company_name"]'
+      ].join(', '));
+
+      const companyName = companyElement ? companyElement.textContent.split('·')[0].trim() : '';
+      const isSponsor = checkIfSponsor(companyName);
+
+      // Create badge container
+      const badgeContainer = document.createElement('span');
+      badgeContainer.style.marginLeft = '6px';
+
+      // Add KM badge first if sponsor
+      if (isSponsor) {
+        const kmBadge = createBadge('KM');
+        badgeContainer.appendChild(kmBadge);
+      }
+
+      // Add EN badge if English
       if (isEnglishText(titleElement.textContent, card)) {
-        const badge = document.createElement('span');
-        badge.className = 'language-indicator';
-        badge.style.cssText = `
-          display: inline-flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          background-color: #0a66c2 !important;
-          color: white !important;
-          font-size: 11px !important;
-          font-weight: bold !important;
-          padding: 2px 4px !important;
-          border-radius: 3px !important;
-          margin-left: 6px !important;
-          vertical-align: middle !important;
-          line-height: normal !important;
-        `;
-        badge.textContent = 'EN';
+        const enBadge = createBadge('EN');
+        if (badgeContainer.firstChild) {
+          enBadge.style.marginLeft = '4px';
+        }
+        badgeContainer.appendChild(enBadge);
+      }
+
+      if (badgeContainer.children.length > 0) {
         titleElement.appendChild(document.createTextNode(' '));
-        titleElement.appendChild(badge);
+        titleElement.appendChild(badgeContainer);
       }
     }
   });
+}
+
+// Helper function to create badges
+function createBadge(text) {
+  const badge = document.createElement('span');
+  badge.className = 'language-indicator';
+  const isKM = text === 'KM';
+  const backgroundColor = isKM ? '#0a66c2' : 'white';
+  const textColor = isKM ? 'white' : '#0a66c2';
+  badge.style.cssText = `
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: ${backgroundColor} !important;
+    color: ${textColor} !important;
+    font-size: 11px !important;
+    font-weight: bold !important;
+    padding: 2px 4px !important;
+    border-radius: 3px !important;
+    vertical-align: middle !important;
+    line-height: normal !important;
+    ${!isKM ? 'border: 1px solid #0a66c2 !important;' : ''}
+  `;
+  badge.textContent = text;
+  return badge;
 }
 
 // Multiple trigger points

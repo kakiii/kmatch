@@ -52,6 +52,69 @@ document.addEventListener('DOMContentLoaded', async () => {
     return cleanText;
   }
 
+  // Cache object to store job descriptions
+  const descriptionCache = new Map();
+
+  // Function to perform initial language detection on job titles
+  function detectLanguageFromTitles(jobs) {
+    jobs.forEach(job => {
+      const title = job.jobTitle; // Assuming job has a jobTitle property
+      const detectedLanguage = performLanguageDetection(title); // Your language detection logic
+      console.log(`Detected language for title "${title}": ${detectedLanguage}`);
+    });
+  }
+
+  // Function to handle job card click
+  function handleJobClick(job) {
+    const jobUrl = job.url; // Assuming job.url contains the job's URL
+
+    // Check if the description is already cached
+    if (descriptionCache.has(jobUrl)) {
+      const cachedDescription = descriptionCache.get(jobUrl);
+      const detectedLanguage = performLanguageDetection(cachedDescription); // Use the cached description
+      console.log(`Detected language for cached description: ${detectedLanguage}`);
+    } else {
+      // Fetch the job description (this is a placeholder for your actual fetching logic)
+      fetchJobDescription(jobUrl).then(description => {
+        // Store the fetched description in the cache
+        descriptionCache.set(jobUrl, description);
+        const detectedLanguage = performLanguageDetection(description); // Use the newly fetched description
+        console.log(`Detected language for newly fetched description: ${detectedLanguage}`);
+      });
+    }
+  }
+
+  // Placeholder function to fetch job description
+  function fetchJobDescription(url) {
+    return new Promise((resolve, reject) => {
+      // Simulate an asynchronous fetch operation
+      setTimeout(() => {
+        // Replace this with actual fetching logic
+        const fetchedDescription = "Sample job description for " + url; // Simulated description
+        resolve(fetchedDescription);
+      }, 1000);
+    });
+  }
+
+  // Function to perform language detection
+  function performLanguageDetection(text) {
+    // Your language detection logic here
+    // For example, return a dummy language based on the text length
+    return text.length > 50 ? 'English' : 'Unknown'; // Simplified example
+  }
+
+  // Example job data (this would typically come from your job fetching logic)
+  const jobs = [
+    { jobTitle: "Software Engineer", url: "https://example.com/job/12345" },
+    { jobTitle: "Data Scientist", url: "https://example.com/job/67890" }
+  ];
+
+  // Initial language detection on page load
+  detectLanguageFromTitles(jobs);
+
+  // Simulate a job card click
+  handleJobClick(jobs[0]); // Click on the first job
+
   chrome.tabs.sendMessage(tab.id, { action: "getJobsInfo" }, response => {
     if (chrome.runtime.lastError) {
       document.getElementById('summary').textContent = 'Unable to check companies. Please refresh the page.';
@@ -84,9 +147,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         jobElement.innerHTML = `
   <div class="job-header">
-    <div class="company-info">
+    <div class="company-info" style="display: flex; justify-content: space-between; align-items: center;">
       <strong>${cleanCompanyName}</strong>
-      ${job.isEnglish ? '<span class="en-badge" style="background-color: #0a66c2; color: white; padding: 2px 4px; border-radius: 3px; margin-left: 6px; vertical-align: middle;">EN</span>' : ''}
+      <div style="display: flex; gap: 4px;">
+        ${job.isSponsor ? '<span style="background-color: #0a66c2; color: white; padding: 1px 3px; border-radius: 2px; vertical-align: top; position: relative; top: 0px; font-weight: bold; font-size: 9px;">KM</span>' : ''}
+        ${job.isEnglish ? '<span style="background-color: white; color: #0a66c2; padding: 1px 3px; border-radius: 2px; vertical-align: top; position: relative; top: 0px; border: 1px solid #0a66c2; font-weight: bold; font-size: 9px;">EN</span>' : ''}
+      </div>
     </div>
   </div>
   <div class="job-title">

@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                        .replace(/·.*$/, '')         // Remove everything after ·
                        .replace(/,.*$/, '')         // Remove everything after comma
                        .replace(/EN/g, '')          // Remove 'EN' from the text
+                       .replace(/KM/g, '')          // Remove 'KM' from the text
                        .replace(/with verification/g, '')  // Remove 'with verification'
                        .trim();
 
@@ -148,19 +149,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         jobElement.innerHTML = `
   <div class="job-header">
     <div class="company-info" style="display: flex; justify-content: space-between; align-items: center;">
-      <strong>${cleanCompanyName}</strong>
+      <div class="job-title" style="color: ${job.isSponsor ? '#000' : '#666'}; font-weight: 700; font-size: 14px;">
+        ${roleType}
+      </div>
       <div style="display: flex; gap: 4px;">
-        ${job.isSponsor ? '<span style="background-color: #0a66c2; color: white; padding: 1px 3px; border-radius: 2px; vertical-align: top; position: relative; top: 0px; font-weight: bold; font-size: 9px;">KM</span>' : ''}
+        ${job.isSponsor ? '<span style="background-color: #0a66c2; color: white; padding: 1px 3px; border-radius: 2px; vertical-align: top; position: relative; top: 0px; border: 1px solid #0a66c2; font-weight: bold; font-size: 9px;">KM</span>' : ''}
         ${job.isEnglish ? '<span style="background-color: white; color: #0a66c2; padding: 1px 3px; border-radius: 2px; vertical-align: top; position: relative; top: 0px; border: 1px solid #0a66c2; font-weight: bold; font-size: 9px;">EN</span>' : ''}
       </div>
     </div>
   </div>
-  <div class="job-title">
-    ${roleType}
-  </div>
-  <div class="post-info">
-    ${job.postTime ? `<span class="post-time">${job.postTime}</span>` : ''}
-    ${job.applicants ? `<span class="applicants">${job.applicants}</span>` : ''}
+  <div style="color: ${job.isSponsor ? '#000' : '#666'}; font-size: 13px; margin-top: 4px;">
+    ${cleanCompanyName}
   </div>
 `;
         

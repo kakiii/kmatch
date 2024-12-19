@@ -215,6 +215,8 @@ function processSponsors() {
       const companyName = companyElement.textContent.split('·')[0].trim();
       if (checkIfSponsor(companyName)) {
         card.style.backgroundColor = 'rgb(230 243 234)';
+      } else {
+        card.style.backgroundColor = 'white';
       }
     }
   });

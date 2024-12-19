@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const sponsorJobs = response.jobs.filter(job => job.isSponsor);
       
       document.getElementById('summary').innerHTML = 
-        `Found ${sponsorJobs.length} out of ${response.jobs.length} jobs with visa sponsorship.<br>Scroll down the page to see more.`;
+        `Found ${sponsorJobs.length} out of ${response.jobs.length} jobs with visa sponsorship.<br>Scroll down the webpage to see more.`;
 
       const companyListElement = document.getElementById('company-list');
       response.jobs.forEach((job, index) => {

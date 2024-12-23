@@ -92,6 +92,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
-- Data source: IND's public register of recognized sponsors. You can find the complete list at: https://ind.nl/en/public-register-recognised-sponsors
+- Data source: IND's public register of recognized sponsors. You can find the complete list at [https://ind.nl/en/public-register-recognised-sponsors](https://ind.nl/en/public-register-recognised-sponsors/public-register-regular-labour-and-highly-skilled-migrants)
 - Built with Chrome Extensions Manifest V3
 - Uses LinkedIn's public job listings interface

@@ -4,12 +4,12 @@ A Chrome extension that helps you quickly identify recognized sponsors for highl
 
 ## Features
 
-- 🔍 Instantly identifies if a company is a recognized sponsor
-- 🏢 Maintains an up-to-date database of recognized sponsors in the Netherlands
-- 🌐 Works on LinkedIn job listings and search results
-- 🔤 Detects job posting language (English vs non-English)
-- ⚡ Zero configuration required
-- 💨 Fast and lightweight
+- 🔍 Automatically scans LinkedIn job listings
+- ✨ Highlights jobs from recognized sponsors
+- 🔄 Maintains an up-to-date database
+- 🏢 Shows company sponsorship status in real-time
+- 📱 Easy-to-use popup interface
+- 🌐 Detects English language job title
 
 ## Installation
 
@@ -19,56 +19,79 @@ A Chrome extension that helps you quickly identify recognized sponsors for highl
 
 ## How to Use
 
-1. Browse LinkedIn jobs as normal
-2. Click the extension icon to see:
-   - List of jobs on the current page
-   - Sponsor status for each company
-   - Language detection (EN badge for English listings)
-3. Click any job in the popup to navigate directly to it
-4. Companies that are recognized sponsors are highlighted in green
+1. Visit LinkedIn's job section
+2. Browse job listings as normal
+3. Look for highlighted jobs with:
+   - "KM" badge: Company is a recognized sponsor
+   - "EN" badge: Job posting is in English
+4. Click on any job in the extension popup to view details
 
 ## Privacy Policy
 
 ### Data Collection and Usage
 
-KMatch is committed to protecting your privacy. This extension:
+#### What We Collect
+- **Job Listings**: We scan visible job postings on LinkedIn pages you visit
+- **Company Names**: We process company names to check against our sponsor database
+- **Job Titles**: We analyze job titles for language detection
+- **URLs**: We store LinkedIn job posting URLs temporarily for functionality
 
-- Does **not** collect any personal information
-- Does **not** track your browsing history
-- Does **not** store any user data
-- Does **not** transmit any information to external servers
-- Only reads and processes information on LinkedIn job pages
-- Only operates within the LinkedIn.com domain
-- Uses a local database of recognized sponsors
+#### What We Don't Collect
+- Personal information
+- Login credentials
+- Browser history
+- Any data outside of LinkedIn
+- Communication data
+- Payment information
 
-### Permissions Required
+### Data Storage
 
-The extension requires minimal permissions:
-- Access to LinkedIn.com domain only
-- Storage (for the sponsors database)
-- Active tab access (to read job listings)
+- All processing happens locally on your device
+- No data is sent to external servers
+- Sponsor list is stored locally and updated via Chrome Web Store updates
+- Temporary data is cleared when you close LinkedIn
 
-### Third-Party Services
+### Third-Party Access
 
-This extension does not use any third-party services or analytics.
+- We don't share any data with third parties
+- We don't use analytics services
+- We don't use advertising services
+- We don't integrate with external APIs
 
-### Updates
+### User Rights
 
-The privacy policy may be updated occasionally. Any changes will be reflected in this document and communicated through the Chrome Web Store listing.
+You have the right to:
+- Disable the extension at any time
+- Clear local storage through Chrome settings
 
-## Support
+### Technical Security
 
-For bug reports or feature requests, please [open an issue](https://github.com/AshZLee/KMatch/issues).
+- All code runs in an isolated environment
+- No network requests except for sponsor list updates
+- Content script isolation prevents cross-site scripting
+- Regular security updates via Chrome Web Store
+
+### Updates to Privacy Policy
+
+- Latest version always available in this README and the Chrome Web Store listing
+- Changes effective upon new version installation
+
+### Contact
+
+For privacy concerns or questions:
+- [Open an issue](https://github.com/AshZLee/KMatch/issues) on our GitHub repository
+- Email: ash.develope@gmail.com
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Data Source
+## License
 
-The extension uses the official public register of recognized sponsors from the Dutch Immigration and Naturalisation Service (IND). You can find the complete list at: https://ind.nl/en/public-register-recognised-sponsors
+This project is licensed under the MIT License - see the LICENSE file for details.
 
+## Acknowledgments
 
----
-
-Made with ❤️ by Ash
+- Data source: IND's public register of recognized sponsors. You can find the complete list at: https://ind.nl/en/public-register-recognised-sponsors
+- Built with Chrome Extensions Manifest V3
+- Uses LinkedIn's public job listings interface

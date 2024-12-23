@@ -1,14 +1,15 @@
 {
   "manifest_version": 3,
-  "name": "Dutch Visa Sponsor Checker",
+  "name": "KMatch",
   "version": "1.0",
   "description": "Checks if companies on LinkedIn are recognized sponsors in the Netherlands",
   "permissions": [
     "storage",
-    "activeTab"
+    "activeTab",
+    "tabs"
   ],
   "host_permissions": [
-    "https://ind.nl/*"
+    "*://*.linkedin.com/*"
   ],
   "action": {
     "default_popup": "popup.html",
@@ -26,6 +27,6 @@
   ],
   "web_accessible_resources": [{
     "resources": ["sponsors.json"],
-    "matches": ["<all_urls>"]
+    "matches": ["*://*.linkedin.com/*"]
   }]
 } 

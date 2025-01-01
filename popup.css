@@ -108,3 +108,16 @@ body {
   font-weight: 500;
   padding: 0 5px;
 }
+
+#summary a {
+  color: #0a66c2;  /* LinkedIn blue color */
+  text-decoration: none;
+}
+
+#summary a:hover {
+  text-decoration: underline;
+}
+
+#summary a:visited {
+  color: #0a66c2;  /* Keep the same color even after visiting */
+}

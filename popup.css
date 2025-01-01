@@ -1,52 +1,110 @@
+body {
+  width: 400px;
+  padding: 15px;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 .job-item {
-    padding: 8px 10px;
-    border-bottom: 1px solid #e0e0e0;
-    cursor: pointer;
-  }
-  
-  .job-header {
-    font-size: 13px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 2px;
-    color: #525565;
-  }
-  
-  .job-header strong {
-    font-weight: 700;  /* Even bolder */
-    font-size: 14px;   /* Increased from 13px */
-  }
-  
-  .job-details {
-    font-size: 13px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: #666;
-  }
-  
-  .sponsor {
-    background-color: #e6f3ea;
-  }
-  
-  .not-sponsor {
-    background-color: white;
-  }
-  
-  .job-item:hover {
-    filter: brightness(0.95);
-  }
-  
-  .en-badge {
-    display: inline-block;
-    background-color: white;
-    color: #0a66c2;
-    font-size: 11px;
-    font-weight: bold;
-    padding: 2px 4px;
-    border-radius: 3px;
-    margin-left: 6px;
-    vertical-align: middle;
-    border: 1px solid #0a66c2;
-  }
+  padding: 7px 15px;
+  margin: 7px 0;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  cursor: pointer;
+}
+
+.job-header {
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+  color: #525565;
+}
+
+.job-header strong {
+  font-weight: 700;  /* Even bolder */
+  font-size: 14px;   /* Increased from 13px */
+}
+
+.job-details {
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #666;
+}
+
+.sponsor {
+  background-color: #f0f7f2;
+  border-color: #e6f3ea;
+}
+
+.not-sponsor {
+  background-color: white;
+}
+
+.job-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+}
+
+.en-badge {
+  display: inline-block;
+  background-color: white;
+  color: #0a66c2;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 3px;
+  margin-left: 6px;
+  vertical-align: middle;
+  border: 1px solid #0a66c2;
+}
+
+.button-container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 15px;
+  background-color: white;
+  width: 400px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: white;
+}
+
+.coffee-button {
+  margin-left: auto;
+  background-color: #ffdd00;
+  color: #000000;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.coffee-button:hover {
+  background-color: #ffd000;
+}
+
+#company-list {
+  padding: 0 5px;
+  padding-bottom: 40px;
+}
+
+#summary {
+  font-size: 15px;
+  line-height: 1.4;
+  color: #333;
+  margin-bottom: 15px;
+  font-weight: 500;
+  padding: 0 5px;
+}

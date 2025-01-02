@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "KMatch",
-  "version": "1.0",
-  "description": "Checks if companies on LinkedIn are recognized sponsors in the Netherlands",
+  "version": "1.2",
+  "description": "Browse LinkedIn jobs smarter: Instantly identify companies authorized to sponsor highly skilled migrant visas in the Netherlands",
   "host_permissions": [
     "*://*.linkedin.com/*"
   ],

@@ -1,9 +1,4 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  const coffeeButton = document.getElementById('coffee-button');
-  coffeeButton.addEventListener('click', () => {
-    chrome.tabs.create({ url: 'https://www.buymeacoffee.com/ash.develope' });
-  });
-
   try {
     // Query tabs in a more specific way
     const tabs = await chrome.tabs.query({

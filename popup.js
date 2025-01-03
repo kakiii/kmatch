@@ -15,22 +15,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const tab = tabs[0];
     
-    // Safety check for URL
-    if (!tab?.url) {
-      document.getElementById('summary').textContent = 'Unable to access tab URL';
-      return;
-    }
-
-    if (!tab.url.includes('linkedin.com')) {
+    // Move LinkedIn check before the URL safety check
+    if (!tab.url || !tab.url.includes('linkedin.com')) {
       const summaryElement = document.getElementById('summary');
       const message = 'Please visit LinkedIn to use this extension.';
       const sponsorListLink = 'https://ind.nl/en/public-register-recognised-sponsors/public-register-regular-labour-and-highly-skilled-migrants';
       const linkText = 'Complete sponsor list';
 
       summaryElement.innerHTML = `
-        <p>${message}</p>
-        <p>${linkText}: <a href="${sponsorListLink}" target="_blank">${sponsorListLink}</a></p>
+        ${message}<br><br>
+        ${linkText}:<br> <a href="${sponsorListLink}" target="_blank">${sponsorListLink}</a>
       `;
+      return;
+    }
+
+    // Safety check for URL
+    if (!tab?.url) {
+      document.getElementById('summary').textContent = 'Unable to access tab URL';
       return;
     }
 

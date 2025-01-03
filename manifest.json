@@ -21,7 +21,10 @@
     }
   ],
   "web_accessible_resources": [{
-    "resources": ["sponsors.json"],
-    "matches": ["*://*.linkedin.com/*"]
-  }]
+    "resources": ["sponsors.json", "welcome.html"],
+    "matches": ["<all_urls>"]
+  }],
+  "background": {
+    "service_worker": "background.js"
+  }
 } 

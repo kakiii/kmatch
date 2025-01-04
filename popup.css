@@ -65,41 +65,9 @@ body {
   border: 1px solid #0a66c2;
 }
 
-.button-container {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  padding: 15px;
-  background-color: white;
-  width: 400px;
-  display: flex;
-  justify-content: flex-end;
-  padding: 10px;
-  box-sizing: border-box;
-  background-color: white;
-}
-
-.coffee-button {
-  margin-left: auto;
-  background-color: #ffdd00;
-  color: #000000;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  text-decoration: none;
-  display: inline-block;
-}
-
-.coffee-button:hover {
-  background-color: #ffd000;
-}
-
 #company-list {
   padding: 0 5px;
-  padding-bottom: 40px;
+  padding-bottom: 20px;
 }
 
 #summary {

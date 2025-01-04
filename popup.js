@@ -18,7 +18,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Move LinkedIn check before the URL safety check
     if (!tab.url || !tab.url.includes('linkedin.com')) {
       const summaryElement = document.getElementById('summary');
-      const message = 'Please visit LinkedIn to use this extension.';
+      const linkedInUrl = 'https://www.linkedin.com/jobs/collections/';
+      const message = `Welcome to the KMatch extension.<br><br>To use the extension, please visit<br><a href="${linkedInUrl}" target="_blank">${linkedInUrl}</a>`;
       const sponsorListLink = 'https://ind.nl/en/public-register-recognised-sponsors/public-register-regular-labour-and-highly-skilled-migrants';
       const linkText = 'Complete sponsor list';
 

@@ -1,4 +1,4 @@
-# KMatch - LinkedIn Job Sponsor Checker
+# KMatch - Dutch Sponsor Job Finder
 
 A Chrome extension that helps you quickly identify recognized sponsors for highly skilled migrant visas while browsing LinkedIn jobs in the Netherlands.
 

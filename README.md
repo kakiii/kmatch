@@ -84,7 +84,23 @@ For privacy concerns or questions:
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+We welcome contributions to make KMatch better! Here's how you can help:
+
+### Feature Improvements
+Found a bug or have a feature idea? Check out `content.js` and submit a PR or open an issue.
+
+### UI Enhancements
+Want to improve the popup interface? Take a look at `popup.js` and show us your ideas.
+
+### Dataset Accuracy
+Notice missing sponsors or incorrect data? Help us maintain `sponsor.json` by submitting updates.
+
+To contribute:
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 Found it helpful?
 - Please share with fellow job seekers 🔗

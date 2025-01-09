@@ -1,7 +1,11 @@
 console.log('Content script loaded');
 
-// Remove the existing recognizedSponsors map and add this instead
+// Map to store recognized sponsor companies and their variations
+// This is loaded from sponsors.json and used for highlighting sponsored companies
 let recognizedSponsors = new Map();
+
+// Cache for storing language detection results to avoid redundant processing
+const jobLanguageCache = new Map();
 
 // Load sponsors from JSON file
 fetch(chrome.runtime.getURL('sponsors.json'))
@@ -15,10 +19,10 @@ fetch(chrome.runtime.getURL('sponsors.json'))
   })
   .catch(error => console.error('Error loading sponsors:', error));
 
-// Add this at the top with other constants
-const jobLanguageCache = new Map();
-
-// Add this near the top of the file with other listeners
+// Main message handler for extension communication
+// Handles two types of messages:
+// 1. getJobsInfo: Collects job listing information from the page
+// 2. scrollToJob: Scrolls to and clicks a specific job listing
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "getJobsInfo") {
     const jobs = [];
@@ -146,6 +150,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   return true; // Keep the message channel open for async responses
 });
 
+// Cleans company names by removing common business suffixes and special characters
+// This helps with matching variations of company names more accurately
 function cleanCompanyName(name) {
   if (!name) return '';
   
@@ -156,6 +162,8 @@ function cleanCompanyName(name) {
     .trim();
 }
 
+// Checks if a company is a recognized sponsor by comparing against loaded sponsor list
+// Performs both exact and fuzzy matching to catch variations in company names
 function checkIfSponsor(companyName) {
   if (!companyName || recognizedSponsors.size === 0) return false;
   
@@ -183,6 +191,8 @@ function checkIfSponsor(companyName) {
   return false;
 }
 
+// Main processing function that handles both sponsor highlighting and language detection
+// Called on page load, scroll, and DOM mutations
 function processPage() {
   // Process both features immediately
   processSponsors();
@@ -195,6 +205,9 @@ function processPage() {
   }, 500);
 }
 
+// Adds visual indicators to job cards:
+// - Green background for sponsored companies
+// - Resets background to white for non-sponsored companies
 function processSponsors() {
   console.log('Processing sponsors...');
   const cards = document.querySelectorAll('.job-card-container, [data-job-id], .jobs-search-results__list-item');
@@ -222,6 +235,9 @@ function processSponsors() {
   });
 }
 
+// Adds language badges to job titles:
+// - KM badge for Known Member (sponsor) companies
+// - EN badge for jobs posted in English
 function processLanguages() {
   const cards = document.querySelectorAll('.job-card-container, [data-job-id], .jobs-search-results__list-item');
   
@@ -280,7 +296,8 @@ function processLanguages() {
   });
 }
 
-// Helper function to create badges
+// Utility function to create consistent badge styling
+// Used for both KM (blue background) and EN (white background) badges
 function createBadge(text) {
   const badge = document.createElement('span');
   badge.className = 'language-indicator';
@@ -305,43 +322,9 @@ function createBadge(text) {
   return badge;
 }
 
-// Multiple trigger points
-document.addEventListener('DOMContentLoaded', processPage);
-window.addEventListener('load', processPage);
-document.addEventListener('scroll', () => {
-  requestAnimationFrame(processPage);
-});
-
-// Observer for dynamic content
-let observerTimeout;
-const observer = new MutationObserver((mutations) => {
-  if (mutations.some(mutation => mutation.addedNodes.length > 0)) {
-    if (observerTimeout) clearTimeout(observerTimeout);
-    observerTimeout = setTimeout(() => {
-      processPage();
-    }, 100);
-  }
-});
-
-observer.observe(document.body, {
-  childList: true,
-  subtree: true,
-  attributes: false,
-  characterData: false
-});
-
-// Initial call
-processPage();
-
-// Process on scroll (debounced)
-let scrollTimeout;
-document.addEventListener('scroll', () => {
-  if (scrollTimeout) clearTimeout(scrollTimeout);
-  scrollTimeout = setTimeout(() => {
-    processLanguages();
-  }, 100);
-});
-
+// Language detection using common Dutch words and patterns
+// Returns false if Dutch words/patterns are found, true otherwise
+// Used to determine if a job posting is in English
 function isEnglishText(text, card) {
   // First try to find the job description
   const descriptionElement = card.querySelector([
@@ -438,4 +421,39 @@ new MutationObserver(() => {
   }
 }).observe(document.body, { subtree: true, childList: true });
 
-// Add sponsors.json to manifest.json 
+// Multiple trigger points
+document.addEventListener('DOMContentLoaded', processPage);
+window.addEventListener('load', processPage);
+document.addEventListener('scroll', () => {
+  requestAnimationFrame(processPage);
+});
+
+// Observer for dynamic content
+let observerTimeout;
+const observer = new MutationObserver((mutations) => {
+  if (mutations.some(mutation => mutation.addedNodes.length > 0)) {
+    if (observerTimeout) clearTimeout(observerTimeout);
+    observerTimeout = setTimeout(() => {
+      processPage();
+    }, 100);
+  }
+});
+
+observer.observe(document.body, {
+  childList: true,
+  subtree: true,
+  attributes: false,
+  characterData: false
+});
+
+// Initial call
+processPage();
+
+// Process on scroll (debounced)
+let scrollTimeout;
+document.addEventListener('scroll', () => {
+  if (scrollTimeout) clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(() => {
+    processLanguages();
+  }, 100);
+});

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "KMatch - Dutch Sponsor Job Finder",
-  "version": "1.5",
+  "version": "1.6",
   "description": "Find LinkedIn jobs from Dutch companies authorized to sponsor Kennismigrant visas",
   "host_permissions": [
     "*://*.linkedin.com/*"

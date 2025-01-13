@@ -1,20 +1,6 @@
 {
-  "lastUpdated": "2024-12-11",
+  "lastUpdated": "2025-01-13",
   "sponsors": {
-    "aadee": [
-      "\"Aa-Dee\" Machinefabriek en Staalbouw Nederland BV"
-    ],
-    "aae": [
-      "\"AAE\" Advanced Automated Equipment BV"
-    ],
-    "easepay": [
-      "@EasePay BV",
-      "EasePay"
-    ],
-    "fentures": [
-      "@Fentures BV",
-      "Imperial Brands PLC"
-    ],
     "0110": [
       "01-10 Architecten BV"
     ],
@@ -152,7 +138,8 @@
     ],
     "4ps": [
       "4PS Development BV",
-      "4PS"
+      "4PS",
+      "4PS Beheer B.V."
     ],
     "4web": [
       "4WEB EU BV",
@@ -193,66 +180,8 @@
       "A Beautiful Story BV",
       "A Beautiful Story | B-Corp",
       "A Beautiful Story l B-Corp",
-      "A New Hope BV"
-    ],
-    "as": [
-      "A&S System Integrators BV",
-      "AS Watson (Health & Beauty Continental Europe) BV"
-    ],
-    "aab": [
-      "AAB International BV"
-    ],
-    "ace": [
-      "ACE Ingenieurs en Adviesbureau, Werktuigbouw en Electrotechniek BV",
-      "ACE Belgium",
-      "Ace and Tate Holding BV",
-      "Ace & Tate",
-      "ACE Company BV",
-      "ACE + Company",
-      "ACE Incubator BV",
-      "ACE Management Consulting BV",
-      "UvA - Amsterdam UMC - HvA Ventures Holding BV",
-      "Ace Solutions BV",
-      "NLWorks",
-      "Ace Tankers CV"
-    ],
-    "al": [
-      "AL Hoogesteger Fresh Specialist BV",
-      "A.L. Hoogesteger Fresh Specialist",
-      "AL International Transport & Logistics BV",
-      "AL LOGISTICS"
-    ],
-    "am": [
-      "AM Best (EU) Rating Services BV",
-      "AM Best Rating Services",
-      "AM Flex SolutionsBV"
-    ],
-    "ampc": [
-      "AMPC Associated Medical Project Consultants BV",
-      "AMPC International Health Consultants"
-    ],
-    "ams": [
-      "AMS BV",
-      "AMS Group BV",
-      "AMS Green Markets BV",
-      "ams Sensors Netherlands BV",
-      "AMS Sourcing BV"
-    ],
-    "ant": [
-      "ANT International BV",
-      "ANT International AB"
-    ],
-    "ar": [
-      "AR Management & Consultancy BV"
-    ],
-    "at": [
-      "AT Kearney BV",
-      "Kearney"
-    ],
-    "az": [
-      "AZ NV",
-      "AZ Alkmaar",
-      "AZ Alkmaar"
+      "A New Hope BV",
+      "A. de Jong Groep"
     ],
     "a10": [
       "A10 Networks Ltd Netherlands",
@@ -267,9 +196,18 @@
     "a2zcm": [
       "A2Z-CM NV"
     ],
+    "aab": [
+      "AAB International BV"
+    ],
     "aacsb": [
       "AACSB International, Inc- The Association to Advance Collegiate Schools of Business",
       "AACSB"
+    ],
+    "aadee": [
+      "\"Aa-Dee\" Machinefabriek en Staalbouw Nederland BV"
+    ],
+    "aae": [
+      "\"AAE\" Advanced Automated Equipment BV"
     ],
     "aaeon": [
       "AAEON Technology (Europe) BV",
@@ -470,6 +408,10 @@
       "Access Innovations BV",
       "Access Technology Group NL"
     ],
+    "acciona": [
+      "Acciona Industrial NL B.V.",
+      "ACCIONA"
+    ],
     "account": [
       "Account 4 BV",
       "Account 4 B.V."
@@ -494,6 +436,20 @@
     "acda": [
       "Acda RPA Consultancy BV",
       "Acda Consultancy B.V."
+    ],
+    "ace": [
+      "ACE Ingenieurs en Adviesbureau, Werktuigbouw en Electrotechniek BV",
+      "ACE Belgium",
+      "Ace and Tate Holding BV",
+      "Ace & Tate",
+      "ACE Company BV",
+      "ACE + Company",
+      "ACE Incubator BV",
+      "ACE Management Consulting BV",
+      "UvA - Amsterdam UMC - HvA Ventures Holding BV",
+      "Ace Solutions BV",
+      "NLWorks",
+      "Ace Tankers CV"
     ],
     "acer": [
       "Acer Computer BV",
@@ -756,6 +712,10 @@
     ],
     "advantech": [
       "Advantech Europe BV"
+    ],
+    "advanza": [
+      "Advanza B.V.",
+      "Advanza"
     ],
     "advario": [
       "Advario BV",
@@ -1113,6 +1073,10 @@
     "airios": [
       "Airios"
     ],
+    "airlife": [
+      "AirLife Netherlands Holdings, B.V.",
+      "AirLife"
+    ],
     "airofiller": [
       "Airofiller Equipment Solutions BV"
     ],
@@ -1189,12 +1153,22 @@
       "Akzo Nobel NV",
       "AKZO Nobel Nederland BV"
     ],
+    "al": [
+      "AL Hoogesteger Fresh Specialist BV",
+      "A.L. Hoogesteger Fresh Specialist",
+      "AL International Transport & Logistics BV",
+      "AL LOGISTICS"
+    ],
     "alabel": [
       "A-Label IT BV"
     ],
     "alalim": [
       "AlAlim Legal BV",
       "AlAlim Legal (Law firm)"
+    ],
+    "alaralukagro": [
+      "Alara-Lukagro B.V.",
+      "Alara-Lukagro"
     ],
     "albelli": [
       "Albelli BV"
@@ -1290,7 +1264,8 @@
     ],
     "all": [
       "All Capital Holding BV",
-      "All Trading BV"
+      "All Trading BV",
+      "All Time Code Stars B.V."
     ],
     "all2md": [
       "ALL2MD BV"
@@ -1466,6 +1441,11 @@
     "alver": [
       "Alver BV"
     ],
+    "am": [
+      "AM Best (EU) Rating Services BV",
+      "AM Best Rating Services",
+      "AM Flex SolutionsBV"
+    ],
     "amada": [
       "AMADA WELD TECH BV"
     ],
@@ -1580,11 +1560,18 @@
     "amo": [
       "AMO Groningen BV"
     ],
+    "ampc": [
+      "AMPC Associated Medical Project Consultants BV",
+      "AMPC International Health Consultants"
+    ],
     "ampelmann": [
       "Ampelmann Operations BV"
     ],
     "amperapark": [
       "Amperapark BV"
+    ],
+    "ampersan": [
+      "Ampersan Services NL B.V."
     ],
     "ampersand": [
       "Ampersand Management BV"
@@ -1610,6 +1597,13 @@
     ],
     "ampowr": [
       "Ampowr BV"
+    ],
+    "ams": [
+      "AMS BV",
+      "AMS Group BV",
+      "AMS Green Markets BV",
+      "ams Sensors Netherlands BV",
+      "AMS Sourcing BV"
     ],
     "amse": [
       "AMSE"
@@ -1799,6 +1793,10 @@
     "ansys": [
       "ANSYS Netherlands"
     ],
+    "ant": [
+      "ANT International BV",
+      "ANT International AB"
+    ],
     "antaris": [
       "Antaris Solutions BV"
     ],
@@ -1839,6 +1837,10 @@
     ],
     "anton": [
       "Anton Paar Netherlands BV"
+    ],
+    "anva": [
+      "ANVA B.V.",
+      "ANVA"
     ],
     "anvil": [
       "Anvil Ventures The Netherlands BV"
@@ -1985,6 +1987,9 @@
     ],
     "aquent": [
       "Aquent LLC"
+    ],
+    "ar": [
+      "AR Management & Consultancy BV"
     ],
     "araco": [
       "Araco International BV"
@@ -2201,6 +2206,10 @@
     "aryza": [
       "Aryza BV"
     ],
+    "as": [
+      "A&S System Integrators BV",
+      "AS Watson (Health & Beauty Continental Europe) BV"
+    ],
     "asa": [
       "ASA International NV"
     ],
@@ -2222,6 +2231,10 @@
     ],
     "ascom": [
       "Ascom (Nederland) BV"
+    ],
+    "ascott": [
+      "Ascott Hospitality (Europe) N.V.",
+      "Ascott Europe"
     ],
     "ase": [
       "ASE NL Service Center BV"
@@ -2343,8 +2356,9 @@
       "ASUS Holland BV",
       "Asus Technology Holland"
     ],
-    "att": [
-      "AT&T Global Network Services Nederland BV"
+    "at": [
+      "AT Kearney BV",
+      "Kearney"
     ],
     "atabix": [
       "Atabix Solutions BV"
@@ -2433,6 +2447,9 @@
     "ats": [
       "ATS Global BV",
       "ATS Group Holding BV"
+    ],
+    "att": [
+      "AT&T Global Network Services Nederland BV"
     ],
     "atterbury": [
       "Atterbury Europe BV"
@@ -2632,6 +2649,10 @@
     "avivia": [
       "Avivia BV"
     ],
+    "avoxt": [
+      "AVOXT B.V.",
+      "Avoxt"
+    ],
     "avrafvalverwerking": [
       "AVR-Afvalverwerking BV"
     ],
@@ -2701,6 +2722,11 @@
     "ayurveda": [
       "Ayurveda Specialist BV"
     ],
+    "az": [
+      "AZ NV",
+      "AZ Alkmaar",
+      "AZ Alkmaar"
+    ],
     "azerion": [
       "Azerion Productions GD BV",
       "Azerion Productions Services BV",
@@ -2718,36 +2744,6 @@
       "B Building Business BV",
       "B. Amsterdam",
       "B Futurist BV"
-    ],
-    "bc": [
-      "B&C Lifestyle BV",
-      "BC Distribution BV"
-    ],
-    "bf": [
-      "B&F Palace Amsterdam BV",
-      "BF Construction Consultancy BV",
-      "BF Global Logistics BV"
-    ],
-    "bth": [
-      "BTH Service BV",
-      "Premier Tech Systems and Automation"
-    ],
-    "bv": [
-      "BV Alabastine (Holland)",
-      "BV Algemeen Nederlands Persbureau ANP",
-      "BV Arrow Electronics DLC",
-      "BV Chiropractie Rugcentra AB van Beest DC",
-      "BV Design-Production Link \"DPL\"",
-      "BV Rubberfabriek \"Wittenburg\"",
-      "BV Systemation AES",
-      "BV Twentsche Kabelfabriek",
-      "BV Vega Meet- en Regeltechniek",
-      "VEGA NL",
-      "BV VITESSE"
-    ],
-    "bb": [
-      "B+B Vakmedianet Groep BV",
-      "VMN media"
     ],
     "b2c": [
       "B2C Europe Support BV"
@@ -2913,6 +2909,10 @@
       "Barentz Commodities BV",
       "Barentz Holding BV"
     ],
+    "barilla": [
+      "Barilla International B.V.",
+      "Barilla Group"
+    ],
     "barla": [
       "Barla Food BV"
     ],
@@ -2991,6 +2991,9 @@
       "Bausch+Lomb Netherlands BV",
       "Bausch+Lomb OPS BV"
     ],
+    "bavelstaete": [
+      "Bavelstaete Holding B.V."
+    ],
     "baxshopnl": [
       "Bax-Shopnl BV"
     ],
@@ -3008,6 +3011,10 @@
       "Bayer Netherlands BV",
       "Bayer World Investments BV"
     ],
+    "bb": [
+      "B+B Vakmedianet Groep BV",
+      "VMN media"
+    ],
     "bbblgm": [
       "BBBLGM BV"
     ],
@@ -3019,6 +3026,10 @@
     ],
     "bbuilt": [
       "B-Built BV"
+    ],
+    "bc": [
+      "B&C Lifestyle BV",
+      "BC Distribution BV"
     ],
     "bcd": [
       "BCD Travel Nederland BV",
@@ -3033,9 +3044,6 @@
     "bd": [
       "BD Kiestra BV"
     ],
-    "bdspectrum": [
-      "BD&Spectrum BV"
-    ],
     "bdairy": [
       "Bdairy BV"
     ],
@@ -3049,6 +3057,9 @@
     ],
     "bdr": [
       "BDR Thermea Group BV"
+    ],
+    "bdspectrum": [
+      "BD&Spectrum BV"
     ],
     "be": [
       "Be Empowered BV",
@@ -3245,6 +3256,12 @@
       "Beyond Meat EU BV",
       "Beyond Space BV",
       "Beyond Sports BV"
+    ],
+    "bf": [
+      "B&F Palace Amsterdam BV",
+      "BF Construction Consultancy BV",
+      "BF Global Logistics BV",
+      "BF COÖPERATIEF U.A."
     ],
     "bgb": [
       "BGB Dentistry BV"
@@ -3462,6 +3479,10 @@
     ],
     "blanq": [
       "Blanq Labs BV"
+    ],
+    "blauwfruit": [
+      "blauwfruit B.V.",
+      "blauwfruit"
     ],
     "blauwtrust": [
       "Blauwtrust Groep BV"
@@ -3781,7 +3802,8 @@
       "Boreal Europe BV"
     ],
     "boreas": [
-      "Boreas Maritime BV"
+      "Boreas Maritime BV",
+      "Boreas Logistics Holdings B.V."
     ],
     "boring": [
       "Boring Agency BV"
@@ -3794,9 +3816,6 @@
     ],
     "bosal": [
       "Bosal Energy Conversion Industry BV"
-    ],
-    "bösch": [
-      "Bösch Boden Spies Import GmbH"
     ],
     "bosch": [
       "Bosch en Slabbers Den Haag BV",
@@ -3856,6 +3875,10 @@
     ],
     "boxfonteck": [
       "BoxFonteck BV"
+    ],
+    "boxspring": [
+      "Boxspring Benelux B.V.",
+      "Boxspring Design"
     ],
     "bp": [
       "BP Europa SE - BP Nederland",
@@ -3923,6 +3946,10 @@
     "brainsfirst": [
       "Brainsfirst BV"
     ],
+    "brainstax": [
+      "BrainStax B.V.",
+      "BrainStax - Stay ahead"
+    ],
     "brainstructions": [
       "Brainstructions BV"
     ],
@@ -3950,7 +3977,9 @@
     ],
     "braskem": [
       "Braskem Netherlands BV",
-      "Braskem Trading & Shipping BV"
+      "Braskem Trading & Shipping BV",
+      "Braskem Netherlands Finance B.V.",
+      "Braskem Netherlands Inc. B.V."
     ],
     "bravinci": [
       "Bravinci NL BV"
@@ -4105,11 +4134,19 @@
     "bsgi": [
       "BSGi NL Warehouse BV"
     ],
+    "bsh": [
+      "BSH Huishoudapparaten B.V.",
+      "BSH Nederland"
+    ],
     "bsi": [
       "BSI Group The Netherlands BV"
     ],
     "bspa": [
       "BSPA BV"
+    ],
+    "bss": [
+      "BSS Holland B.V.",
+      "BSS Holland BV"
     ],
     "bsur": [
       "BSUR Agency BV"
@@ -4119,6 +4156,10 @@
     ],
     "btg": [
       "BTG BioLiquids BV"
+    ],
+    "bth": [
+      "BTH Service BV",
+      "Premier Tech Systems and Automation"
     ],
     "bts": [
       "BTS in Amsterdam BV"
@@ -4147,9 +4188,6 @@
     ],
     "bugloos": [
       "Bugloos BV"
-    ],
-    "bühler": [
-      "Bühler BV"
     ],
     "build": [
       "Build in Amsterdam BV"
@@ -4237,6 +4275,19 @@
     "buybay": [
       "BuyBay BV"
     ],
+    "bv": [
+      "BV Alabastine (Holland)",
+      "BV Algemeen Nederlands Persbureau ANP",
+      "BV Arrow Electronics DLC",
+      "BV Chiropractie Rugcentra AB van Beest DC",
+      "BV Design-Production Link \"DPL\"",
+      "BV Rubberfabriek \"Wittenburg\"",
+      "BV Systemation AES",
+      "BV Twentsche Kabelfabriek",
+      "BV Vega Meet- en Regeltechniek",
+      "VEGA NL",
+      "BV VITESSE"
+    ],
     "bw": [
       "BW Global (Europe) BV",
       "BW Offshore Management BV"
@@ -4275,6 +4326,12 @@
     "byte": [
       "Byte BV"
     ],
+    "bösch": [
+      "Bösch Boden Spies Import GmbH"
+    ],
+    "bühler": [
+      "Bühler BV"
+    ],
     "c": [
       "C & C Asian Market",
       "C & D Foods (Netherlands) BV",
@@ -4282,34 +4339,11 @@
       "C Fleet Supervision BV",
       "C Steinweg-Handelsveem BV"
     ],
-    "ce": [
-      "C&E Development BV",
-      "CE Delft"
-    ],
-    "cj": [
-      "C&J International Trading BV",
-      "CJ Europe GmbH",
-      "CJ Logistics Europe BV",
-      "CJ Netherlands Office",
-      "CJ Wildbird Foods Europe BV"
-    ],
-    "ccs": [
-      "CCS Conmar Coating Services BV"
-    ],
-    "cems": [
-      "CEMS (Community of European Management Schools) Alumni Association the Netherlands"
-    ],
-    "ch": [
-      "CH Robinson Europe BV"
-    ],
-    "cohe": [
-      "COHE"
-    ],
-    "cpi": [
-      "CPI Governance BV"
-    ],
     "c1": [
       "C1 Connections BV"
+    ],
+    "c2ca": [
+      "C2CA Technology B.V."
     ],
     "ca": [
       "CA Software Holding BV"
@@ -4370,9 +4404,6 @@
     "cairn": [
       "Cairn Real Estate BV"
     ],
-    "çak": [
-      "Çak Textile BV"
-    ],
     "cal": [
       "CAL Consult Nederland BV"
     ],
@@ -4387,9 +4418,6 @@
     ],
     "caliberglobal": [
       "Caliberglobal BV"
-    ],
-    "çalik": [
-      "Çalik Denim BV"
     ],
     "callisto": [
       "Callisto Integration Europe BV",
@@ -4413,6 +4441,10 @@
     "campuskey": [
       "Campuskey BV"
     ],
+    "candi": [
+      "candi solar B.V.",
+      "Candi Solar"
+    ],
     "canfield": [
       "Canfield Scientific Europe BV"
     ],
@@ -4424,6 +4456,10 @@
     ],
     "canna": [
       "Canna Corporate BV"
+    ],
+    "cannamax": [
+      "Cannamax B.V.",
+      "Cannamax NL"
     ],
     "canon": [
       "Canon Europa NV",
@@ -4470,6 +4506,10 @@
     ],
     "capreit": [
       "CAPREIT NL I BV"
+    ],
+    "capri": [
+      "Capri Partners B.V.",
+      "Capri Partners"
     ],
     "capstone": [
       "Capstone Advisory BV"
@@ -4518,6 +4558,10 @@
     ],
     "carepay": [
       "CarePay International BV"
+    ],
+    "carerix": [
+      "Carerix B.V.",
+      "Carerix"
     ],
     "careservant": [
       "CareServant BV"
@@ -4636,11 +4680,11 @@
     "cavotec": [
       "Cavotec Nederland BV"
     ],
-    "cbi": [
-      "CB&I Nederland BV"
-    ],
     "cbe": [
       "CBE Staffing BV"
+    ],
+    "cbi": [
+      "CB&I Nederland BV"
     ],
     "cbmm": [
       "CBMM Europe BV"
@@ -4688,6 +4732,9 @@
     "ccorp": [
       "C-Corp BV"
     ],
+    "ccs": [
+      "CCS Conmar Coating Services BV"
+    ],
     "ccv": [
       "CCV Group BV"
     ],
@@ -4699,6 +4746,10 @@
     ],
     "cds": [
       "CDS Development BV"
+    ],
+    "ce": [
+      "C&E Development BV",
+      "CE Delft"
     ],
     "cead": [
       "CEAD BV"
@@ -4723,7 +4774,9 @@
       "Cegeka Nederland"
     ],
     "cegelec": [
-      "Cegelec Industry BV"
+      "Cegelec Industry BV",
+      "Cegelec Infra B.V.",
+      "Cegelec Fire Solutions"
     ],
     "celanese": [
       "Celanese Europe BV"
@@ -4757,6 +4810,9 @@
     ],
     "celsian": [
       "CelSian Glass & Solar BV"
+    ],
+    "cems": [
+      "CEMS (Community of European Management Schools) Alumni Association the Netherlands"
     ],
     "cenosco": [
       "Cenosco Custom BV"
@@ -4857,6 +4913,9 @@
     "cgi": [
       "CGI Nederland BV"
     ],
+    "ch": [
+      "CH Robinson Europe BV"
+    ],
     "chain": [
       "Chain Professionals BV"
     ],
@@ -4915,8 +4974,8 @@
     "chartboost": [
       "Chartboost BV"
     ],
-    "châteraisé": [
-      "Châteraisé Europe BV"
+    "chase": [
+      "Chase Bliss B.V."
     ],
     "che": [
       "CHE BV"
@@ -5078,6 +5137,9 @@
     "chugoku": [
       "Chugoku Paints BV"
     ],
+    "châteraisé": [
+      "Châteraisé Europe BV"
+    ],
     "ci": [
       "CI IV Coöperatief UA",
       "CI NMF I Coöperatief UA"
@@ -5191,6 +5253,14 @@
     ],
     "ciwit": [
       "Ciwit BV"
+    ],
+    "cj": [
+      "C&J International Trading BV",
+      "CJ Europe GmbH",
+      "CJ Logistics Europe BV",
+      "CJ Netherlands Office",
+      "CJ Wildbird Foods Europe BV",
+      "CJ Administratiekantoor"
     ],
     "cjob": [
       "C-Job & Partners BV"
@@ -5345,16 +5415,16 @@
     "clustervision": [
       "ClusterVision Solutions BV"
     ],
-    "cmcom": [
-      "CMcom International BV",
-      "CMcom R&D 14 BV",
-      "CMcom R&D 7 BV"
-    ],
     "cmacgm": [
       "CMA-CGM (Holland) BV"
     ],
     "cmc": [
       "CMC Group Europe BV"
+    ],
+    "cmcom": [
+      "CMcom International BV",
+      "CMcom R&D 14 BV",
+      "CMcom R&D 7 BV"
     ],
     "cmd": [
       "CMD Automotive"
@@ -5472,6 +5542,9 @@
     ],
     "cognyte": [
       "Cognyte Netherlands BV"
+    ],
+    "cohe": [
+      "COHE"
     ],
     "coil": [
       "Coil Services BV"
@@ -5824,17 +5897,6 @@
     "cooperatie": [
       "Cooperatie Eucord UA"
     ],
-    "coöperatie": [
-      "Coöperatie Koninklijke Avebe UA",
-      "Coöperatie Koninklijke Cosun UA",
-      "Coöperatie Koninklijke Fruitmasters UA",
-      "Coöperatie Studio CC Amsterdam UA",
-      "Coöperatie Tory Burch UA"
-    ],
-    "coöperatieve": [
-      "Coöperatieve KazMunaiGaz UA",
-      "Coöperatieve Rabobank UA"
-    ],
     "coosto": [
       "Coosto BV"
     ],
@@ -6000,8 +6062,22 @@
     "cozy": [
       "Cozy"
     ],
+    "coöperatie": [
+      "Coöperatie Koninklijke Avebe UA",
+      "Coöperatie Koninklijke Cosun UA",
+      "Coöperatie Koninklijke Fruitmasters UA",
+      "Coöperatie Studio CC Amsterdam UA",
+      "Coöperatie Tory Burch UA"
+    ],
+    "coöperatieve": [
+      "Coöperatieve KazMunaiGaz UA",
+      "Coöperatieve Rabobank UA"
+    ],
     "cph": [
       "CPH Pharma BV"
+    ],
+    "cpi": [
+      "CPI Governance BV"
     ],
     "cpic": [
       "CPIC Europe BV"
@@ -6050,9 +6126,6 @@
       "Creative Clicks BV",
       "Creative Fabrica BV",
       "Creative Strategy Digital BV"
-    ],
-    "crédit": [
-      "Crédit Agricole Consumer Finance Nederland BV"
     ],
     "credit": [
       "Credit Europe Bank NV",
@@ -6162,6 +6235,9 @@
     ],
     "crystalloids": [
       "Crystalloids BV"
+    ],
+    "crédit": [
+      "Crédit Agricole Consumer Finance Nederland BV"
     ],
     "cs": [
       "CS Digital Media BV"
@@ -6316,29 +6392,9 @@
     "cytocypher": [
       "Cytocypher BV"
     ],
-    "dm": [
-      "D&M Europe BV"
-    ],
     "d": [
       "D SOLUTIONS BV",
       "D TRADING BV"
-    ],
-    "dorc": [
-      "DORC Dutch Ophthalmic Research Center (International) BV"
-    ],
-    "dp": [
-      "DP Supply BV",
-      "DP World Inland BV",
-      "DP World Logistics Europe BV",
-      "DP World Logistics Netherlands BV"
-    ],
-    "dqa": [
-      "DQA Pharma International BV",
-      "DQ&A Group BV",
-      "DQ&A Nederland BV"
-    ],
-    "ddock": [
-      "D/DOCK BV"
     ],
     "d2d": [
       "D2D Holding BV"
@@ -6478,9 +6534,6 @@
     "dassault": [
       "Dassault Systèmes BV"
     ],
-    "datmobility": [
-      "DATMobility BV"
-    ],
     "data": [
       "Data eXcellence BV"
     ],
@@ -6534,6 +6587,9 @@
     ],
     "datlinq": [
       "Datlinq"
+    ],
+    "datmobility": [
+      "DATMobility BV"
     ],
     "datum": [
       "DATUM SOLUTIONS NETHERLANDS BV"
@@ -6592,6 +6648,9 @@
     "ddl": [
       "DDL Diagnostic Laboratory BV"
     ],
+    "ddock": [
+      "D/DOCK BV"
+    ],
     "de": [
       "De Agile Testers BV",
       "De Architectenwerkgroep Tilburg (DAT)",
@@ -6628,7 +6687,10 @@
       "De Voogt Naval Architects BV",
       "De Werkunie BV",
       "De Zwaluw Logistiek BV",
-      "De Zwarte Hond Groningen BV"
+      "De Zwarte Hond Groningen BV",
+      "De Blauwe Tand B.V.",
+      "De Jong Combustion B.V.",
+      "De Koninklijke Nederlandse Zwembond - KNZB"
     ],
     "dealroomco": [
       "Dealroomco BV"
@@ -6689,9 +6751,6 @@
     ],
     "deha": [
       "DEHA BV"
-    ],
-    "déhora": [
-      "Déhora advies BV"
     ],
     "deitycommerce": [
       "DEITYcommerce BV"
@@ -7219,6 +7278,9 @@
     "dlm": [
       "DLM Finance BV"
     ],
+    "dm": [
+      "D&M Europe BV"
+    ],
     "dmc": [
       "DMC Invest BV"
     ],
@@ -7265,9 +7327,6 @@
     "doedijns": [
       "Doedijns BV"
     ],
-    "döhler": [
-      "Döhler Holland BV"
-    ],
     "dole": [
       "Dole Europe BV",
       "Dole Packaged Foods BV"
@@ -7287,6 +7346,9 @@
     ],
     "doral": [
       "Doral Hydrogen Europe BV"
+    ],
+    "dorc": [
+      "DORC Dutch Ophthalmic Research Center (International) BV"
     ],
     "dorf": [
       "Dorf Ketal BV"
@@ -7316,6 +7378,12 @@
     ],
     "dozon": [
       "Dozon BV"
+    ],
+    "dp": [
+      "DP Supply BV",
+      "DP World Inland BV",
+      "DP World Logistics Europe BV",
+      "DP World Logistics Netherlands BV"
     ],
     "dp6": [
       "DP6 architectuurstudio BV"
@@ -7348,6 +7416,11 @@
     ],
     "dps": [
       "DPS Engineering (Netherlands) BV"
+    ],
+    "dqa": [
+      "DQA Pharma International BV",
+      "DQ&A Group BV",
+      "DQ&A Nederland BV"
     ],
     "dr": [
       "Dr Martens Airwair Netherlands BV",
@@ -7457,6 +7530,10 @@
       "DTT Gaming BV",
       "DTT Multimedia BV"
     ],
+    "dtx": [
+      "DTX B.V.",
+      "DTX | Dutch Technology eXperts"
+    ],
     "dual": [
       "Dual Inventive Holding BV"
     ],
@@ -7479,9 +7556,6 @@
     "dumela": [
       "Dumela BV"
     ],
-    "dümmen": [
-      "Dümmen Orange The Netherlands BV"
-    ],
     "dun": [
       "Dun & Bradstreet BV"
     ],
@@ -7501,9 +7575,6 @@
     ],
     "durapower": [
       "Durapower Technology Group BV"
-    ],
-    "dürüm": [
-      "Dürüm Company NL BV"
     ],
     "dustin": [
       "Dustin Netherlands BV"
@@ -7610,18 +7681,24 @@
     "dzm": [
       "DZM Data Solution BV"
     ],
+    "déhora": [
+      "Déhora advies BV"
+    ],
+    "döhler": [
+      "Döhler Holland BV"
+    ],
+    "dümmen": [
+      "Dümmen Orange The Netherlands BV"
+    ],
+    "dürüm": [
+      "Dürüm Company NL BV"
+    ],
     "e": [
       "E D & F Man Holdings BV",
       "E Green Europe BV",
       "E Ink Netherlands BV",
       "E Ink Technology BV",
       "E Zilly BV"
-    ],
-    "em": [
-      "EM Rogers (Transport) BV"
-    ],
-    "emc": [
-      "EMC BV"
     ],
     "e2m": [
       "E2M Technologies BV"
@@ -7650,6 +7727,10 @@
     ],
     "easee": [
       "Easee BV"
+    ],
+    "easepay": [
+      "@EasePay BV",
+      "EasePay"
     ],
     "easp": [
       "EASP Air BV"
@@ -8147,6 +8228,9 @@
     "elycio": [
       "Elycio Talen BV"
     ],
+    "em": [
+      "EM Rogers (Transport) BV"
+    ],
     "emagy": [
       "E-magy BV"
     ],
@@ -8161,6 +8245,9 @@
     ],
     "embraer": [
       "Embraer Netherlands BV"
+    ],
+    "emc": [
+      "EMC BV"
     ],
     "emendis": [
       "Emendis BV"
@@ -8474,9 +8561,6 @@
     "eps": [
       "EPS Europe BV"
     ],
-    "épsilon": [
-      "Épsilon Inversiones BV"
-    ],
     "epson": [
       "Epson Europe BV"
     ],
@@ -8643,6 +8727,9 @@
     "esso": [
       "Esso Nederland BV"
     ],
+    "est": [
+      "EST Netherlands B.V."
+    ],
     "est2021fw": [
       "EST2021FW BV"
     ],
@@ -8739,7 +8826,8 @@
       "Euro Pool System International",
       "Euro Retail BV",
       "Euro Senko",
-      "Euro West BV"
+      "Euro West BV",
+      "Euro Tank Terminal B.V."
     ],
     "euroboor": [
       "Euroboor BV"
@@ -8969,6 +9057,10 @@
     "excelya": [
       "Excelya Netherlands BV"
     ],
+    "excentr": [
+      "EXCENTR B.V.",
+      "EXCENTR"
+    ],
     "except": [
       "Except BV"
     ],
@@ -9097,14 +9189,6 @@
     "ezviz": [
       "EZVIZ Europe BV"
     ],
-    "fv": [
-      "F&V Photographic Industry BV"
-    ],
-    "fg": [
-      "FG Progress BV",
-      "FG Stijl BV",
-      "FG ROBOSYS BV"
-    ],
     "f5": [
       "F5 Networks Benelux BV"
     ],
@@ -9125,6 +9209,10 @@
     ],
     "facial": [
       "Facial Harmony BV"
+    ],
+    "facta": [
+      "Facta Elektrotechniek B.V.",
+      "Facta Elektrotechniek"
     ],
     "factor": [
       "Factor 75 BV"
@@ -9181,6 +9269,9 @@
     "famed": [
       "Famed BV"
     ],
+    "famps": [
+      "F&amp;S B.V."
+    ],
     "fancom": [
       "Fancom BV"
     ],
@@ -9197,7 +9288,8 @@
       "FareHarbor BV"
     ],
     "farm": [
-      "Farm Frites International BV"
+      "Farm Frites International BV",
+      "Farm Dairy"
     ],
     "farm21": [
       "Farm21 BV"
@@ -9213,7 +9305,9 @@
     "fast": [
       "Fast & Fluid Management BV",
       "Fast Four BV",
-      "Fast Imaging BV"
+      "Fast Imaging BV",
+      "FAST (Financial Administration Service and Technology)",
+      "Fast Solutions"
     ],
     "fasten": [
       "Fasten BV"
@@ -9295,6 +9389,10 @@
       "Fenix Consulting Delft BV",
       "Fenix Outdoor Logistics BV"
     ],
+    "fentures": [
+      "@Fentures BV",
+      "Imperial Brands PLC"
+    ],
     "fenzi": [
       "Fenzi AGT Netherlands BV"
     ],
@@ -9334,6 +9432,11 @@
     ],
     "ffund": [
       "Ffund BV"
+    ],
+    "fg": [
+      "FG Progress BV",
+      "FG Stijl BV",
+      "FG ROBOSYS BV"
     ],
     "fge": [
       "FGE International BV"
@@ -9516,6 +9619,9 @@
     ],
     "flamingos": [
       "Flamingo´s Plaza BV"
+    ],
+    "flash": [
+      "Flash Shipping B.V."
     ],
     "flatex": [
       "flatex DEGIRO Bank Dutch Branch"
@@ -10106,7 +10212,9 @@
       "Fulfilment Solutions BV"
     ],
     "full": [
-      "Full Circle Group Holding BV"
+      "Full Circle Group Holding BV",
+      "Full Circle Wind Services Netherlands B.V.",
+      "Full Circle Wind Services"
     ],
     "full4c": [
       "Full4C"
@@ -10162,6 +10270,9 @@
     "fuze": [
       "Fuze Europe BV"
     ],
+    "fv": [
+      "F&V Photographic Industry BV"
+    ],
     "fyffes": [
       "Fyffes"
     ],
@@ -10181,15 +10292,6 @@
     ],
     "g": [
       "G Vermes BV"
-    ],
-    "gb": [
-      "GB Electronics Limited"
-    ],
-    "gc": [
-      "GC de Jong Construction BV"
-    ],
-    "gj": [
-      "GJ van Olst BV"
     ],
     "g3": [
       "G3 Worldwide Mail"
@@ -10287,11 +10389,17 @@
       "Gazprom International Projects BV",
       "Gazprom Sakhalin Holdings BV"
     ],
+    "gb": [
+      "GB Electronics Limited"
+    ],
     "gbe": [
       "GBE Converge BV"
     ],
     "gbm": [
       "GBM Works BV"
+    ],
+    "gc": [
+      "GC de Jong Construction BV"
     ],
     "gcc": [
       "GCC Europe BV"
@@ -10322,9 +10430,6 @@
       "GEA Food Solutions Weert BV",
       "GEA Niro PT BV",
       "GEA Refrigeration Netherlands NV"
-    ],
-    "géant": [
-      "GÉANT Vereniging"
     ],
     "gearbox": [
       "Gearbox Innovations BV",
@@ -10613,6 +10718,9 @@
     ],
     "givaudan": [
       "Givaudan Nederland BV"
+    ],
+    "gj": [
+      "GJ van Olst BV"
     ],
     "gk": [
       "GK Design Europe BV"
@@ -10910,6 +11018,9 @@
     "greenchem": [
       "GreenChem Holding BV"
     ],
+    "greenchoice": [
+      "Greenchoice"
+    ],
     "greencovery": [
       "Greencovery BV"
     ],
@@ -10986,6 +11097,9 @@
     "grolsche": [
       "Grolsche Bierbrouwerij Nederland BV"
     ],
+    "grondboorbedrijf": [
+      "Grondboorbedrijf Haitjema B.V."
+    ],
     "groot": [
       "Groot Ship Design BV"
     ],
@@ -11033,14 +11147,14 @@
     "grundfos": [
       "Grundfos Nederland BV"
     ],
-    "grünenthal": [
-      "Grünenthal BV"
-    ],
     "grus": [
       "Grus BV"
     ],
     "grutto": [
       "Grutto BV"
+    ],
+    "grünenthal": [
+      "Grünenthal BV"
     ],
     "gs": [
       "Gs Holding BV",
@@ -11086,9 +11200,6 @@
       "Gulf Agency Company (Holdings) BV",
       "Gulf Turbo Solutions BV"
     ],
-    "güller": [
-      "Güller Güller Architecture Urbanism"
-    ],
     "gunnebo": [
       "Gunnebo Doetinchem BV"
     ],
@@ -11110,9 +11221,6 @@
     "gutami": [
       "Gutami Solar Development BV"
     ],
-    "güven": [
-      "Güven Supermarkt BV"
-    ],
     "guy": [
       "Guy Carpenter, Netherlands Branch"
     ],
@@ -11133,44 +11241,29 @@
     "gyron": [
       "Gyron Crew BV"
     ],
+    "géant": [
+      "GÉANT Vereniging"
+    ],
+    "güller": [
+      "Güller Güller Architecture Urbanism"
+    ],
+    "güven": [
+      "Güven Supermarkt BV"
+    ],
     "h": [
       "H & H Select BV",
       "H & M Hennes & Mauritz Netherlands BV",
       "H J Baker Sulphur International Coöperatief UA"
-    ],
-    "hm": [
-      "H&M Hennes & Mauritz Services BV"
-    ],
-    "hi": [
-      "HI Systems"
-    ],
-    "hip": [
-      "HIP Trade BV",
-      "HIP BV"
-    ],
-    "his": [
-      "HIS Travel Nederland BV"
-    ],
-    "hj": [
-      "HJ Heinz European Holding BV",
-      "HJ Heinz Nederland BV",
-      "HJ Heinz Supply Chain Europe BV"
-    ],
-    "hp": [
-      "HP Valves Oldenzaal BV",
-      "HP Nederland BV"
-    ],
-    "hwi": [
-      "HWI Techniek BV"
-    ],
-    "hns": [
-      "H+N+S BV"
     ],
     "h2compute": [
       "H2Compute Software BV"
     ],
     "h2l": [
       "H2L Robotics BV"
+    ],
+    "h4a": [
+      "H4A Industrie Service B.V.",
+      "H4A INDUSTRIE SERVICE BV"
     ],
     "haagsche": [
       "Haagsche Rugby Club (HRC)"
@@ -11222,6 +11315,9 @@
     ],
     "haitima": [
       "Haitima Valve BV"
+    ],
+    "haitjema": [
+      "Haitjema Grondboorbedrijf B.V."
     ],
     "haiwode": [
       "Haiwode Trading BV"
@@ -11398,9 +11494,6 @@
     ],
     "haskoningdhv": [
       "HaskoningDHV Nederland BV"
-    ],
-    "hästens": [
-      "Hästens Beds International BV"
     ],
     "hatch": [
       "Hatch BV"
@@ -11629,9 +11722,6 @@
     "hermes": [
       "Hermes Benelux Nordics"
     ],
-    "héroult": [
-      "Héroult Marine Modules BV"
-    ],
     "heroyam": [
       "Heroyam BV"
     ],
@@ -11669,6 +11759,9 @@
     "hhoya": [
       "HHOYA BV"
     ],
+    "hi": [
+      "HI Systems"
+    ],
     "hiab": [
       "Hiab Benelux BV"
     ],
@@ -11704,14 +11797,14 @@
     "hill": [
       "Hill International NV"
     ],
-    "hillknowlton": [
-      "Hill+Knowlton Strategies BV"
-    ],
     "hillebrand": [
       "Hillebrand Gori IT BV"
     ],
     "hillel": [
       "Hillel Hospitality GP BV"
+    ],
+    "hillknowlton": [
+      "Hill+Knowlton Strategies BV"
     ],
     "hills": [
       "Hill's Pet Nutrition BV",
@@ -11730,6 +11823,10 @@
     "hinicio": [
       "Hinicio NV"
     ],
+    "hip": [
+      "HIP Trade BV",
+      "HIP BV"
+    ],
     "hiranyavarnaam": [
       "Hiranyavarnaam Alkalis BV"
     ],
@@ -11738,6 +11835,9 @@
     ],
     "hirose": [
       "Hirose Electric Europe BV"
+    ],
+    "his": [
+      "HIS Travel Nederland BV"
     ],
     "hitachi": [
       "Hitachi Astemo Netherlands BV",
@@ -11764,6 +11864,11 @@
     "hitron": [
       "Hitron Technologies Europe Holding BV"
     ],
+    "hj": [
+      "HJ Heinz European Holding BV",
+      "HJ Heinz Nederland BV",
+      "HJ Heinz Supply Chain Europe BV"
+    ],
     "hk": [
       "HK Local Heroes BV"
     ],
@@ -11779,6 +11884,9 @@
     ],
     "hlb": [
       "HLB Blömer accountants en adviseurs BV"
+    ],
+    "hm": [
+      "H&M Hennes & Mauritz Services BV"
     ],
     "hmc": [
       "HMC Hydrographic and Marine Consultants",
@@ -11801,6 +11909,9 @@
     ],
     "hnm": [
       "HNM Solutions BV"
+    ],
+    "hns": [
+      "H+N+S BV"
     ],
     "hoaco": [
       "HOACO AUTOMATION TECHNOLOGY BV"
@@ -11995,7 +12106,9 @@
       "Hotel Okura Amsterdam",
       "Hotel Seasons BV",
       "Hotel Villa Ruimzicht BV",
-      "Hotel Winston"
+      "Hotel Winston",
+      "Hotel Nobel B.V.",
+      "Hotel Nobel"
     ],
     "hotelchamp": [
       "Hotelchamp BV"
@@ -12047,6 +12160,10 @@
     ],
     "hoyu": [
       "Hoyu Cosmetics (Nederland) BV"
+    ],
+    "hp": [
+      "HP Valves Oldenzaal BV",
+      "HP Nederland BV"
     ],
     "hpe": [
       "HPE Growth BV"
@@ -12163,6 +12280,10 @@
     "humanr": [
       "HumanR BV"
     ],
+    "humanwave": [
+      "Humanwave B.V.",
+      "Humanwave"
+    ],
     "hunkemöller": [
       "Hunkemöller BV",
       "Hunkemöller International BV"
@@ -12190,6 +12311,9 @@
     ],
     "hvs": [
       "HVS Solutions BV"
+    ],
+    "hwi": [
+      "HWI Techniek BV"
     ],
     "hws": [
       "HWS Solutions BV"
@@ -12247,7 +12371,9 @@
     ],
     "hyundai": [
       "Hyundai Motor Netherlands BV",
-      "Hyundai Welding Europe"
+      "Hyundai Welding Europe",
+      "HYUNDAI EVERDIGM EUROPE",
+      "HYUNDAI EVERDIGM Corp."
     ],
     "hyva": [
       "Hyva Holding BV",
@@ -12259,17 +12385,17 @@
     "hzpc": [
       "HZPC Holding BV"
     ],
+    "hästens": [
+      "Hästens Beds International BV"
+    ],
+    "héroult": [
+      "Héroult Marine Modules BV"
+    ],
     "i": [
       "I & C Services BV",
       "I AM POP BV",
       "I Hate Statistics BV",
       "i+ Solutions"
-    ],
-    "iaa": [
-      "IAA Architecten BV"
-    ],
-    "idb": [
-      "IDB Holland BV"
     ],
     "i2d": [
       "i2d consulting BV"
@@ -12288,6 +12414,9 @@
     ],
     "ia": [
       "IA Shared Services BV"
+    ],
+    "iaa": [
+      "IAA Architecten BV"
     ],
     "iact": [
       "IACT BV"
@@ -12398,6 +12527,9 @@
     "ida": [
       "IDA Mediafoundry BV"
     ],
+    "idb": [
+      "IDB Holland BV"
+    ],
     "ideaworks": [
       "Ideaworks Netherlands BV"
     ],
@@ -12421,6 +12553,9 @@
     "idis": [
       "IDIS Co, Ltd"
     ],
+    "idna": [
+      "iDNA - The Institute for DiagNostic Accuracy"
+    ],
     "ids": [
       "IDS Europe BV"
     ],
@@ -12435,6 +12570,10 @@
     ],
     "ifla": [
       "Ifla, International Federation of Library Associations and Institutions"
+    ],
+    "iflavours": [
+      "iFlavours B.V.",
+      "iFlavours"
     ],
     "ifm": [
       "IFM Investors (Netherlands) BV"
@@ -12466,6 +12605,9 @@
     ],
     "ihi": [
       "IHI Hauzer Techno Coating BV"
+    ],
+    "ihs": [
+      "IHS, Institute for Housing and Urban Development Studies of Erasmus University Rotterdam"
     ],
     "iiyama": [
       "Iiyama Benelux BV"
@@ -12745,9 +12887,6 @@
     "info": [
       "Info Support BV"
     ],
-    "infonl": [
-      "Infonl Holding BV"
-    ],
     "infoblox": [
       "Infoblox Netherlands BV"
     ],
@@ -12759,6 +12898,9 @@
     ],
     "infomedics": [
       "Infomedics BV"
+    ],
+    "infonl": [
+      "Infonl Holding BV"
     ],
     "infoplaza": [
       "Infoplaza Network BV"
@@ -12935,6 +13077,10 @@
     "innotractor": [
       "InnoTractor BV"
     ],
+    "innov8ion": [
+      "Innov8ion B.V.",
+      "INNOV8iON"
+    ],
     "innova": [
       "Innova Market Insights BV"
     ],
@@ -13025,12 +13171,6 @@
     ],
     "instech": [
       "InsTech Netherlands BV"
-    ],
-    "idna": [
-      "iDNA - The Institute for DiagNostic Accuracy"
-    ],
-    "ihs": [
-      "IHS, Institute for Housing and Urban Development Studies of Erasmus University Rotterdam"
     ],
     "instruqt": [
       "Instruqt BV"
@@ -13290,6 +13430,10 @@
     "investion": [
       "Investion Management BV"
     ],
+    "investnl": [
+      "Invest-NL N.V.",
+      "Invest-NL"
+    ],
     "invisionapp": [
       "InVisionApp NL"
     ],
@@ -13460,10 +13604,8 @@
     "it": [
       "IT Labs BV",
       "IT Solutions Worldwide BV",
-      "IT Visors ECM BV"
-    ],
-    "itcare": [
-      "IT&Care BV"
+      "IT Visors ECM BV",
+      "IT Services and IT Consulting"
     ],
     "italiaans": [
       "Italiaans Restaurant La Madonnina"
@@ -13476,6 +13618,9 @@
     ],
     "itc": [
       "ITC Infotech India Limited"
+    ],
+    "itcare": [
+      "IT&Care BV"
     ],
     "iteam": [
       "i-team Professional"
@@ -13586,10 +13731,6 @@
     "izico": [
       "IZICO Katwijk BV"
     ],
-    "jj": [
-      "J&J Inspections BV",
-      "JJ Foods International BV"
-    ],
     "j": [
       "J Bekkers Co BV",
       "J de Jonge Shared Service BV",
@@ -13600,12 +13741,6 @@
     ],
     "ja": [
       "JA Benschop Electriciteitswerken BV"
-    ],
-    "jam": [
-      "JAM de Rijk BV"
-    ],
-    "jp": [
-      "JP Morgan SE Amsterdam Branch"
     ],
     "jaarbeurs": [
       "Jaarbeurs BV"
@@ -13626,6 +13761,9 @@
     ],
     "jaguar": [
       "Jaguar, the fresh company BV"
+    ],
+    "jam": [
+      "JAM de Rijk BV"
     ],
     "jam3": [
       "Jam3 EMEA BV"
@@ -13748,6 +13886,10 @@
     "jeras": [
       "Jeras Projectmanagement BV"
     ],
+    "jeta": [
+      "Jeta Molecular B.V.",
+      "JETA Molecular"
+    ],
     "jetbrains": [
       "JetBrains Expo BV",
       "JetBrains NV"
@@ -13804,6 +13946,10 @@
     ],
     "jislon": [
       "Jislon (Europe) BV"
+    ],
+    "jj": [
+      "J&J Inspections BV",
+      "JJ Foods International BV"
     ],
     "jla": [
       "JLA Loading Technology BV"
@@ -13868,6 +14014,9 @@
     ],
     "joz": [
       "Joz BV"
+    ],
+    "jp": [
+      "JP Morgan SE Amsterdam Branch"
     ],
     "jpb": [
       "JPB IT Solutions BV"
@@ -13956,9 +14105,6 @@
     ],
     "jy": [
       "JY Management Holding BV"
-    ],
-    "kdekker": [
-      "K_Dekker bouw & infra bv"
     ],
     "k2view": [
       "K2View BV"
@@ -14134,6 +14280,9 @@
     "kddi": [
       "KDDI Europe Limited Amsterdam Branch"
     ],
+    "kdekker": [
+      "K_Dekker bouw & infra bv"
+    ],
     "keansa": [
       "Keansa Solutions BV"
     ],
@@ -14155,6 +14304,10 @@
     ],
     "keijzer": [
       "Keijzer Drijer Priester & van der Stoel"
+    ],
+    "keiron": [
+      "Keiron Printing Technologies B.V.",
+      "Keiron Printing Technologies"
     ],
     "kellogg": [
       "Kellogg Brown & Root Services BV"
@@ -14419,6 +14572,10 @@
     "kleyn": [
       "Kleyn Group BV"
     ],
+    "kleynen": [
+      "Kleynen Consultants B.V.",
+      "Kleynen Consultants"
+    ],
     "klg": [
       "KLG Europe Venlo BV"
     ],
@@ -14601,7 +14758,8 @@
       "Koninklijke Verkade NV",
       "Koninklijke Vezet BV",
       "Koninklijke VIV Buisman BV",
-      "Koninklijke Vopak NV"
+      "Koninklijke Vopak NV",
+      "Koninklijke Nederlandse Zwembond (KNZB)"
     ],
     "konnektus": [
       "Konnektus BV",
@@ -14624,9 +14782,6 @@
     ],
     "kopshop": [
       "KopShop BV"
-    ],
-    "körber": [
-      "Körber Supply Chain NL BV"
     ],
     "kore": [
       "KORE Wireless Nederland BV"
@@ -14790,9 +14945,6 @@
       "Kuehne + Nagel Logistics BV",
       "Kuehne + Nagel NV"
     ],
-    "kühne": [
-      "Kühne + Heitz Holland BV"
-    ],
     "kuhngeldrop": [
       "Kuhn-Geldrop BV"
     ],
@@ -14890,12 +15042,14 @@
     "kza": [
       "KZA BV"
     ],
+    "körber": [
+      "Körber Supply Chain NL BV"
+    ],
+    "kühne": [
+      "Kühne + Heitz Holland BV"
+    ],
     "l": [
       "L - founders of loyalty Group BV"
-    ],
-    "lt": [
-      "L&T Technology Services Limited",
-      "LT Foods Europe BV"
     ],
     "l1nda": [
       "L1nda BV"
@@ -14949,6 +15103,10 @@
     "lam": [
       "Lam Research International BV"
     ],
+    "lamb": [
+      "Lamb Weston B.V.",
+      "Lamb Weston EMEA"
+    ],
     "lambwestonmeijer": [
       "Lamb-Weston/Meijer VOF"
     ],
@@ -14963,6 +15121,9 @@
     ],
     "lance": [
       "Lance Informatie Technologie BV"
+    ],
+    "lancesoft": [
+      "LanceSoft Dutch B.V."
     ],
     "land": [
       "Land Life Company BV"
@@ -15185,7 +15346,8 @@
       "Lenovo International Coöperatief UA"
     ],
     "lens": [
-      "LENS BV"
+      "LENS BV",
+      "Lens R&D B.V."
     ],
     "lensor": [
       "Lensor BV"
@@ -15643,6 +15805,10 @@
     "lsi": [
       "LSI - Netherlands BV"
     ],
+    "lt": [
+      "L&T Technology Services Limited",
+      "LT Foods Europe BV"
+    ],
     "ltd": [
       "LTD NL BV"
     ],
@@ -15794,24 +15960,6 @@
       "M Restart",
       "M Restart Secondment & Solutions BV",
       "M Velings Holding BV"
-    ],
-    "mc": [
-      "M&C Saatchi BV"
-    ],
-    "mm": [
-      "M&M e-commerce BV",
-      "MM Flowers Europe BV",
-      "MM Metal Recycling BV"
-    ],
-    "mi": [
-      "MI Maritime BV",
-      "MI Company BV",
-      "MI Group BV"
-    ],
-    "mp": [
-      "M+P, raadgevende ingenieurs BV",
-      "MP Liften BV",
-      "MP Motorsport BV"
     ],
     "m11": [
       "M11 BV"
@@ -16319,6 +16467,10 @@
     "maxi": [
       "Maxi Miliaan BV"
     ],
+    "maxicom": [
+      "Maxicom IT Distribution B.V.",
+      "Maxicom IT Distribution"
+    ],
     "maxima": [
       "Maxima Technologies NL BV"
     ],
@@ -16371,6 +16523,9 @@
     ],
     "mbp": [
       "MBP Netherlands BV"
+    ],
+    "mc": [
+      "M&C Saatchi BV"
     ],
     "mca": [
       "MCA Nederland BV"
@@ -16830,13 +16985,20 @@
       "MGE-RB (Roermond) Management Co BV"
     ],
     "mh": [
-      "MH Poly Consultants & Engineers BV"
+      "MH Poly Consultants & Engineers BV",
+      "MH Hydraulics B.V.",
+      "MH Hydraulics BV."
     ],
     "mhc": [
       "MHC Mobility BV"
     ],
     "mhi": [
       "MHI International Investment BV"
+    ],
+    "mi": [
+      "MI Maritime BV",
+      "MI Company BV",
+      "MI Group BV"
     ],
     "mib": [
       "MIB Management Services BV"
@@ -17010,6 +17172,9 @@
     "mir": [
       "MIR Architecten"
     ],
+    "mira": [
+      "MIRA Home B.V."
+    ],
     "mirantis": [
       "Mirantis Poland Sp z oo"
     ],
@@ -17100,6 +17265,11 @@
     ],
     "mlp": [
       "MLP Newco BV"
+    ],
+    "mm": [
+      "M&M e-commerce BV",
+      "MM Flowers Europe BV",
+      "MM Metal Recycling BV"
     ],
     "mmdmonitors": [
       "MMD-Monitors & Displays Nederland BV"
@@ -17246,6 +17416,10 @@
     "montisq": [
       "Montis-Q Qonsulting BV"
     ],
+    "montroos": [
+      "Montroos Administratie & Advieskantoor B.V.",
+      "Montroos Administratie & Advieskantoor"
+    ],
     "monument": [
       "Monument Group Netherlands BV",
       "Monument London BV"
@@ -17316,6 +17490,9 @@
     "motel": [
       "Motel One Netherlands BV"
     ],
+    "motherduck": [
+      "MotherDuck"
+    ],
     "motivaction": [
       "Motivaction International BV"
     ],
@@ -17350,6 +17527,10 @@
     "movewell": [
       "MoveWell"
     ],
+    "movexx": [
+      "Movexx International B.V.",
+      "Movexx International BV"
+    ],
     "movianto": [
       "Movianto Nederland BV"
     ],
@@ -17358,6 +17539,11 @@
     ],
     "movus": [
       "Movus Warehousing BV"
+    ],
+    "mp": [
+      "M+P, raadgevende ingenieurs BV",
+      "MP Liften BV",
+      "MP Motorsport BV"
     ],
     "mpc": [
       "MPC Energy Solutions NV",
@@ -17375,7 +17561,9 @@
       "Mploy Associates International BV"
     ],
     "mployee": [
-      "MPloyee BV"
+      "MPloyee BV",
+      "M-Ployee HR Solutions B.V.",
+      "M-Ployee"
     ],
     "mpr": [
       "MPR Accountants & Consultants BV"
@@ -17490,11 +17678,11 @@
     "multi-tank": [
       "Multi Tank Card BV"
     ],
-    "multiengineering": [
-      "MULTIengineering Maritime & Offshore Project sourcing Netherlands"
-    ],
     "multichoice": [
       "MultiChoice Group Holdings BV"
+    ],
+    "multiengineering": [
+      "MULTIengineering Maritime & Offshore Project sourcing Netherlands"
     ],
     "multiflexx": [
       "MultiFlexx BV"
@@ -17562,9 +17750,6 @@
     "mx3d": [
       "MX3D BV"
     ],
-    "mygames": [
-      "MYGAMES BV"
-    ],
     "mybit": [
       "Mybit BV"
     ],
@@ -17573,6 +17758,9 @@
     ],
     "mycumulus": [
       "MyCumulus BV"
+    ],
+    "mygames": [
+      "MYGAMES BV"
     ],
     "mylan": [
       "Mylan Healthcare BV"
@@ -17608,20 +17796,6 @@
     "n": [
       "N G Foods BV"
     ],
-    "nv": [
-      "NV ADO Den Haag",
-      "NV Afvalzorg Holding",
-      "NV Elektriciteits Produktiemaatschappij Zuid-Nederland EPZ",
-      "NV Eneco",
-      "NV Juva",
-      "NV Limburgs Instituut voor Ontwikkeling en Financiering ( Liof )",
-      "NV Nederlandsch Octrooibureau",
-      "NV Nederlandse Gasunie",
-      "NV Nutricia",
-      "NV Organon",
-      "NV PWN Waterleidingbedrijf Noord-Holland",
-      "NV Subaru Benelux"
-    ],
     "naaykens": [
       "Naaykens' Luchttechnische Apparatenbouw BV"
     ],
@@ -17633,9 +17807,6 @@
     ],
     "naess": [
       "Naess Ship Management BV"
-    ],
-    "naïf": [
-      "Naïf Care BV"
     ],
     "naktuinbouw": [
       "Naktuinbouw"
@@ -17722,6 +17893,9 @@
     ],
     "naxcon": [
       "NAXCON BV"
+    ],
+    "naïf": [
+      "Naïf Care BV"
     ],
     "nb": [
       "NB Europe BV"
@@ -18057,7 +18231,9 @@
     "newtone": [
       "Newtone Audit",
       "Newtone Audit NV",
-      "Newtone Belastingadviseurs BV"
+      "Newtone Belastingadviseurs BV",
+      "Newtone Adviseurs & Accountants B.V.",
+      "Newtone"
     ],
     "newzoo": [
       "Newzoo BV"
@@ -18370,6 +18546,10 @@
       "Nomura Europe Finance NV",
       "Nomura Financial Products Europe GmbH"
     ],
+    "nonius": [
+      "Nonius Hospitality Technology (Europe) B.V.",
+      "Nonius"
+    ],
     "noordboer": [
       "Noordboer International Ondernemen BV"
     ],
@@ -18657,6 +18837,20 @@
     "nuwa": [
       "Nuwa Pen BV"
     ],
+    "nv": [
+      "NV ADO Den Haag",
+      "NV Afvalzorg Holding",
+      "NV Elektriciteits Produktiemaatschappij Zuid-Nederland EPZ",
+      "NV Eneco",
+      "NV Juva",
+      "NV Limburgs Instituut voor Ontwikkeling en Financiering ( Liof )",
+      "NV Nederlandsch Octrooibureau",
+      "NV Nederlandse Gasunie",
+      "NV Nutricia",
+      "NV Organon",
+      "NV PWN Waterleidingbedrijf Noord-Holland",
+      "NV Subaru Benelux"
+    ],
     "nvent": [
       "nVent Holding NL BV",
       "nVent Thermal Netherlands BV"
@@ -18938,7 +19132,8 @@
       "OM Partners Nederland BV"
     ],
     "omega": [
-      "Omega Architecten"
+      "Omega Architecten",
+      "Omega Pharma Nederland B.V."
     ],
     "omers": [
       "OMERS Infrastructure European Holdings BV"
@@ -19144,9 +19339,6 @@
     "opsens": [
       "Opsens BV"
     ],
-    "optnet": [
-      "OPT/NET BV"
-    ],
     "optelec": [
       "Optelec Nederland BV"
     ],
@@ -19176,6 +19368,9 @@
     ],
     "optiwa": [
       "Optiwa BV"
+    ],
+    "optnet": [
+      "OPT/NET BV"
     ],
     "opure": [
       "Opure BV"
@@ -19356,9 +19551,6 @@
     "osstem": [
       "OSSTEM NETHERLANDS BV"
     ],
-    "össur": [
-      "Össur Europe BV"
-    ],
     "ostate": [
       "Ostate BV"
     ],
@@ -19456,31 +19648,13 @@
       "OYO Hotels Netherlands BV",
       "OYO Vacation Homes Holding BV"
     ],
-    "öz": [
-      "Öz & Er Food BV"
-    ],
     "oz": [
       "OZ Export BV",
       "OZ Import BV"
     ],
-    "özbaktat": [
-      "Özbaktat Supermarkt BV"
-    ],
     "p": [
       "P & O Ferrymasters",
       "P van der Wegen Gears BV"
-    ],
-    "pm": [
-      "P&M Netherlands BV"
-    ],
-    "pmej": [
-      "PMEJ Hendrix BV"
-    ],
-    "pmt": [
-      "PMT CARGO SMARTPOINT BV"
-    ],
-    "pso": [
-      "PSO Beheer BV"
     ],
     "p1": [
       "P1 Corporate Hospitality"
@@ -20109,6 +20283,10 @@
     "piet": [
       "Piet Boon Studio BV"
     ],
+    "pieters": [
+      "Pieters Projectbureau B.V.",
+      "Pieters Bouwkunde"
+    ],
     "piggy": [
       "Piggy Netherlands BV"
     ],
@@ -20266,8 +20444,17 @@
     "plygrndcity": [
       "PLYGRNDCITY"
     ],
+    "pm": [
+      "P&M Netherlands BV"
+    ],
+    "pmej": [
+      "PMEJ Hendrix BV"
+    ],
     "pmitech": [
       "PMI-TECH (EUROPE) BV"
+    ],
+    "pmt": [
+      "PMT CARGO SMARTPOINT BV"
     ],
     "pnl": [
       "PNL Fintech BV"
@@ -20442,9 +20629,6 @@
     "pqshield": [
       "PQShield BV"
     ],
-    "prco": [
-      "prco BV"
-    ],
     "pragma": [
       "Pragma Netherlands BV"
     ],
@@ -20464,9 +20648,8 @@
       "Praxis Automation Technology BV",
       "Praxis Works EU BV"
     ],
-    "pré": [
-      "PRé",
-      "Pré Pain BV"
+    "prco": [
+      "prco BV"
     ],
     "premium": [
       "Premium Foods BV",
@@ -20792,6 +20975,13 @@
     "prysmian": [
       "Prysmian Netherlands BV"
     ],
+    "pré": [
+      "PRé",
+      "Pré Pain BV"
+    ],
+    "pso": [
+      "PSO Beheer BV"
+    ],
     "psp": [
       "PSP Projecten BV"
     ],
@@ -20908,8 +21098,8 @@
     "q": [
       "Q Park BV"
     ],
-    "qbird": [
-      "Q*BIRD BV"
+    "qafka": [
+      "Qafka B.V."
     ],
     "qatar": [
       "Qatar Airways Group (QCSC)"
@@ -20925,6 +21115,9 @@
     ],
     "qbil": [
       "Qbil Software BV"
+    ],
+    "qbird": [
+      "Q*BIRD BV"
     ],
     "qblox": [
       "Qblox BV"
@@ -20966,6 +21159,10 @@
     ],
     "qlip": [
       "Qlip BV"
+    ],
+    "qliq": [
+      "QLIQ B.V.",
+      "Qliq"
     ],
     "qlouder": [
       "Qlouder"
@@ -21149,24 +21346,6 @@
     "qyp": [
       "QYP BV"
     ],
-    "re": [
-      "R&E Installaties",
-      "RE Finance BV",
-      "Re Rotterdam Engineering BV"
-    ],
-    "rr": [
-      "R&R Mechatronics International BV",
-      "R&R WFM Holding BV",
-      "RR Business Holding BV",
-      "RR Maritime Engineering BV",
-      "RR Holland BV"
-    ],
-    "rwm": [
-      "RWM van Rooijen Holding BV"
-    ],
-    "rwest": [
-      "R\\West BV"
-    ],
     "rackspace": [
       "Rackspace Benelux BV"
     ],
@@ -21211,9 +21390,6 @@
     ],
     "railtechniek": [
       "Railtechniek Van Herwijnen BV"
-    ],
-    "raïnaraï": [
-      "raïnaraï"
     ],
     "rainforest": [
       "Rainforest Alliance BV"
@@ -21290,6 +21466,9 @@
     "razorleaf": [
       "Razorleaf BV"
     ],
+    "raïnaraï": [
+      "raïnaraï"
+    ],
     "rb": [
       "RB Hygiene Home Netherlands BV"
     ],
@@ -21311,8 +21490,10 @@
     "rdw": [
       "RDW"
     ],
-    "regent": [
-      "Re/Gent BV"
+    "re": [
+      "R&E Installaties",
+      "RE Finance BV",
+      "Re Rotterdam Engineering BV"
     ],
     "react": [
       "React BV"
@@ -21444,6 +21625,10 @@
     "refinitiv": [
       "Refinitiv Netherlands BV"
     ],
+    "refleet": [
+      "ReFleet B.V.",
+      "ReFleet"
+    ],
     "reflow": [
       "Reflow BV"
     ],
@@ -21462,6 +21647,9 @@
     ],
     "regal": [
       "Regal Digital BV"
+    ],
+    "regent": [
+      "Re/Gent BV"
     ],
     "regnology": [
       "Regnology Netherlands BV"
@@ -21596,9 +21784,6 @@
     ],
     "research": [
       "Research Square BV"
-    ],
-    "réseaux": [
-      "Réseaux IP Européens Network Coordination Centre (RIPE NCC)"
     ],
     "resleeve": [
       "Resleeve BV"
@@ -21784,6 +21969,10 @@
     "riskquest": [
       "RiskQuest BV"
     ],
+    "risksphere": [
+      "RiskSphere B.V.",
+      "RiskSphere"
+    ],
     "ritchie": [
       "Ritchie Bros BV",
       "Ritchie Bros Shared Services BV"
@@ -21886,7 +22075,9 @@
       "Rock Payroll BV"
     ],
     "rocket": [
-      "Rocket Software BV"
+      "Rocket Software BV",
+      "Rocket Launcher B.V.",
+      "Rocket Launcher"
     ],
     "rockfeather": [
       "Rockfeather Data Vizualization BV"
@@ -21970,9 +22161,6 @@
     "ronin": [
       "RONIN Amsterdam BV"
     ],
-    "röntgen": [
-      "Röntgen Technische Dienst BV"
-    ],
     "roodhart": [
       "Roodhart Emission Control BV"
     ],
@@ -22020,6 +22208,10 @@
     ],
     "rosterbuster": [
       "RosterBuster BV"
+    ],
+    "rotar": [
+      "Rotar Participaties B.V.",
+      "Rotar"
     ],
     "rotaserve": [
       "Rotaserve BV"
@@ -22083,8 +22275,19 @@
     "rpwalter": [
       "RPWalter Consulting BV"
     ],
+    "rr": [
+      "R&R Mechatronics International BV",
+      "R&R WFM Holding BV",
+      "RR Business Holding BV",
+      "RR Maritime Engineering BV",
+      "RR Holland BV"
+    ],
     "rro": [
       "RRo Industrial Design BV"
+    ],
+    "rsg": [
+      "RSG Audit, Risk & Compliance B.V.",
+      "RSG"
     ],
     "rsm": [
       "RSM Netherlands Accountants NV",
@@ -22154,6 +22357,12 @@
       "RWE Generation NL Personeel BV",
       "RWE Renewables Benelux BV"
     ],
+    "rwest": [
+      "R\\West BV"
+    ],
+    "rwm": [
+      "RWM van Rooijen Holding BV"
+    ],
     "ryberg": [
       "Ryberg BV"
     ],
@@ -22163,25 +22372,14 @@
     "rymax": [
       "RYMAX BV"
     ],
-    "sp": [
-      "S&P DJI Netherlands BV"
+    "réseaux": [
+      "Réseaux IP Européens Network Coordination Centre (RIPE NCC)"
+    ],
+    "röntgen": [
+      "Röntgen Technische Dienst BV"
     ],
     "s": [
       "S Khonkaen Foods (Netherlands) BV"
-    ],
-    "sc": [
-      "SC Johnson Europe BV",
-      "SC Johnson Europlant BV",
-      "SC Staffing BV"
-    ],
-    "srs": [
-      "SRS Specialist Retail Systems BV"
-    ],
-    "strs": [
-      "STRS BV"
-    ],
-    "swiftsociety": [
-      "SWIFT(Society for Worldwide Interbank Financial Telecommunication SCRL)"
     ],
     "s2ix": [
       "S2IX BV"
@@ -22192,9 +22390,6 @@
     ],
     "sab": [
       "SAB ELECTRO BV"
-    ],
-    "sabt": [
-      "SAB&T Tec BV"
     ],
     "saba": [
       "SaBa IFA BV"
@@ -22211,6 +22406,9 @@
     ],
     "sabre": [
       "Sabre Marketing Nederland BV"
+    ],
+    "sabt": [
+      "SAB&T Tec BV"
     ],
     "saca": [
       "SACA Europe BV"
@@ -22263,6 +22461,10 @@
     ],
     "saleschamp": [
       "SalesChamp BV"
+    ],
+    "saleshuntai": [
+      "Saleshunt.ai B.V.",
+      "Saleshunt.ai"
     ],
     "salesscreen": [
       "SalesScreen Europe BV"
@@ -22417,6 +22619,10 @@
     "sapporo": [
       "Sapporo Europe BV"
     ],
+    "sarens": [
+      "Sarens Nederland B.V.",
+      "Sarens"
+    ],
     "sarten": [
       "Sarten Packaging Netherlands BV"
     ],
@@ -22485,6 +22691,11 @@
     ],
     "sbs": [
       "SBS Corp BV"
+    ],
+    "sc": [
+      "SC Johnson Europe BV",
+      "SC Johnson Europlant BV",
+      "SC Staffing BV"
     ],
     "scailable": [
       "Scailable BV"
@@ -22599,6 +22810,10 @@
     "schothorst": [
       "Schothorst Feed Research BV"
     ],
+    "schouten": [
+      "Schouten Europe B.V.",
+      "Schouten - Specialist in Plant-Based Protein"
+    ],
     "schouw": [
       "Schouw Informatisering BV"
     ],
@@ -22610,9 +22825,6 @@
     ],
     "schuberg": [
       "Schuberg Philis BV"
-    ],
-    "schüco": [
-      "Schüco Nederland BV"
     ],
     "schuiteman": [
       "Schuiteman Audit & Assurance BV",
@@ -22626,6 +22838,9 @@
     ],
     "schweppes": [
       "Schweppes International Limited"
+    ],
+    "schüco": [
+      "Schüco Nederland BV"
     ],
     "scibuy": [
       "Sci-Buy Netherlands BV"
@@ -22871,6 +23086,10 @@
     ],
     "senergetics": [
       "Senergetics BV"
+    ],
+    "senica": [
+      "SENICA International Holding B.V.",
+      "Senica International Holding B.V."
     ],
     "senkron": [
       "Senkron Energy Digital Services BV"
@@ -23152,6 +23371,9 @@
     "shipsy": [
       "Shipsy BV"
     ],
+    "shirayuki": [
+      "Shira-Yuki"
+    ],
     "shirley": [
       "Shirley Parsons BV"
     ],
@@ -23222,6 +23444,10 @@
       "Siemens International Holding BV",
       "Siemens Mobility BV",
       "Siemens Nederland NV"
+    ],
+    "sier": [
+      "Sier Disposables B.V.",
+      "Sier Disposables"
     ],
     "siere": [
       "Siere Handel BV"
@@ -23546,9 +23772,6 @@
       "SMART Photonics BV",
       "Smart Robotics BV"
     ],
-    "smartpr": [
-      "Smartpr BV"
-    ],
     "smart2it": [
       "Smart2IT BV"
     ],
@@ -23581,6 +23804,9 @@
     ],
     "smartnow": [
       "SmartNow BV"
+    ],
+    "smartpr": [
+      "Smartpr BV"
     ],
     "smartsd": [
       "SmartSD Holding BV"
@@ -23835,14 +24061,14 @@
       "Solutional Consulting BV",
       "Solutional Netherlands BV"
     ],
-    "solvès": [
-      "Solvès Employee BV"
-    ],
     "solvinity": [
       "Solvinity"
     ],
     "solvy": [
       "Solvy BV"
+    ],
+    "solvès": [
+      "Solvès Employee BV"
     ],
     "somar": [
       "Somar Europe BV"
@@ -23960,6 +24186,12 @@
     "sowiso": [
       "Sowiso BV"
     ],
+    "soyventis": [
+      "Soyventis Europe B.V."
+    ],
+    "sp": [
+      "S&P DJI Netherlands BV"
+    ],
     "spa": [
       "SPA WNP ingenieurs BV"
     ],
@@ -23969,11 +24201,11 @@
     "space": [
       "Space Encounters BV"
     ],
-    "spacematter": [
-      "space&matter BV"
-    ],
     "space4good": [
       "Space4Good BV"
+    ],
+    "spacematter": [
+      "space&matter BV"
     ],
     "spacewell": [
       "Spacewell Netherlands BV"
@@ -24184,6 +24416,9 @@
     ],
     "srm": [
       "S-RM BV"
+    ],
+    "srs": [
+      "SRS Specialist Retail Systems BV"
     ],
     "st": [
       "St Anny Food BV",
@@ -24682,7 +24917,12 @@
       "Stichting World Benchmarking Alliance Foundation",
       "Stichting World Press Photo",
       "Stichting World Society for the Protection of Animals afdeling Nederland",
-      "Stichting ZDHC Foundation"
+      "Stichting ZDHC Foundation",
+      "Stichting Climate-KIC International Foundation",
+      "Stichting European Clinical Research Alliance on Infectious Diseases",
+      "Stichting Offlimits",
+      "Stichting Quantum Delta NL",
+      "Stichting Philadelphia Zorg"
     ],
     "stijlgroep": [
       "Stijlgroep Landschap en Stedelijke Ruimte BV"
@@ -24736,9 +24976,6 @@
     "stork": [
       "Stork Nederland BV"
     ],
-    "störktronic": [
-      "Störk-Tronic NL BV"
-    ],
     "story": [
       "Story of AMS BV"
     ],
@@ -24753,6 +24990,10 @@
     ],
     "straightline": [
       "Straight-Line Leadership Group BV"
+    ],
+    "stratasys": [
+      "Stratasys Netherlands B.V.",
+      "Stratasys"
     ],
     "strattner": [
       "Strattner BV"
@@ -24769,11 +25010,11 @@
     "stravito": [
       "Stravito AB"
     ],
-    "streamio": [
-      "Streamio BV"
-    ],
     "streamax": [
       "Streamax Europe BV"
+    ],
+    "streamio": [
+      "Streamio BV"
     ],
     "streamit": [
       "Streamit BV"
@@ -24794,11 +25035,11 @@
     "stripe": [
       "Stripe Netherlands BV"
     ],
-    "strödter": [
-      "Strödter Handling Systems NL"
-    ],
     "strohm": [
       "Strohm BV"
+    ],
+    "strs": [
+      "STRS BV"
     ],
     "strukton": [
       "Strukton Rail BV",
@@ -24809,6 +25050,9 @@
       "Stryker EMEA Supply Chain Services BV",
       "Stryker European Operations Limited",
       "Stryker Nederland BV"
+    ],
+    "strödter": [
+      "Strödter Handling Systems NL"
     ],
     "studeersnel": [
       "StudeerSnel BV"
@@ -24834,6 +25078,9 @@
     ],
     "styx": [
       "Styx BV"
+    ],
+    "störktronic": [
+      "Störk-Tronic NL BV"
     ],
     "su": [
       "SU Biomedicine BV"
@@ -25072,6 +25319,9 @@
     "swift": [
       "Swift Marine BV"
     ],
+    "swiftsociety": [
+      "SWIFT(Society for Worldwide Interbank Financial Telecommunication SCRL)"
+    ],
     "swipeguide": [
       "SwipeGuide BV"
     ],
@@ -25210,33 +25460,8 @@
       "Sytac Digital BV",
       "Sytac Technologies BV"
     ],
-    "tp": [
-      "T&P Projecten BV",
-      "TP ICAP (Europe) SA",
-      "TP Industrial Yarns BV",
-      "TP Things BV",
-      "TP Tuned BV",
-      "TP Vision Europe BV"
-    ],
     "t": [
       "T Stolze Installatietechniek BV"
-    ],
-    "tec": [
-      "TEC (Tabata Europe Corporation) BV"
-    ],
-    "ten": [
-      "TEN Netherlands BV",
-      "Topsector Energie",
-      "Ten Cate Protect BV",
-      "Ten Cate Thiolon BV"
-    ],
-    "top": [
-      "TOP (Training Organisatie Personeel) BV",
-      "TOP Beheer BV",
-      "Top Bouwwerken BV",
-      "Top Cargo BV",
-      "Top Chiropractie BV",
-      "Top Group International BV"
     ],
     "t0k10": [
       "T0K10 BV"
@@ -25302,11 +25527,11 @@
     "talent": [
       "Talent Professionals BV"
     ],
-    "talentpro": [
-      "Talent&Pro Nederland BV"
-    ],
     "talentmark": [
       "Talentmark Nederland BV"
+    ],
+    "talentpro": [
+      "Talent&Pro Nederland BV"
     ],
     "talentsoft": [
       "Talentsoft Holding BV"
@@ -25554,18 +25779,21 @@
       "Team Industrial Services Europe BV",
       "Team Rockstars IT BV"
     ],
-    "teamblue": [
-      "teamblue nl BV"
-    ],
     "team6": [
       "Team6 Development BV",
       "Team6 Game Studios BV"
+    ],
+    "teamblue": [
+      "teamblue nl BV"
     ],
     "teamleader": [
       "Teamleader Nederland BV"
     ],
     "tebi": [
       "Tebi BV"
+    ],
+    "tec": [
+      "TEC (Tabata Europe Corporation) BV"
     ],
     "tecalliance": [
       "TecAlliance Netherlands BV"
@@ -25773,6 +26001,12 @@
     "tempress": [
       "Tempress Holding BV"
     ],
+    "ten": [
+      "TEN Netherlands BV",
+      "Topsector Energie",
+      "Ten Cate Protect BV",
+      "Ten Cate Thiolon BV"
+    ],
     "tenaris": [
       "Tenaris Connections BV"
     ],
@@ -25880,9 +26114,6 @@
       "Tetra Pak BV",
       "Tetra Pak Cheese and Powder Systems BV",
       "Tetra Pak Processing Systems BV"
-    ],
-    "tétris": [
-      "Tétris Design & Build BV"
     ],
     "teva": [
       "Teva Pharmaceuticals Europe BV"
@@ -26490,6 +26721,14 @@
     "toolstation": [
       "Toolstation Europe BV"
     ],
+    "top": [
+      "TOP (Training Organisatie Personeel) BV",
+      "TOP Beheer BV",
+      "Top Bouwwerken BV",
+      "Top Cargo BV",
+      "Top Chiropractie BV",
+      "Top Group International BV"
+    ],
     "topchiro": [
       "TOPCHIRO Den Bosch BV",
       "TopChiro Rotterdam BV",
@@ -26591,6 +26830,14 @@
     ],
     "toyota": [
       "Toyota Motor Finance (Netherlands) BV"
+    ],
+    "tp": [
+      "T&P Projecten BV",
+      "TP ICAP (Europe) SA",
+      "TP Industrial Yarns BV",
+      "TP Things BV",
+      "TP Tuned BV",
+      "TP Vision Europe BV"
     ],
     "tpion": [
       "T-Pion BV"
@@ -26733,9 +26980,6 @@
     ],
     "trespa": [
       "Trespa International BV"
-    ],
-    "trésviri": [
-      "Trésviri Cost Engineering Solutions BV"
     ],
     "trg": [
       "TRG Global BV"
@@ -26895,6 +27139,9 @@
     "trymax": [
       "Trymax Semiconductor Equipment BV"
     ],
+    "trésviri": [
+      "Trésviri Cost Engineering Solutions BV"
+    ],
     "tsc": [
       "TSC Leeuwarden BV"
     ],
@@ -26973,9 +27220,6 @@
     "tuttnauer": [
       "Tuttnauer Europe BV"
     ],
-    "tüv": [
-      "TÜV Rheinland Sonovation BV"
-    ],
     "tux": [
       "TUX mobility BV"
     ],
@@ -26993,7 +27237,9 @@
       "Twilio Netherlands BV"
     ],
     "twin": [
-      "Twin Sport BV"
+      "Twin Sport BV",
+      "Twin Peaks Hospitality B.V.",
+      "Twin Peaks Hospitality"
     ],
     "twintec": [
       "Twintec Nederland BV"
@@ -27040,8 +27286,11 @@
       "Tyson Foods Holland BV",
       "Tyson Foods Oosterwolde BV"
     ],
-    "us": [
-      "US Wheat Associates, Inc"
+    "tétris": [
+      "Tétris Design & Build BV"
+    ],
+    "tüv": [
+      "TÜV Rheinland Sonovation BV"
     ],
     "uabonline": [
       "UAB-Online BV"
@@ -27264,9 +27513,6 @@
     "univar": [
       "Univar Solutions"
     ],
-    "univé": [
-      "Univé Dichtbij Organisatie BV"
-    ],
     "universal": [
       "Universal Africa Lines BV",
       "Universal Electronics BV",
@@ -27284,6 +27530,9 @@
     "universitair-medisch-centrum-utrecht": [
       "Universitair Medisch Centrum Utrecht"
     ],
+    "universiteit-amsterdam": [
+      "Universiteit van Amsterdam"
+    ],
     "universiteit-leiden": [
       "Universiteit Leiden"
     ],
@@ -27293,23 +27542,23 @@
     "universiteit-nyenrode": [
       "Universiteit Nyenrode BV"
     ],
+    "universiteit-tilburg": [
+      "Universiteit van Tilburg"
+    ],
     "universiteit-twente": [
       "Universiteit Twente"
     ],
     "universiteit-utrecht": [
       "Universiteit Utrecht"
     ],
-    "universiteit-amsterdam": [
-      "Universiteit van Amsterdam"
-    ],
-    "universiteit-tilburg": [
-      "Universiteit van Tilburg"
-    ],
     "university-industry-innovation-network-bv": [
       "University Industry Innovation Network BV"
     ],
     "uniview": [
       "Uniview Europe BV"
+    ],
+    "univé": [
+      "Univé Dichtbij Organisatie BV"
     ],
     "unloq": [
       "UNLOQ"
@@ -27370,6 +27619,9 @@
     "urw": [
       "URW Europa BV"
     ],
+    "us": [
+      "US Wheat Associates, Inc"
+    ],
     "user": [
       "User Intelligence Netherlands BV"
     ],
@@ -27415,16 +27667,6 @@
     "uxus": [
       "Uxus Europe BV"
     ],
-    "vbi": [
-      "VBI Ontwikkeling BV"
-    ],
-    "vof": [
-      "VOF Fysiotherapie Konings-Pinxteren",
-      "Vof Van Gulik"
-    ],
-    "vse": [
-      "VSE Vehicle Systems Engineering BV"
-    ],
     "v2future": [
       "V2Future BV"
     ],
@@ -27445,6 +27687,10 @@
     ],
     "vaessenschoemaker": [
       "Vaessen-Schoemaker BV"
+    ],
+    "vaf": [
+      "VAF Instruments B.V.",
+      "VAF Instruments"
     ],
     "valcon": [
       "Valcon B BV",
@@ -27755,7 +28001,9 @@
       "VASS Nederland BV"
     ],
     "vastint": [
-      "Vastint Hospitality BV"
+      "Vastint Hospitality BV",
+      "Vastint Development B.V.",
+      "Vastint"
     ],
     "vatbox": [
       "Vatbox BV"
@@ -27777,6 +28025,9 @@
     ],
     "vbairsuspension": [
       "VB-Airsuspension BV"
+    ],
+    "vbi": [
+      "VBI Ontwikkeling BV"
     ],
     "vbr": [
       "VBR Services BV"
@@ -28248,7 +28499,11 @@
       "Visma Youserve BV"
     ],
     "visscher": [
-      "Visscher Caravelle BV"
+      "Visscher Caravelle BV",
+      "Visscher Caravelle Participaties B.V."
+    ],
+    "visschercaravelle": [
+      "Visscher-Caravelle Poland"
     ],
     "visser": [
       "Visser & Smit Hanab Installatie BV",
@@ -28388,6 +28643,10 @@
     "voetbalzone": [
       "Voetbalzone BV"
     ],
+    "vof": [
+      "VOF Fysiotherapie Konings-Pinxteren",
+      "Vof Van Gulik"
+    ],
     "vogelaarvredehof": [
       "Vogelaar-Vredehof BV"
     ],
@@ -28502,9 +28761,8 @@
     "vrumona": [
       "Vrumona BV"
     ],
-    "vst": [
-      "VS&T Valves BV",
-      "VST Europe BV"
+    "vse": [
+      "VSE Vehicle Systems Engineering BV"
     ],
     "vsilicon": [
       "V-Silicon Netherlands BV"
@@ -28517,6 +28775,10 @@
     ],
     "vsparticle": [
       "VSParticle BV"
+    ],
+    "vst": [
+      "VS&T Valves BV",
+      "VST Europe BV"
     ],
     "vstep": [
       "VSTEP BV"
@@ -28557,31 +28819,6 @@
     ],
     "vysus": [
       "Vysus Netherlands BV"
-    ],
-    "wo": [
-      "W&O Personeels-BV"
-    ],
-    "wb": [
-      "WB Stables"
-    ],
-    "wdigital": [
-      "Wdigital BV"
-    ],
-    "we": [
-      "WE Engineering BV",
-      "WE ARE PI BV"
-    ],
-    "wf": [
-      "WF Westermann & Co BV",
-      "WF Consultancy BV",
-      "NBBU"
-    ],
-    "wp": [
-      "WP Carey & Co BV",
-      "WP van Acker BV"
-    ],
-    "wr": [
-      "WR Fibers BV"
     ],
     "waalstroom": [
       "Waalstroom Netwerk Notarissen"
@@ -28656,9 +28893,6 @@
     "wartenbergh": [
       "Wartenbergh Engineering Bureau BV"
     ],
-    "wärtsilä": [
-      "Wärtsilä Netherlands"
-    ],
     "wassenburg": [
       "Wassenburg Medical BV"
     ],
@@ -28683,7 +28917,8 @@
     ],
     "waterschap": [
       "Waterschap De Dommel",
-      "Waterschap Rijn en IJssel"
+      "Waterschap Rijn en IJssel",
+      "Waterschap Rivierenland"
     ],
     "waterschapsbedrijf": [
       "Waterschapsbedrijf Limburg"
@@ -28724,14 +28959,24 @@
     "waypoint": [
       "Waypoint Port Services BV"
     ],
+    "wb": [
+      "WB Stables"
+    ],
     "wcc": [
       "WCC Development BV"
     ],
     "wcts": [
       "WCTS BV"
     ],
+    "wdigital": [
+      "Wdigital BV"
+    ],
     "wdjarchitecten": [
       "WDJArchitecten BV"
+    ],
+    "we": [
+      "WE Engineering BV",
+      "WE ARE PI BV"
     ],
     "we4sea": [
       "We4Sea BV"
@@ -28874,6 +29119,10 @@
       "WePayPeople Backoffice Services BV",
       "WePayPeople Verloningen BV"
     ],
+    "werfen": [
+      "Werfen B.V.",
+      "Werfen"
+    ],
     "werkgroep": [
       "WerkGroep NL Contracting BV"
     ],
@@ -28937,6 +29186,11 @@
     ],
     "wexford": [
       "Wexford Finance BV"
+    ],
+    "wf": [
+      "WF Westermann & Co BV",
+      "WF Consultancy BV",
+      "NBBU"
     ],
     "whale": [
       "Whale Cloud Technology Netherlands BV"
@@ -29067,6 +29321,9 @@
     ],
     "wns": [
       "WNS Global Services Netherlands BV"
+    ],
+    "wo": [
+      "W&O Personeels-BV"
     ],
     "wok": [
       "WOK Het Oosten Oriëntaal restaurant & partycatering"
@@ -29202,6 +29459,13 @@
     "worth": [
       "Worth IT Webdevelopment BV"
     ],
+    "wp": [
+      "WP Carey & Co BV",
+      "WP van Acker BV"
+    ],
+    "wr": [
+      "WR Fibers BV"
+    ],
     "wrangu": [
       "Wrangu BV"
     ],
@@ -29256,6 +29520,9 @@
     ],
     "wypoon": [
       "Wypoon Technologies BV"
+    ],
+    "wärtsilä": [
+      "Wärtsilä Netherlands"
     ],
     "x17": [
       "X17 Group BV"
@@ -29335,6 +29602,10 @@
     ],
     "xinhuanet": [
       "Xinhuanet Europe BV"
+    ],
+    "xintc": [
+      "XINTC B.V.",
+      "XINTC"
     ],
     "xip": [
       "XIP BV"
@@ -29478,6 +29749,10 @@
     ],
     "ydatalytics": [
       "YDATALYTICS Netherlands BV"
+    ],
+    "yehwang": [
+      "Yehwang Product Imports International B.V.",
+      "Yehwang Sieraden, Fashion & Accessoires Groothandel"
     ],
     "yellow": [
       "Yellow Step Solar BV"
@@ -29916,6 +30191,24 @@
     ],
     "zyxel": [
       "ZyXel Communications BV"
+    ],
+    "çak": [
+      "Çak Textile BV"
+    ],
+    "çalik": [
+      "Çalik Denim BV"
+    ],
+    "épsilon": [
+      "Épsilon Inversiones BV"
+    ],
+    "össur": [
+      "Össur Europe BV"
+    ],
+    "öz": [
+      "Öz & Er Food BV"
+    ],
+    "özbaktat": [
+      "Özbaktat Supermarkt BV"
     ]
   }
 }

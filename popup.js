@@ -15,11 +15,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const tab = tabs[0];
     
-    // Move LinkedIn check before the URL safety check
-    if (!tab.url || !tab.url.includes('linkedin.com')) {
+    // Update URL check for both LinkedIn and Indeed
+    if (!tab.url || !(tab.url.includes('linkedin.com') || tab.url.includes('indeed.com'))) {
       const summaryElement = document.getElementById('summary');
-      const linkedInUrl = 'https://www.linkedin.com/jobs/collections/';
-      const message = `Welcome to the KMatch extension.<br><br>To use the extension, please visit<br><a href="${linkedInUrl}" target="_blank">${linkedInUrl}</a>`;
+      const jobSites = [
+        { name: 'LinkedIn', url: 'https://www.linkedin.com/jobs/collections/' },
+        { name: 'Indeed', url: 'https://www.indeed.com' }
+      ];
+      
+      const siteLinks = jobSites
+        .map(site => `<a href="${site.url}" target="_blank">${site.name}</a>`)
+        .join(' or ');
+
+      const message = `Welcome to the KMatch extension.<br><br>To use the extension, please visit ${siteLinks}`;
       const sponsorListLink = 'https://ind.nl/en/public-register-recognised-sponsors/public-register-regular-labour-and-highly-skilled-migrants';
       const linkText = 'Complete sponsor list';
 
@@ -184,19 +192,22 @@ document.addEventListener('DOMContentLoaded', async () => {
           
           jobElement.addEventListener('click', () => {
             // Get the job URL from the job object
-            const jobUrl = job.url; // Make sure this is being passed from content.js
+            const jobUrl = job.url;
+            const isIndeed = jobUrl.includes('indeed.com');
             
             console.log('Clicking job:', {
               title: roleType,
-              url: jobUrl
+              url: jobUrl,
+              platform: isIndeed ? 'indeed' : 'linkedin'
             });
 
-            // Send message to content script
+            // Send message to content script with platform info
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
               chrome.tabs.sendMessage(tabs[0].id, {
                 action: "scrollToJob",
                 url: jobUrl,
-                title: roleType
+                title: roleType,
+                platform: isIndeed ? 'indeed' : 'linkedin'
               }, () => {
                 window.close();
               });

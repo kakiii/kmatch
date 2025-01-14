@@ -4,7 +4,8 @@
   "version": "1.6.1",
   "description": "Find LinkedIn jobs from Dutch companies authorized to sponsor Kennismigrant visas",
   "host_permissions": [
-    "*://*.linkedin.com/*"
+    "https://*.linkedin.com/*",
+    "https://*.indeed.com/*"
   ],
   "action": {
     "default_popup": "popup.html",
@@ -16,8 +17,12 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://*.linkedin.com/*"],
-      "js": ["content.js"]
+      "matches": [
+        "https://*.linkedin.com/*",
+        "https://*.indeed.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_end"
     }
   ],
   "web_accessible_resources": [{

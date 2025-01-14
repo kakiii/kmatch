@@ -29,11 +29,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     
     // Expanded list of selectors for job cards
     const jobCardSelectors = [
+      // LinkedIn selectors
       '.job-card-container',
       '.jobs-search-results__list-item',
       '.jobs-job-board-list__item',
       '.job-card-list__entity-lockup',
-      '.jobs-search-results-grid__card-item'
+      '.jobs-search-results-grid__card-item',
+      // Indeed selectors
+      '.mainContentTable',
+      '[data-testid="job-card"]',
+      '.job_seen_beacon'
     ];
     
     // Try each selector
@@ -51,21 +56,31 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     jobCards.forEach(card => {
       // Expanded list of selectors for company names
       const companySelectors = [
+        // LinkedIn selectors
         '.job-card-container__company-name',
         '.job-card-container__primary-description',
         '.company-name',
         '.job-card-list__company-name',
         '.artdeco-entity-lockup__subtitle',
-        '.job-card-container__company-link'
+        '.job-card-container__company-link',
+        // Indeed selectors
+        '[data-testid="company-name"]',
+        '.companyName',
+        '.company'
       ];
 
       // Expanded list of selectors for job titles
       const titleSelectors = [
+        // LinkedIn selectors
         '.job-card-container__link',
         '.job-card-list__title',
         '.jobs-unified-top-card__job-title',
         '.artdeco-entity-lockup__title',
-        '.job-card-list__entity-lockup a'
+        '.job-card-list__entity-lockup a',
+        // Indeed selectors
+        '.jcs-JobTitle',
+        '.jobTitle a',
+        '[data-testid="jobTitle"]'
       ];
 
       let companyElement = null;
@@ -122,29 +137,57 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   } else if (request.action === "scrollToJob") {
     console.log('Received scroll request:', request);
-
-    // Find all job cards
-    const jobCards = document.querySelectorAll('[data-job-id]');
     
-    // Find the matching job card
-    for (const card of jobCards) {
-      const link = card.querySelector('a[href*="/jobs/view/"]');
-      if (link && (link.href === request.url || link.textContent.includes(request.title))) {
-        console.log('Found matching job card');
+    if (request.platform === 'indeed') {
+      // Indeed-specific job card finding
+      const jobCards = document.querySelectorAll('table.mainContentTable');
+      let targetCard;
+
+      jobCards.forEach(card => {
+        const titleLink = card.querySelector('h2.jobTitle a, a.jcs-JobTitle');
+        if (titleLink) {
+          const cardUrl = titleLink.href;
+          const cardTitle = titleLink.textContent.trim();
+
+          console.log('Checking card:', { cardUrl, cardTitle, requestUrl: request.url, requestTitle: request.title });
+
+          // Check both URL and title for matching
+          if (cardUrl === request.url || cardTitle === request.title) {
+            targetCard = card;
+          }
+        }
+      });
+
+      if (targetCard) {
+        console.log('Found target card, scrolling...');
+        targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
         
-        // Scroll into view
-        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        
-        // Click the link after a short delay
+        // Highlight the card temporarily
+        const originalBackground = targetCard.style.backgroundColor;
+        targetCard.style.backgroundColor = '#e8f0fe';
         setTimeout(() => {
-          link.click();
-        }, 500);
-        
-        break;
+          targetCard.style.backgroundColor = originalBackground;
+        }, 2000);
+
+        // Click the job title link
+        const titleLink = targetCard.querySelector('h2.jobTitle a, a.jcs-JobTitle');
+        if (titleLink) {
+          titleLink.click();
+        }
       }
+    } else {
+      // LinkedIn logic
+      const jobCards = document.querySelectorAll('.job-card-container');
+      jobCards.forEach(card => {
+        const link = card.querySelector('a');
+        if (link && (link.href === request.url || link.textContent.trim() === request.title)) {
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          link.click();
+        }
+      });
     }
     
-    sendResponse();
+    sendResponse({ success: true });
     return true;
   }
   return true; // Keep the message channel open for async responses
@@ -210,26 +253,44 @@ function processPage() {
 // - Resets background to white for non-sponsored companies
 function processSponsors() {
   console.log('Processing sponsors...');
-  const cards = document.querySelectorAll('.job-card-container, [data-job-id], .jobs-search-results__list-item');
+  // Add more specific Indeed selectors
+  const cards = document.querySelectorAll([
+    // LinkedIn selectors
+    '.job-card-container',
+    '[data-job-id]',
+    '.jobs-search-results__list-item',
+    // Indeed selectors
+    'table.mainContentTable',
+    'div[class*="job_seen_beacon"]',
+    'td.resultContent'
+  ].join(', '));
+  
   console.log('Found cards:', cards.length);
   
   cards.forEach(card => {
-    // Updated company selectors
+    // Updated company selectors for Indeed
     const companyElement = card.querySelector([
+      // LinkedIn selectors
       '.job-card-container__company-name',
       '.artdeco-entity-lockup__subtitle',
       '.job-card-container__primary-description',
       '.company-name',
-      '.job-card-list__company-name',
-      '[data-tracking-control-name="public_jobs_company_name"]'
+      // Indeed selectors
+      '[data-testid="company-name"]',
+      'span[class*="companyName"]',
+      'div[class*="company_location"] span'
     ].join(', '));
     
     if (companyElement) {
       const companyName = companyElement.textContent.split('·')[0].trim();
+      console.log('Processing company:', companyName);
       if (checkIfSponsor(companyName)) {
-        card.style.backgroundColor = 'rgb(230 243 234)';
+        // For Indeed, we need to style the parent table
+        const parentCard = card.closest('table.mainContentTable') || card;
+        parentCard.style.backgroundColor = 'rgb(230 243 234)';
       } else {
-        card.style.backgroundColor = 'white';
+        const parentCard = card.closest('table.mainContentTable') || card;
+        parentCard.style.backgroundColor = 'white';
       }
     }
   });
@@ -239,31 +300,42 @@ function processSponsors() {
 // - KM badge for Known Member (sponsor) companies
 // - EN badge for jobs posted in English
 function processLanguages() {
-  const cards = document.querySelectorAll('.job-card-container, [data-job-id], .jobs-search-results__list-item');
+  const cards = document.querySelectorAll([
+    // LinkedIn selectors
+    '.job-card-container',
+    '[data-job-id]',
+    '.jobs-search-results__list-item',
+    // Indeed selectors
+    'table.mainContentTable',
+    'div[class*="job_seen_beacon"]',
+    'td.resultContent'
+  ].join(', '));
   
   cards.forEach(card => {
     if (card.dataset.processed) return;
     card.dataset.processed = 'true';
 
+    // Updated title selectors for Indeed
     const titleElement = card.querySelector([
+      // LinkedIn selectors
       '.job-card-container__link span',
       '.job-card-list__title',
-      '.jobs-unified-top-card__job-title',
-      '.job-card-list__title-link',
-      '[data-tracking-control-name="public_jobs_jserp_job_link"]',
-      'a[href*="/jobs/view/"] span',
-      'h3.base-search-card__title'
+      // Indeed selectors
+      '.jobTitle span[id^="jobTitle"]',
+      'h2.jobTitle a',
+      'a.jcs-JobTitle'
     ].join(', '));
 
     if (titleElement && !titleElement.querySelector('.language-indicator')) {
       // Get company name for sponsor check
       const companyElement = card.querySelector([
+        // LinkedIn selectors
         '.job-card-container__company-name',
         '.artdeco-entity-lockup__subtitle',
-        '.job-card-container__primary-description',
-        '.company-name',
-        '.job-card-list__company-name',
-        '[data-tracking-control-name="public_jobs_company_name"]'
+        // Indeed selectors
+        '[data-testid="company-name"]',
+        'span[class*="companyName"]',
+        'div[class*="company_location"] span'
       ].join(', '));
 
       const companyName = companyElement ? companyElement.textContent.split('·')[0].trim() : '';

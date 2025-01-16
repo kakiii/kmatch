@@ -1,10 +1,10 @@
 # KMatch - Dutch Sponsor Job Finder
 
-A [Chrome extension](https://chromewebstore.google.com/detail/kmatch-dutch-sponsor-job/jlchmhdkonkhmllpdcjomhboiednalmf) that helps you quickly identify recognized sponsors for highly skilled migrant visas while browsing LinkedIn jobs in the Netherlands.
+A [Chrome extension](https://chromewebstore.google.com/detail/kmatch-dutch-sponsor-job/jlchmhdkonkhmllpdcjomhboiednalmf) that helps you quickly identify recognized sponsors for highly skilled migrant visas while browsing LinkedIn and Indeed jobs in the Netherlands.
 
 ## Features
 
-- 🔍 Automatically scans LinkedIn job listings
+- 🔍 Automatically scans LinkedIn and Indeed job listings
 - ✨ Highlights jobs from recognized sponsors
 - 🔄 Maintains an up-to-date database
 - 🏢 Shows company sponsorship status in real-time
@@ -19,7 +19,7 @@ A [Chrome extension](https://chromewebstore.google.com/detail/kmatch-dutch-spons
 
 ## How to Use
 
-1. Visit LinkedIn's job section
+1. Visit LinkedIn and Indeed's job section
 2. Browse job listings as normal
 3. Look for highlighted jobs with:
    - "KM" badge: Company is a recognized sponsor
@@ -31,16 +31,16 @@ A [Chrome extension](https://chromewebstore.google.com/detail/kmatch-dutch-spons
 ### Data Collection and Usage
 
 #### What We Collect
-- **Job Listings**: We scan visible job postings on LinkedIn pages you visit
+- **Job Listings**: We scan visible job postings on LinkedIn and Indeed pages you visit
 - **Company Names**: We process company names to check against our sponsor database
 - **Job Titles**: We analyze job titles for language detection
-- **URLs**: We store LinkedIn job posting URLs temporarily for functionality
+- **URLs**: We store LinkedIn and Indeed job posting URLs temporarily for functionality
 
 #### What We Don't Collect
 - Personal information
 - Login credentials
 - Browser history
-- Any data outside of LinkedIn
+- Any data outside of LinkedIn and Indeed
 - Communication data
 - Payment information
 
@@ -49,7 +49,7 @@ A [Chrome extension](https://chromewebstore.google.com/detail/kmatch-dutch-spons
 - All processing happens locally on your device
 - No data is sent to external servers
 - Sponsor list is stored locally and updated via Chrome Web Store updates
-- Temporary data is cleared when you close LinkedIn
+- Temporary data is cleared when you close LinkedIn and Indeed
 
 ### Third-Party Access
 
@@ -115,4 +115,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - Data source: IND's public register of recognized sponsors. You can find the complete list at [https://ind.nl/en/public-register-recognised-sponsors](https://ind.nl/en/public-register-recognised-sponsors/public-register-regular-labour-and-highly-skilled-migrants)
 - Built with Chrome Extensions Manifest V3
-- Uses LinkedIn's public job listings interface
+- Uses LinkedIn and Indeed's public job listings interface

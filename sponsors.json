@@ -660,7 +660,8 @@
     ],
     "adm": [
       "ADM Europoort",
-      "ADM WILD Netherlands"
+      "ADM WILD Netherlands",
+      "ADM"
     ],
     "admatec": [
       "Admatec Europe BV",
@@ -1370,58 +1371,72 @@
       "Alpha Group"
     ],
     "alphacomm": [
-      "Alphacomm Solutions BV"
+      "Alphacomm Solutions BV",
+      "Alphacomm - the revenue boosting platform"
     ],
     "alphagrep": [
-      "AlphaGrep Amsterdam BV"
+      "AlphaGrep Amsterdam BV",
+      "AlphaGrep "
     ],
     "alphatron": [
       "Alphatron Marine BV",
-      "Alphatron Medical Innovations BV"
+      "Alphatron Medical Innovations BV",
+      "Alphatron Medical"
     ],
     "alpine": [
       "Alpine Grove (Netherlands) BV",
-      "Alpine Nederland BV"
+      "Alpine Nederland BV",
+      "Alpine Grove Partners LLP",
+      "Alpine"
     ],
     "alpinvest": [
       "AlpInvest Partners BV"
     ],
     "alpla": [
-      "Alpla Nederland BV"
+      "Alpla Nederland BV",
+      "ALPLA Group"
     ],
     "alstom": [
-      "ALSTOM Netherlands BV"
+      "ALSTOM Netherlands BV",
+      "Alstom"
     ],
     "altadent": [
       "AltaDent"
     ],
     "altcon": [
-      "Altcon Equipment BV"
+      "Altcon Equipment BV",
+      "ALTCON"
     ],
     "alten": [
       "Alten Nederland BV"
     ],
     "alter": [
-      "Alter Domus Nederland BV"
+      "Alter Domus Nederland BV",
+      "Alter Domus"
     ],
     "altimedia": [
       "Altimedia BV"
     ],
     "altrad": [
-      "Altrad Services BV"
+      "Altrad Services BV",
+      "ALTRAD SERVICES Benelux & Spain"
     ],
     "altran": [
-      "Altran Netherlands BV"
+      "Altran Netherlands BV",
+      "Capgemini Engineering"
     ],
     "altrex": [
       "Altrex BV"
     ],
     "altum": [
       "Altum Consulting BV",
-      "Altum RF International BV"
+      "Altum RF International BV",
+      "Altum Consulting",
+      "Altum RF"
     ],
     "altura": [
-      "Altura BV"
+      "Altura BV",
+      "ALVATechnology.nl"
     ],
     "alucha": [
       "Alucha Works BV"
@@ -1436,7 +1451,8 @@
       "ALVA BV"
     ],
     "alvarez": [
-      "Alvarez & Marsal Benelux BV"
+      "Alvarez & Marsal Benelux BV",
+      "Alvarez & Marsal"
     ],
     "alver": [
       "Alver BV"
@@ -1447,17 +1463,20 @@
       "AM Flex SolutionsBV"
     ],
     "amada": [
-      "AMADA WELD TECH BV"
+      "AMADA WELD TECH BV",
+      "AMADA WELD TECH EU"
     ],
     "amadeus": [
       "Amadeus Benelux",
-      "Amadeus Hospitality Netherlands BV"
+      "Amadeus Hospitality Netherlands BV",
+      "Amadeus"
     ],
     "amanos": [
       "Amanos Projektbureau BV"
     ],
     "amaris": [
-      "Amaris Netherlands BV"
+      "Amaris Netherlands BV",
+      "Amaris Consulting"
     ],
     "amarna": [
       "Amarna Therapeutics BV"
@@ -1472,7 +1491,8 @@
       "Amazon EU SARL, Dutch Branch",
       "Amazon Online Netherlands BV",
       "Amazon Transport Netherlands BV",
-      "Amazon Web Services EMEA SARL, Dutch Branch"
+      "Amazon Web Services EMEA SARL, Dutch Branch",
+      "Amazon"
     ],
     "ambagon": [
       "AmbAgon Therapeutics BV"
@@ -1491,7 +1511,8 @@
       "Amberscript Global BV"
     ],
     "ambrell": [
-      "Ambrell BV"
+      "Ambrell BV",
+      "Ambrell Induction Heating Solutions"
     ],
     "ambroise": [
       "Ambroise Holland BV"
@@ -1506,32 +1527,40 @@
       "AMCO Solutions BV"
     ],
     "amcor": [
-      "Amcor Specialty Cartons Brabant BV"
+      "Amcor Specialty Cartons Brabant BV",
+      "Amcor"
     ],
     "amdocs": [
       "Amdocs BV"
     ],
     "amelia": [
-      "Amelia NL BV"
+      "Amelia NL BV",
+      "Amelia"
     ],
     "america": [
-      "America II Europe BV"
+      "America II Europe BV",
+      "A2 Global Electronics + Solutions"
     ],
     "american": [
       "American Eagle Outfitters Dutch Op Co BV",
+      "American Eagle Outfitters Inc.",
       "American Express Europe SA (Netherlands branch)",
+      "American Express",
       "American Express Payments Europe, SL (Netherlands branch)",
       "American Orthodontics BV"
     ],
     "americold": [
-      "Americold Netherlands II BV"
+      "Americold Netherlands II BV",
+      "Americold Logistics, LLC."
     ],
     "amflow": [
-      "AM-Flow Holding BV"
+      "AM-Flow Holding BV",
+      "AM-Flow"
     ],
     "amgen": [
       "Amgen BV",
-      "Amgen Europe BV"
+      "Amgen Europe BV",
+      "Amicorp Group"
     ],
     "amicorp": [
       "Amicorp Netherlands BV"
@@ -1540,22 +1569,26 @@
       "Amiri Collections BV"
     ],
     "amis": [
-      "Amis Services BV"
+      "Amis Services BV",
+      "AMIS Conclusion"
     ],
     "amisys": [
       "AMISYS Co Ltd"
     ],
     "amity": [
-      "Amity Global Education"
+      "Amity Global Education",
+      "Amity International School Amsterdam"
     ],
     "ammega": [
-      "Ammega Group BV"
+      "Ammega Group BV",
+      "AMMEGA"
     ],
     "ammp": [
       "AMMP Technologies BV"
     ],
     "amnesty": [
-      "Amnesty International, Afdeling Nederland"
+      "Amnesty International, Afdeling Nederland",
+      "Amnesty International The Netherlands"
     ],
     "amo": [
       "AMO Groningen BV"
@@ -1574,26 +1607,32 @@
       "Ampersan Services NL B.V."
     ],
     "ampersand": [
-      "Ampersand Management BV"
+      "Ampersand Management BV",
+      "Ampersand Capital Partners"
     ],
     "ampharma": [
       "AM-Pharma BV"
     ],
     "amphenol": [
-      "Amphenol Benelux BV"
+      "Amphenol Benelux BV",
+      "Amphenol"
     ],
     "amphia": [
-      "Amphia Ziekenhuis"
+      "Amphia Ziekenhuis",
+      "Amphia Hospital"
     ],
     "ampire": [
-      "Ampire Vastgoed BV"
+      "Ampire Vastgoed BV",
+      "Ampire Real Estate Group"
     ],
     "ampleon": [
       "Ampleon Coöperatief UA",
-      "Ampleon Netherlands BV"
+      "Ampleon Netherlands BV",
+      "Ampleon"
     ],
     "amplitude": [
-      "Amplitude Analytics BV"
+      "Amplitude Analytics BV",
+      "Amplitude"
     ],
     "ampowr": [
       "Ampowr BV"
@@ -1603,13 +1642,15 @@
       "AMS Group BV",
       "AMS Green Markets BV",
       "ams Sensors Netherlands BV",
-      "AMS Sourcing BV"
+      "AMS Sourcing BV",
+      "ams OSRAM"
     ],
     "amse": [
       "AMSE"
     ],
     "amsino": [
-      "Amsino HR BV"
+      "Amsino HR BV",
+      "Amsino International, Inc."
     ],
     "amsma": [
       "AMSMA Group BV"
@@ -1621,8 +1662,10 @@
       "Amsterdam",
       "Amsterdam Capital Partners BV",
       "Amsterdam Data Collective BV",
+      "ADC Consulting",
       "Amsterdam Downtown Hotel BV",
       "Amsterdam Institute of Technology BV",
+      "Amsterdam Tech",
       "Amsterdam Internet Exchange BV",
       "AMS-IX",
       "Amsterdam Platform Creation BV",
@@ -1631,6 +1674,8 @@
       "Amsterdam Software BV",
       "FBO One",
       "Amsterdam UMC Research BV",
+      "Amsterdam UMC",
+      "UvA - Amsterdam UMC - HvA Ventures Holding BV",
       "Amsterdam VentureLab BV"
     ],
     "amsterdamse": [
@@ -1657,13 +1702,16 @@
       "Anadolubank Nederland NV"
     ],
     "anago": [
-      "Anago BV"
+      "Anago BV",
+      "Anago | Smart Planning Solutions"
     ],
     "analitiqs": [
-      "AnalitiQs BV"
+      "AnalitiQs BV",
+      "Highberg"
     ],
     "analog": [
-      "Analog Folk BV"
+      "Analog Folk BV",
+      "AnalogFolk"
     ],
     "analytical": [
       "Analytical Solutions and Products BV"
@@ -1679,75 +1727,93 @@
       "Ananda Digital Technologies BV"
     ],
     "anaplan": [
-      "Anaplan Nederland BV"
+      "Anaplan Nederland BV",
+      "Anaplan"
     ],
     "anatolia": [
-      "Anatolia BV"
+      "Anatolia BV",
+      "Wine Anatolia B.V."
     ],
     "and": [
       "AND Digital Nederland BV"
     ],
     "anderis": [
-      "Anderis Technology BV"
+      "Anderis Technology BV",
+      "Anderis Group"
     ],
     "andile": [
       "Andile BV"
     ],
     "andre": [
-      "Andre Rieu Productions BV"
+      "Andre Rieu Productions BV",
+      "André Rieu Productions BV"
     ],
     "andrea": [
-      "anDREa BV"
+      "anDREa BV",
+      "anDREa B.V. (Digital Research Environment)"
     ],
     "andries": [
-      "Andries Geerse Stedenbouwkundige BV"
+      "Andries Geerse Stedenbouwkundige BV",
+      "WeLoveTheCity"
     ],
     "andritz": [
       "ANDRITZ FEED & BIOFUEL BV",
       "ANDRITZ Gouda BV",
-      "Andritz Metals France SAS"
+      "Andritz Metals France SAS",
+      "ANDRITZ Separation",
+      "ANDRITZ Metals"
     ],
     "anewspring": [
       "aNewSpring"
     ],
     "angara": [
-      "Angara DX BV"
+      "Angara DX BV",
+      "Angara Global"
     ],
     "angelo": [
-      "Angelo, Gordon Netherlands BV"
+      "Angelo, Gordon Netherlands BV",
+      "TPG Angelo Gordon"
     ],
     "angelscompany": [
-      "Angelscompany BV"
+      "Angelscompany BV",
+      "ANGELS COMPANY"
     ],
     "angiodynamics": [
-      "AngioDynamics Netherlands BV"
+      "AngioDynamics Netherlands BV",
+      "AngioDynamics"
     ],
     "angiogenesis": [
       "Angiogenesis Analytics BV"
     ],
     "anglia": [
-      "Anglia NL BV"
+      "Anglia NL BV",
+      "Anglia & Optima"
     ],
     "angloeastern": [
-      "Anglo-Eastern Ship Management (NL) BV"
+      "Anglo-Eastern Ship Management (NL) BV",
+      "Anglo-Eastern"
     ],
     "anicura": [
-      "AniCura Netherlands BV"
+      "AniCura Netherlands BV",
+      "AniCura"
     ],
     "aniform": [
       "AniForm Engineering BV"
     ],
     "animal": [
-      "Animal Health Concepts BV"
+      "Animal Health Concepts BV",
+      "Animal Health Concepts (AHC)"
     ],
     "anixter": [
-      "Anixter Nederland BV"
+      "Anixter Nederland BV",
+      "Anixter"
     ],
     "anji": [
       "Anji Logistics Europe BV"
     ],
     "anker": [
-      "Anker Recruitment BV"
+      "Anker Recruitment BV",
+      "Anker Innovations LTD"
     ],
     "ankerbeer": [
       "Ankerbeer BV"
@@ -1756,7 +1822,8 @@
       "Ankerpoort NV"
     ],
     "anko": [
-      "ANKO Food Tech BV"
+      "ANKO Food Tech BV",
+      "ANKO Food Tech Inc."
     ],
     "anna": [
       "Anna Agency BV",
@@ -1767,7 +1834,8 @@
       "Annogen BV"
     ],
     "annual": [
-      "Annual Insight BV"
+      "Annual Insight BV",
+      "A-INSIGHTS"
     ],
     "anomaly": [
       "Anomaly BV"
@@ -1776,36 +1844,44 @@
       "Anopanel BV"
     ],
     "anotech": [
-      "Anotech Energy Netherlands BV"
+      "Anotech Energy Netherlands BV",
+      "Anotech"
     ],
     "anqore": [
       "AnQore BV"
     ],
     "anritsu": [
-      "Anritsu Infivis BV"
+      "Anritsu Infivis BV",
+      "Anritsu"
     ],
     "ans": [
-      "Ans Exam BV"
+      "Ans Exam BV",
+      "Ans"
     ],
     "ansinger": [
       "ANSINGER BV"
     ],
     "ansys": [
-      "ANSYS Netherlands"
+      "ANSYS Netherlands",
+      "Ansys"
     ],
     "ant": [
       "ANT International BV",
       "ANT International AB"
     ],
     "antaris": [
-      "Antaris Solutions BV"
+      "Antaris Solutions BV",
+      "Antaris Digital Health Solutions GmbH"
     ],
     "antec": [
       "Antec Europe",
-      "Antec Leyden BV"
+      "Antec Leyden BV",
+      "Antec Europe B.V.",
+      "Antec Scientific"
     ],
     "antek": [
-      "Antek Europe BV"
+      "Antek Europe BV",
+      "Antek"
     ],
     "antennex": [
       "AntenneX BV"
@@ -1823,10 +1899,12 @@
       "ANTFIN (NETHERLANDS) HOLDING BV"
     ],
     "anthesis": [
-      "Anthesis BV"
+      "Anthesis BV",
+      "Anthesis Group"
     ],
     "anthony": [
-      "Anthony Veder Rederijzaken BV"
+      "Anthony Veder Rederijzaken BV",
+      "Anthony Veder"
     ],
     "anthos": [
       "Anthos Fund & Asset Management BV",
@@ -1843,7 +1921,8 @@
       "ANVA"
     ],
     "anvil": [
-      "Anvil Ventures The Netherlands BV"
+      "Anvil Ventures The Netherlands BV",
+      "Anvil Secure"
     ],
     "anwb": [
       "ANWB BV",
@@ -1863,13 +1942,16 @@
     "aon": [
       "Aon 5 BV",
       "Aon 6 BV",
-      "Aon Groep Nederland BV"
+      "Aon Groep Nederland BV",
+      "Aon"
     ],
     "aopen": [
-      "Aopen Computer BV"
+      "Aopen Computer BV",
+      "AOPEN"
     ],
     "apacer": [
-      "Apacer Technology BV"
+      "Apacer Technology BV",
+      "Apacer宇瞻"
     ],
     "apandam": [
       "Apandam Europe BV"
@@ -1878,7 +1960,8 @@
       "Apara BV"
     ],
     "apeel": [
-      "Apeel Netherlands BV"
+      "Apeel Netherlands BV",
+      "Apeel"
     ],
     "apeldoorn": [
       "Apeldoorn Orthodontie"
@@ -1893,10 +1976,12 @@
     "apg": [
       "APG Asset Management NV",
       "APG Fondsenbedrijf",
-      "APG Groep NV"
+      "APG Groep NV",
+      "APG"
     ],
     "apl": [
-      "APL Logistics Europe BV"
+      "APL Logistics Europe BV",
+      "APL Logistics"
     ],
     "apm": [
       "APM Terminals Maasvlakte II BV",
@@ -1910,10 +1995,12 @@
     ],
     "apollo": [
       "Apollo Capital Solutions Europe BV",
+      "Apollo Global Management, Inc.",
       "Apollo Seiko Europe BV",
       "Apollo Tyres (Europe) BV",
       "Apollo Tyres (NL) BV",
-      "Apollo Tyres Global R&D BV"
+      "Apollo Tyres Global R&D BV",
+      "Apollo Tyres Ltd"
     ],
     "apotheek": [
       "Apotheek Jager Bruining BV"
@@ -1924,26 +2011,33 @@
     "apple": [
       "Apple Benelux BV",
       "Apple Inn Hotel BV",
-      "Apple Retail Netherlands BV"
+      "Apple Retail Netherlands BV",
+      "Apple Retail Properties",
+      "Apple"
     ],
     "applied": [
       "Applied Drone Innovations BV",
       "AgriData Innovations",
       "Applied Materials Europe BV",
       "Applied Medical Europe BV",
+      "Applied Medical",
       "Applied Micro Electronics \"AME\" BV",
       "AME (Applied Micro Electronics)",
       "Applied Nanolayers BV",
+      "Applied Nanolayers BV - ANL",
       "Applied Principles BV",
       "Applied Risk BV",
+      "Applied Risk - Critical Infrastructure Made Secure",
       "Applied Value Technologies BV",
       "AVT, a Wipro company"
     ],
     "applikon": [
-      "Applikon Biotechnology BV"
+      "Applikon Biotechnology BV",
+      "Getinge"
     ],
     "approba": [
-      "Approba Executives Flecs BV"
+      "Approba Executives Flecs BV",
+      "Approba"
     ],
     "appsignal": [
       "AppSignal BV"
@@ -1956,13 +2050,16 @@
     ],
     "aps": [
       "APS Group BV",
-      "APS Uitzendburo BV"
+      "APS Uitzendburo BV",
+      "APS Personeelservices"
     ],
     "aptiv": [
-      "Aptiv Mexican Holdings (US) LLC"
+      "Aptiv Mexican Holdings (US) LLC",
+      "Aptiv"
     ],
     "aqana": [
-      "Aqana BV"
+      "Aqana BV",
+      "Aqua-Spark"
     ],
     "aqs": [
       "AQS European Real Estate Coöperatief UA"
@@ -1986,7 +2083,8 @@
       "Aquatic Drones BV"
     ],
     "aquent": [
-      "Aquent LLC"
+      "Aquent LLC",
+      "Aquent"
     ],
     "ar": [
       "AR Management & Consultancy BV"
@@ -1995,7 +2093,8 @@
       "Araco International BV"
     ],
     "arag": [
-      "ARAG SE Nederland"
+      "ARAG SE Nederland",
+      "ARAG SE - Branch Belgium"
     ],
     "aragen": [
       "Aragen Life Sciences BV"
@@ -2007,10 +2106,12 @@
       "Araido BV"
     ],
     "aram": [
-      "ARAM Technology Services"
+      "ARAM Technology Services",
+      "Aram | Knowledge Partners in Project Control"
     ],
     "aramco": [
-      "Aramco Overseas Company BV"
+      "Aramco Overseas Company BV",
+      "aramco"
     ],
     "aramex": [
       "Aramex Nederland BV"
@@ -2026,10 +2127,12 @@
       "ArboNed BV"
     ],
     "arc": [
-      "ARC Phone Accessories BV"
+      "ARC Phone Accessories BV",
+      "Arc"
     ],
     "arcadia": [
-      "Arcadia Maritime Group BV"
+      "Arcadia Maritime Group BV",
+      "Arcadis"
     ],
     "arcadis": [
       "Arcadis Global BV",
@@ -2038,35 +2141,41 @@
     ],
     "arcelormittal": [
       "ArcelorMittal Netherlands BV",
-      "ArcelorMittal Projects Europe BV"
+      "ArcelorMittal Projects Europe BV",
+      "ArcelorMittal"
     ],
     "archer": [
       "Archer Daniels Midland Europe BV",
       "Archer Hotel Capital BV"
     ],
     "architechts": [
-      "Architechts NV"
+      "Architechts NV",
+      "Architechts® | Digital Impact"
     ],
     "architectenbureau": [
       "Architectenbureau Cepezed BV",
       "Architectenbureau Popma en ter Steege"
     ],
     "archlynk": [
-      "ArchLynk Netherlands BV"
+      "ArchLynk Netherlands BV",
+      "ArchLynk"
     ],
     "arcus": [
-      "Arcus European Investment Manager Netherlands BV"
+      "Arcus European Investment Manager Netherlands BV",
+      "Arcus Infrastructure Partners LLP"
     ],
     "arcwide": [
       "Arcwide BV"
     ],
     "ardagh": [
       "Ardagh Glass Benelux",
-      "Ardagh Metal Beverage Netherlands BV"
+      "Ardagh Metal Beverage Netherlands BV",
+      "Ardagh Group"
     ],
     "ardena": [
       "Ardena Amsterdam BV",
-      "Ardena Oss BV"
+      "Ardena Oss BV",
+      "Ardena"
     ],
     "ardevelopment": [
       "AR-Development BV"
@@ -2088,7 +2197,8 @@
       "Arep Accountants & Belastingadviseurs BV"
     ],
     "argent": [
-      "Argent Energy Netherlands Holding BV"
+      "Argent Energy Netherlands Holding BV",
+      "Argent Energy"
     ],
     "argentex": [
       "Argentex BV"
@@ -2099,6 +2209,7 @@
     "argo": [
       "Argo Coral Maritime Ltd",
       "Argo Design Europe BV",
+      "ARGO Design",
       "ARGO MOTOR SPARES BV"
     ],
     "ariana": [
@@ -2108,10 +2219,12 @@
       "Arisphone BV"
     ],
     "aristos": [
-      "Aristos BV"
+      "Aristos BV",
+      "Aristos - eCommerce Solutions for Producers"
     ],
     "arjo": [
-      "Arjo Nederland BV"
+      "Arjo Nederland BV",
+      "Arjo"
     ],
     "arkema": [
       "ARKEMA BV"
@@ -2130,7 +2243,8 @@
     ],
     "arlanxeo": [
       "ARLANXEO Holding BV",
-      "ARLANXEO Netherlands BV"
+      "ARLANXEO Netherlands BV",
+      "ARLANXEO"
     ],
     "armada": [
       "Armada Consultants BV"
@@ -2148,7 +2262,8 @@
       "ARQ Nationaal Psychotrauma Centrum"
     ],
     "array": [
-      "Array Industries Engineering BV"
+      "Array Industries Engineering BV",
+      "Array Industries b.v."
     ],
     "arris": [
       "ARRIS Group BV"
@@ -2157,13 +2272,15 @@
       "ARS Traffic & Transport Technology BV"
     ],
     "artefact": [
-      "Artefact Benelux"
+      "Artefact Benelux",
+      "Artefact"
     ],
     "artemis": [
       "Artemis Bioservices BV"
     ],
     "artez": [
-      "ArtEZ Hogeschool voor de Kunsten"
+      "ArtEZ Hogeschool voor de Kunsten",
+      "ArtEZ University of the Arts"
     ],
     "arthe": [
       "Arthe Civil & Structure BV"
@@ -2173,10 +2290,12 @@
       "Arthrex Nederland BV"
     ],
     "arthur": [
-      "Arthur D Little Benelux NV"
+      "Arthur D Little Benelux NV",
+      "Arthur D. Little"
     ],
     "arthurs": [
-      "Arthur's Legal BV"
+      "Arthur's Legal BV",
+      "Arthur's Legal, Strategies & Systems"
     ],
     "artificial": [
       "Artificial Design"
@@ -2191,17 +2310,20 @@
       "Arts en Zorg BV"
     ],
     "artsen": [
-      "Artsen zonder Grenzen (Médecins Sans Frontières, Nederland)"
+      "Artsen zonder Grenzen (Médecins Sans Frontières, Nederland)",
+      "Artsen zonder Grenzen Nederland"
     ],
     "arup": [
       "Arup BV"
     ],
     "arval": [
       "Arval BV",
-      "Arval Benelux BV"
+      "Arval Benelux BV",
+      "BNP Paribas "
     ],
     "arvato": [
-      "Arvato Netherlands BV"
+      "Arvato Netherlands BV",
+      "Arvato"
     ],
     "aryza": [
       "Aryza BV"
@@ -2227,10 +2349,12 @@
       "Asc Academics BV"
     ],
     "asci": [
-      "ASCI Netherlands BV"
+      "ASCI Netherlands BV",
+      "ASCI"
     ],
     "ascom": [
-      "Ascom (Nederland) BV"
+      "Ascom (Nederland) BV",
+      "Ascom"
     ],
     "ascott": [
       "Ascott Hospitality (Europe) N.V.",
@@ -2244,7 +2368,8 @@
     ],
     "ashland": [
       "Ashland Industries Nederland BV",
-      "Ashland Services"
+      "Ashland Services",
+      "Ashland"
     ],
     "asian": [
       "Asian Bistro Nijmegen"
@@ -2254,7 +2379,9 @@
     ],
     "asics": [
       "ASICS Europe BV",
-      "ASICS Technology BV"
+      "ASICS Technology BV",
+      "ASICS EMEA",
+      "ASICS"
     ],
     "asimo": [
       "Asimo Networks BV"
@@ -2272,12 +2399,14 @@
       "ASM Europe BV",
       "ASM International NV",
       "ASM IP Holding BV",
-      "ASM Maritime BV"
+      "ASM Maritime BV",
+      "ASM Global - Europe"
     ],
     "asml": [
       "ASML Holding NV",
       "ASML Netherlands BV",
-      "ASML Trading BV"
+      "ASML Trading BV",
+      "ASML"
     ],
     "asmpt": [
       "ASMPT ALSI BV"
@@ -2289,37 +2418,45 @@
       "Aspen Oss BV"
     ],
     "aspentech": [
-      "Aspentech Europe BV"
+      "Aspentech Europe BV",
+      "Aspen Technology"
     ],
     "asperion": [
-      "Asperion Hosting BV"
+      "Asperion Hosting BV",
+      "Asperion"
     ],
     "aspire": [
       "Aspire Systems BV"
     ],
     "asr": [
-      "ASR Nederland NV"
+      "ASR Nederland NV",
+      "a.s.r."
     ],
     "asrock": [
-      "ASRock Europe BV"
+      "ASRock Europe BV",
+      "ASRock Industrial Computer"
     ],
     "assai": [
-      "Assai Software Services BV"
+      "Assai Software Services BV",
+      "Assai Software"
     ],
     "assemble": [
       "Assemble 33 BV"
     ],
     "assembling": [
-      "Assembling Manufacturing & Sourcing Group BV"
+      "Assembling Manufacturing & Sourcing Group BV",
+      "AMS Group BV"
     ],
     "assent": [
-      "Assent Compliance Netherlands BV"
+      "Assent Compliance Netherlands BV",
+      "Assent"
     ],
     "assertive": [
       "Assertive Yield BV"
     ],
     "asset": [
       "Asset Control International BV",
+      "Asset Control",
       "Asset Insight BV",
       "Asset People BV",
       "ASSET Rail BV"
@@ -2332,61 +2469,73 @@
     ],
     "astellas": [
       "Astellas BV",
-      "Astellas Pharma Europe BV"
+      "Astellas Pharma Europe BV",
+      "Astellas Pharma "
     ],
     "aster": [
       "Aster Technology Holland BV"
     ],
     "asteria": [
-      "Asteria Food BV"
+      "Asteria Food BV",
+      "Asteria Group"
     ],
     "astrata": [
-      "Astrata Europe BV"
+      "Astrata Europe BV",
+      "Astrata, Inc"
     ],
     "astrazeneca": [
-      "AstraZeneca BV"
+      "AstraZeneca BV",
+      "Acerta Pharma B.V. (A member of the AstraZeneca Group)"
     ],
     "astrolkwx": [
       "Astrolkwx BV"
     ],
     "astronergy": [
-      "Astronergy Solar Netherlands BV"
+      "Astronergy Solar Netherlands BV",
+      "Astronergy Solar"
     ],
     "asus": [
       "ASUS Holland BV",
-      "Asus Technology Holland"
+      "Asus Technology Holland",
+      "ASUS"
     ],
     "at": [
       "AT Kearney BV",
       "Kearney"
     ],
     "atabix": [
-      "Atabix Solutions BV"
+      "Atabix Solutions BV",
+      "Atabix"
     ],
     "atag": [
-      "ATAG Nederland BV"
+      "ATAG Nederland BV",
+      "ATAG Benelux"
     ],
     "atc": [
       "ATC Europe Coöperatief UA",
       "ATC International Coöperatief UA",
-      "ATC International Financing BV"
+      "ATC International Financing BV",
+      "American Tower Europe"
     ],
     "atelier": [
       "Atelier Eindhoven BV"
     ],
     "atensus": [
-      "ATENSUS Detachering BV"
+      "ATENSUS Detachering BV",
+      "Atensus bv - inrichting openbare ruimte"
     ],
     "atg": [
       "ATG Engineering BV",
-      "ATG Netherlands BV"
+      "ATG Netherlands BV",
+      "ATG Europe"
     ],
     "athenastudies": [
       "AthenaStudies BV"
     ],
     "athlon": [
       "Athlon Car Lease International BV",
-      "Athlon Car Lease Nederland BV"
+      "Athlon Car Lease Nederland BV",
+      "Athlon Nederland"
     ],
     "athom": [
       "Athom BV"
@@ -2409,6 +2558,7 @@
     ],
     "atlas": [
       "Atlas Copco Internationaal BV",
+      "Atlas Copco",
       "Atlas Global Energy BV",
       "Atlas Inexco Contractors BV",
       "Atlas International BV",
@@ -2421,21 +2571,25 @@
       "Atlassian BV"
     ],
     "atmos": [
-      "ATMOS UAV BV"
+      "ATMOS UAV BV",
+      "Atmos"
     ],
     "atogear": [
-      "ATO-gear BV"
+      "ATO-gear BV",
+      "GEAR UP ATO"
     ],
     "atos": [
       "ATOS INTERNATIONAL BV",
       "Atos International Global Functions BV",
-      "Atos Netherlands BV"
+      "Atos Netherlands BV",
+      "Atos"
     ],
     "atotech": [
       "Atotech BV"
     ],
     "atr": [
-      "ATR Infra-Services BV"
+      "ATR Infra-Services BV",
+      "ATR Group | Safety- & Infra-services"
     ],
     "atradius": [
       "Atradius",
@@ -2449,7 +2603,8 @@
       "ATS Group Holding BV"
     ],
     "att": [
-      "AT&T Global Network Services Nederland BV"
+      "AT&T Global Network Services Nederland BV",
+      "AT&T Global Network Services India Private Ltd."
     ],
     "atterbury": [
       "Atterbury Europe BV"
@@ -2458,7 +2613,8 @@
       "Attrace BV"
     ],
     "audacity": [
-      "Audacity Capital Technologies BV"
+      "Audacity Capital Technologies BV",
+      "AudaCity Capital Management"
     ],
     "audibene": [
       "Audibene BV"
@@ -2473,11 +2629,14 @@
       "AugmedIT BV"
     ],
     "augusta": [
-      "Augusta Aiken & Associates BV"
+      "Augusta Aiken & Associates BV",
+      "AAA Global"
     ],
     "auo": [
       "AUO Display Plus Netherlands BV",
-      "AUO Europe BV"
+      "AUO Europe BV",
+      "AUO Display Plus",
+      "AUO"
     ],
     "aura": [
       "Aura BV"
@@ -2486,7 +2645,8 @@
       "Aurea Imaging BV"
     ],
     "aurelius": [
-      "AURELIUS Nederland BV"
+      "AURELIUS Nederland BV",
+      "AURELIUS"
     ],
     "auren": [
       "Auren Staffing Amersfoort BV"
@@ -2496,10 +2656,12 @@
       "Aurora Technology BV"
     ],
     "aurubis": [
-      "Aurubis Netherlands BV"
+      "Aurubis Netherlands BV",
+      "Aurubis"
     ],
     "ausnutria": [
-      "Ausnutria Operations BV"
+      "Ausnutria Operations BV",
+      "Ausnutria"
     ],
     "autarco": [
       "Autarco BV"
@@ -2508,12 +2670,14 @@
       "Autel Netherlands BV"
     ],
     "autisme": [
-      "Autisme Centrum Groei! BV"
+      "Autisme Centrum Groei! BV",
+      "Centrum Groei!"
     ],
     "auto": [
       "Auto Camper Service International Holding BV",
       "Auto Kökcü BV",
-      "Auto Wonders"
+      "Auto Wonders",
+      "Auto Kökcü - Mercedes-Benz"
     ],
     "autobinck": [
       "AutoBinck Group NV"
@@ -2522,22 +2686,27 @@
       "Autodesk BV"
     ],
     "autofacets": [
-      "AutoFacets BV"
+      "AutoFacets BV",
+      "AutoFacets (A Gateway Group Company)"
     ],
     "autoform": [
-      "AutoForm Engineering BV"
+      "AutoForm Engineering BV",
+      "AutoForm Engineering Czech Republic"
     ],
     "autoglas": [
-      "Autoglas D & K BV"
+      "Autoglas D & K BV",
+      "Autotaalglas"
     ],
     "automotive": [
       "Automotive Mediaventions BV"
     ],
     "autoriteit": [
-      "Autoriteit Consument en Markt"
+      "Autoriteit Consument en Markt",
+      "The Netherlands Authority for Consumers and Markets"
     ],
     "autoscout24": [
-      "AutoScout24 Nederland BV"
+      "AutoScout24 Nederland BV",
+      "AutoScout24"
     ],
     "autotelex": [
       "Autotelex BV"
@@ -2549,7 +2718,8 @@
       "AVA ALMS VALVE AGENCY BV"
     ],
     "avago": [
-      "Avago Technologies Holdings BV"
+      "Avago Technologies Holdings BV",
+      "Avago Technologies"
     ],
     "avalor": [
       "Avalor AI BV"
@@ -2565,7 +2735,8 @@
     ],
     "avans": [
       "Avans Hogeschool",
-      "Avans Hogeschool BV"
+      "Avans Hogeschool BV",
+      "Avans University of Applied Sciences"
     ],
     "avant": [
       "Avant Arte BV"
@@ -2576,13 +2747,15 @@
     "avantium": [
       "Avantium Chemicals BV",
       "Avantium Renewable Polymers BV",
-      "Avantium Support BV"
+      "Avantium Support BV",
+      "Avantium"
     ],
     "avast": [
       "Avast Software BV"
     ],
     "avaya": [
-      "Avaya Nederland BV"
+      "Avaya Nederland BV",
+      "Avaya"
     ],
     "aveco": [
       "Aveco De Bondt BV"
@@ -2594,14 +2767,16 @@
       "Aventiss Europe Engineering"
     ],
     "avepoint": [
-      "AvePoint Deutschland GmbH"
+      "AvePoint Deutschland GmbH",
+      "AvePoint"
     ],
     "avery": [
       "Avery Dennison Hong Kong BV",
       "Avery Dennison Materials Europe BV",
       "Avery Dennison Materials Nederland BV",
       "Avery Dennison Netherlands Investment II BV",
-      "Avery Dennison Treasury Management BV"
+      "Avery Dennison Treasury Management BV",
+      "Avery Dennison"
     ],
     "aveva": [
       "AVEVA Select Benelux BV",
@@ -2614,31 +2789,38 @@
       "AVH Dairy Trade BV"
     ],
     "aviaco": [
-      "Aviaco Nederland BV"
+      "Aviaco Nederland BV",
+      "Aviaco GSE"
     ],
     "aviator": [
-      "Aviator Netherlands BV"
+      "Aviator Netherlands BV",
+      "AVIATOR"
     ],
     "avidicure": [
       "Avidicure BV"
     ],
     "avient": [
-      "Avient Colorants Netherlands BV"
+      "Avient Colorants Netherlands BV",
+      "Avient Corporation"
     ],
     "avignon": [
-      "Avignon Capital Netherlands BV"
+      "Avignon Capital Netherlands BV",
+      "Avignon Capital"
     ],
     "aviko": [
       "Aviko BV"
     ],
     "avion": [
-      "Avion BV"
+      "Avion BV",
+      "Avion Full Flight Simulators"
     ],
     "avisi": [
-      "Avisi Cloud Services BV"
+      "Avisi Cloud Services BV",
+      "Avisi"
     ],
     "avit": [
-      "Avit Group BV"
+      "Avit Group BV",
+      "Avit"
     ],
     "avito": [
       "Avito Technologies BV"
@@ -2647,39 +2829,47 @@
       "Aviva Investors Luxembourg - Netherlands branch"
     ],
     "avivia": [
-      "Avivia BV"
+      "Avivia BV",
+      "Aviva Investors"
     ],
     "avoxt": [
       "AVOXT B.V.",
       "Avoxt"
     ],
     "avrafvalverwerking": [
-      "AVR-Afvalverwerking BV"
+      "AVR-Afvalverwerking BV",
+      "AVR"
     ],
     "avular": [
-      "Avular Innovations BV"
+      "Avular Innovations BV",
+      "Avular"
     ],
     "avy": [
-      "Avy BV"
+      "Avy BV",
+      "AV Flexologic B.V."
     ],
     "awa": [
       "AWA Alexander Watson Associates BV",
       "AWA Conferences BV"
     ],
     "awaretrain": [
-      "Awaretrain BV"
+      "Awaretrain BV",
+      "Awaretrain | Security Awareness"
     ],
     "awareways": [
       "AWAREWAYS BV"
     ],
     "awin": [
-      "AWIN BV"
+      "AWIN BV",
+      "Awin Global"
     ],
     "awltechniek": [
-      "AWL-Techniek BV"
+      "AWL-Techniek BV",
+      "AWL"
     ],
     "axa": [
-      "AXA Real Estate Investment Managers Nederland BV"
+      "AXA Real Estate Investment Managers Nederland BV",
+      "AXA Investment Managers"
     ],
     "axelera": [
       "AXELERA AI BV"
@@ -2689,7 +2879,8 @@
       "Axia Vegetable Seeds BV"
     ],
     "axians": [
-      "Axians Communication Solutions BV"
+      "Axians Communication Solutions BV",
+      "Axians NL"
     ],
     "axicom": [
       "AxiCom BV"
@@ -2701,7 +2892,8 @@
       "Axion Biosystems BV"
     ],
     "axon": [
-      "Axon Public Safety BV"
+      "Axon Public Safety BV",
+      "Axon"
     ],
     "axoniq": [
       "AxonIQ BV"
@@ -2733,20 +2925,24 @@
       "Azerion Services BV",
       "Azerion Sports BV",
       "Azerion Tech Holding BV",
-      "Azerion Technology BV"
+      "Azerion Technology BV",
+      "Azerion"
     ],
     "azz": [
       "AZZ WSI BV"
     ],
     "b": [
       "B & C International BV",
+      "B & C international",
       "B & S International BV",
+      "B&S",
       "B Building Business BV",
       "B. Amsterdam",
       "B Futurist BV"
     ],
     "b2c": [
-      "B2C Europe Support BV"
+      "B2C Europe Support BV",
+      "B2C Europe - A Maersk Company"
     ],
     "b4c": [
       "B4C Markets BV"
@@ -4278,15 +4474,21 @@
     "bv": [
       "BV Alabastine (Holland)",
       "BV Algemeen Nederlands Persbureau ANP",
+      "ANP",
       "BV Arrow Electronics DLC",
+      "Arrow Electronics",
       "BV Chiropractie Rugcentra AB van Beest DC",
       "BV Design-Production Link \"DPL\"",
       "BV Rubberfabriek \"Wittenburg\"",
+      "Wittenburg Group",
       "BV Systemation AES",
+      "Systemation",
       "BV Twentsche Kabelfabriek",
+      "TKF (BV Twentsche Kabelfabriek)",
       "BV Vega Meet- en Regeltechniek",
       "VEGA NL",
-      "BV VITESSE"
+      "BV VITESSE",
+      "Vitesse Arnhem"
     ],
     "bw": [
       "BW Global (Europe) BV",

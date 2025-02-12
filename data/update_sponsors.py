@@ -1,89 +1,68 @@
+import json
+import os
 import pandas as pd
 import glob
-import os
 from datetime import datetime
-import json
 
-# Get all Excel files in the directory
-path = "/Users/ashlee/Documents/Chrome Extensions/kmatch/data/"
-files = glob.glob(path + "KMatch - *.xlsx")
+# 获取数据文件路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+excel_files = glob.glob(os.path.join(current_dir, 'KMatch - *.xlsx'))
 
-# Sort files by date in filename
+# 按日期排序文件
 def extract_date(filename):
-    date_str = filename.split(' - ')[1].replace('.xlsx', '')
+    date_str = os.path.basename(filename).split(' - ')[1].replace('.xlsx', '')
     return datetime.strptime(date_str, '%d_%m_%Y')
 
-sorted_files = sorted(files, key=extract_date, reverse=True)
+sorted_files = sorted(excel_files, key=extract_date, reverse=True)
 
 if len(sorted_files) < 2:
     print("Need at least 2 files to compare")
     exit()
 
-# Read the two most recent files
+# 读取最新的两个文件
 latest_file = sorted_files[0]
 second_latest_file = sorted_files[1]
-print(f"\nComparing files:")
-print(f"Latest: {os.path.basename(latest_file)}")
-print(f"Previous: {os.path.basename(second_latest_file)}\n")
 
+# 读取数据
 latest_df = pd.read_excel(latest_file)
 second_latest_df = pd.read_excel(second_latest_file)
 
-# Get the second column name from both files
-latest_second_col = latest_df.columns[1]
-prev_second_col = second_latest_df.columns[1]
+# 使用第二列（索引1）进行对比
+new_entries = latest_df[~latest_df.iloc[:, 1].isin(second_latest_df.iloc[:, 1])]
+print(f"\nNew entries in {os.path.basename(latest_file)}: {len(new_entries)} entries")
+print(new_entries)
 
-print(f"\nSecond column in latest file: {latest_second_col}")
-print(f"Second column in previous file: {prev_second_col}")
+# 找出删除的公司
+removed_entries = second_latest_df[~second_latest_df.iloc[:, 1].isin(latest_df.iloc[:, 1])]
+print(f"\nRemoved entries in {os.path.basename(latest_file)}: {len(removed_entries)} entries")
+print(removed_entries)
 
-# Find rows in latest that aren't in second_latest
-new_entries = latest_df[~latest_df[latest_second_col].isin(second_latest_df[prev_second_col])]
+# 读取 sponsors.json
+sponsors_path = os.path.join(os.path.dirname(current_dir), 'sponsors.json')
 
-# Find rows in second_latest that aren't in latest
-removed_entries = second_latest_df[~second_latest_df[prev_second_col].isin(latest_df[latest_second_col])]
+with open(sponsors_path, 'r', encoding='utf-8') as f:
+    data = json.load(f)
 
-# Extract date from latest file for naming the output files
-latest_date = extract_date(latest_file).strftime('%d_%m_%Y')
-new_entries_file = os.path.join(path, f"NewEntries_{latest_date}.xlsx")
-removed_entries_file = os.path.join(path, f"RemovedEntries_{latest_date}.xlsx")
-
-if new_entries.empty and removed_entries.empty:
-    print("No differences found")
-else:
-   if not new_entries.empty:
-    print(f"\nNew entries in {os.path.basename(latest_file)}: {len(new_entries)} entries")
-    print(new_entries)
-    new_entries.to_excel(new_entries_file, index=False)
-    print(f"New entries exported to: {os.path.basename(new_entries_file)}")
-    
-    # 直接更新 sponsors.json
-    with open('kmatch/sponsors.json', 'r', encoding='utf-8') as f:
-        data = json.load(f)
-
-    # 处理每个新公司
-    for company in new_entries['Organisation'].tolist():
-        company = company.strip()
-        if not company:
-            continue
-            
-        key = company.split()[0].lower()
+# 处理每个新公司（使用第一列的Organisation）
+for company in new_entries.iloc[:, 0].tolist():
+    company = company.strip()
+    if not company:
+        continue
         
-        if 'sponsors' in data and key in data['sponsors']:
-            if company not in data['sponsors'][key]:
-                data['sponsors'][key].append(company)
-        else:
-            if 'sponsors' not in data:
-                data['sponsors'] = {}
-            data['sponsors'][key] = [company]
+    key = company.split()[0].lower()
+    
+    if 'sponsors' in data and key in data['sponsors']:
+        if company not in data['sponsors'][key]:
+            data['sponsors'][key].append(company)
+    else:
+        if 'sponsors' not in data:
+            data['sponsors'] = {}
+        if key not in data['sponsors']:
+            data['sponsors'][key] = []
+        data['sponsors'][key].append(company)
 
-    # 保存更新后的 JSON
-    with open('../sponsors.json', 'w', encoding='utf-8') as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
-    
-    print("\nsponsors.json has been updated successfully!")
-    
-    if not removed_entries.empty:
-        print(f"\nEntries removed (present in {os.path.basename(second_latest_file)} but not in {os.path.basename(latest_file)}): {len(removed_entries)} entries")
-        print(removed_entries)
-        removed_entries.to_excel(removed_entries_file, index=False)
-        print(f"Removed entries exported to: {os.path.basename(removed_entries_file)}")
+# 保存更新后的 JSON
+with open(sponsors_path, 'w', encoding='utf-8') as f:
+    json.dump(data, f, indent=2, ensure_ascii=False)
+
+print("\nsponsors.json has been updated successfully!")

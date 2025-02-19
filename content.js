@@ -240,11 +240,13 @@ function processPage() {
   // Process both features immediately
   processSponsors();
   processLanguages();
+  markViewedJobs();
   
   // And again after a short delay
   setTimeout(() => {
     processSponsors();
     processLanguages();
+    markViewedJobs();
   }, 500);
 }
 
@@ -529,3 +531,75 @@ document.addEventListener('scroll', () => {
     processLanguages();
   }, 100);
 });
+
+// Add this new function
+function markViewedJobs() {
+  const currentUrl = window.location.href;
+  const cards = document.querySelectorAll([
+    // LinkedIn selectors
+    '.job-card-container',
+    '[data-job-id]',
+    '.jobs-search-results__list-item',
+    // Indeed selectors
+    'table.mainContentTable',
+    'div[class*="job_seen_beacon"]',
+    'td.resultContent'
+  ].join(', '));
+  
+  cards.forEach(card => {
+    // Add click listener to each card
+    card.addEventListener('click', () => {
+      const titleElement = card.querySelector([
+        // LinkedIn selectors
+        '.job-card-container__link',
+        '.job-card-list__title',
+        // Indeed selectors
+        '.jobTitle a',
+        'a.jcs-JobTitle'
+      ].join(', '));
+
+      if (titleElement?.href) {
+        const viewedJobs = JSON.parse(localStorage.getItem('viewedJobs') || '[]');
+        if (!viewedJobs.includes(titleElement.href)) {
+          viewedJobs.push(titleElement.href);
+          localStorage.setItem('viewedJobs', JSON.stringify(viewedJobs));
+        }
+        
+        // Apply grey background immediately after click
+        const parentCard = card.closest('table.mainContentTable') || card;
+        if (!parentCard.style.backgroundColor.includes('rgb(230 243 234)')) {
+          parentCard.style.backgroundColor = '#f5f5f5';
+        }
+      }
+    }, { once: true }); // Ensure listener is only added once
+
+    // Also check if this card was previously viewed
+    const titleElement = card.querySelector([
+      // LinkedIn selectors
+      '.job-card-container__link',
+      '.job-card-list__title',
+      // Indeed selectors
+      '.jobTitle a',
+      'a.jcs-JobTitle'
+    ].join(', '));
+
+    const cardUrl = titleElement?.href;
+    const viewedJobs = JSON.parse(localStorage.getItem('viewedJobs') || '[]');
+    if (cardUrl && viewedJobs.includes(cardUrl)) {
+      const parentCard = card.closest('table.mainContentTable') || card;
+      if (!parentCard.style.backgroundColor.includes('rgb(230 243 234)')) {
+        parentCard.style.backgroundColor = '#f5f5f5';
+      }
+    }
+  });
+}
+
+// Ensure markViewedJobs runs on URL changes
+new MutationObserver(() => {
+  const url = location.href;
+  if (url !== lastUrl) {
+    lastUrl = url;
+    console.log('URL changed, marking viewed jobs...');
+    setTimeout(markViewedJobs, 500);
+  }
+}).observe(document, { subtree: true, childList: true });

@@ -13,9 +13,9 @@ A [Chrome extension](https://chromewebstore.google.com/detail/kmatch-dutch-spons
 
 ## Installation
 
-1. Visit the Chrome Web Store (link coming soon)
+1. Visit the [Chrome Web Store](https://chromewebstore.google.com/detail/kmatch-dutch-sponsor-job/jlchmhdkonkhmllpdcjomhboiednalmf)
 2. Click "Add to Chrome"
-3. The extension will automatically activate when you visit LinkedIn
+3. The extension will automatically activate when you visit LinkedIn and Indeed Jobs
 
 ## How to Use
 

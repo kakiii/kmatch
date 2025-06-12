@@ -30,6 +30,11 @@
     "matches": ["<all_urls>"]
   }],
   "background": {
-    "service_worker": "background.js"
+    "scripts": ["background.js"]
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "kmatch@example.com"
+    }
   }
 } 

@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
   try {
     // Query tabs in a more specific way
-    const tabs = await chrome.tabs.query({
+    const tabs = await browser.tabs.query({
       active: true,
       lastFocusedWindow: true,
       currentWindow: true
@@ -143,12 +143,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Simulate a job card click
     handleJobClick(jobs[0]); // Click on the first job
 
-    chrome.tabs.sendMessage(tab.id, { action: "getJobsInfo" }, response => {
-      if (chrome.runtime.lastError) {
-        document.getElementById('summary').textContent = 'Unable to check companies. Please refresh the page.';
-        return;
-      }
-
+    try {
+      const response = await browser.tabs.sendMessage(tab.id, { action: "getJobsInfo" });
       if (response && response.jobs) {
         const sponsorJobs = response.jobs.filter(job => job.isSponsor);
         
@@ -190,7 +186,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     </div>
   `;
           
-          jobElement.addEventListener('click', () => {
+          jobElement.addEventListener('click', async () => {
             // Get the job URL from the job object
             const jobUrl = job.url;
             const isIndeed = jobUrl.includes('indeed.com');
@@ -200,26 +196,28 @@ document.addEventListener('DOMContentLoaded', async () => {
               url: jobUrl,
               platform: isIndeed ? 'indeed' : 'linkedin'
             });
-
-            // Send message to content script with platform info
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-              chrome.tabs.sendMessage(tabs[0].id, {
-                action: "scrollToJob",
+            
+            try {
+              await browser.tabs.sendMessage(tab.id, { 
+                action: "scrollToJob", 
                 url: jobUrl,
                 title: roleType,
                 platform: isIndeed ? 'indeed' : 'linkedin'
-              }, () => {
-                window.close();
               });
-            });
+            } catch (error) {
+              console.error('Error sending scroll message:', error);
+            }
           });
           
           companyListElement.appendChild(jobElement);
         });
       }
-    });
+    } catch (error) {
+      console.error('Error getting jobs info:', error);
+      document.getElementById('summary').textContent = 'Unable to check companies. Please refresh the page.';
+    }
   } catch (error) {
-    console.error('Error:', error);
-    document.getElementById('summary').textContent = 'An error occurred: ' + error.message;
+    console.error('Error initializing popup:', error);
+    document.getElementById('summary').textContent = 'An unexpected error occurred.';
   }
 });

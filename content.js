@@ -8,7 +8,7 @@ let recognizedSponsors = new Map();
 const jobLanguageCache = new Map();
 
 // Load sponsors from JSON file
-fetch(chrome.runtime.getURL('sponsors.json'))
+fetch(browser.runtime.getURL('sponsors.json'))
   .then(response => response.json())
   .then(data => {
     // Convert the JSON object into a Map
@@ -23,7 +23,7 @@ fetch(chrome.runtime.getURL('sponsors.json'))
 // Handles two types of messages:
 // 1. getJobsInfo: Collects job listing information from the page
 // 2. scrollToJob: Scrolls to and clicks a specific job listing
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "getJobsInfo") {
     const jobs = [];
     

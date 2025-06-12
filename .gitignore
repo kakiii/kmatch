@@ -3,9 +3,13 @@
 
 # node
 node_modules
+dist/
 
 # vscode
 .vscode
 
 # firefox
 .zip
+
+# git
+.gitconfig

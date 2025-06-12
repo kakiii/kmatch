@@ -1,32 +1,299 @@
 console.log('Content script loaded');
 
-// Map to store recognized sponsor companies and their variations
-// This is loaded from sponsors.json and used for highlighting sponsored companies
-let recognizedSponsors = new Map();
+// Import the enhanced sponsor matcher
+// Note: In a Chrome extension content script, we need to handle module imports differently
+// For now, we'll include the SponsorMatcher class inline until we implement proper bundling
+
+// Enhanced sponsor matcher instance
+let sponsorMatcher = null;
 
 // Cache for storing language detection results to avoid redundant processing
 const jobLanguageCache = new Map();
 
-// Load sponsors from JSON file
+// Load sponsors from JSON file with enhanced matching
 fetch(browser.runtime.getURL('sponsors.json'))
   .then(response => response.json())
   .then(data => {
-    // Convert the JSON object into a Map
-    Object.entries(data.sponsors).forEach(([key, variations]) => {
-      recognizedSponsors.set(key, variations);
-    });
-    console.log('Sponsors loaded:', recognizedSponsors.size);
+    console.log('Loading sponsor data with enhanced matcher...');
+    
+    // Initialize the enhanced sponsor matcher
+    try {
+      sponsorMatcher = new SponsorMatcher(data);
+      console.log('Enhanced sponsor matcher loaded successfully');
+      console.log('Matcher stats:', sponsorMatcher.getStats());
+    } catch (error) {
+      console.error('Error initializing sponsor matcher:', error);
+      // Fallback to simple matching if enhanced matcher fails
+      console.log('Falling back to simple sponsor matching');
+      sponsorMatcher = null;
+    }
   })
-  .catch(error => console.error('Error loading sponsors:', error));
+  .catch(error => {
+    console.error('Error loading sponsors:', error);
+    sponsorMatcher = null;
+  });
+
+// Enhanced SponsorMatcher class (inline implementation)
+// TODO: Move to separate module when implementing proper bundling
+class SponsorMatcher {
+  constructor(sponsorData = null) {
+    this.sponsors = new Map();
+    this.indexes = {
+      byFirstWord: new Map(),
+      byNormalizedName: new Map(),
+      bySearchToken: new Map()
+    };
+    this.matchCache = new Map();
+    this.loaded = false;
+    
+    if (sponsorData) {
+      this.loadSponsorData(sponsorData);
+    }
+  }
+
+  loadSponsorData(sponsorData) {
+    try {
+      if (!sponsorData || !sponsorData.sponsors) {
+        throw new Error('Invalid sponsor data format');
+      }
+
+      // Clear existing data
+      this.sponsors.clear();
+      Object.values(this.indexes).forEach(index => index.clear());
+      this.matchCache.clear();
+
+      // Load sponsors
+      Object.entries(sponsorData.sponsors).forEach(([id, record]) => {
+        this.sponsors.set(id, record);
+      });
+
+      // Build or load indexes
+      if (sponsorData.index) {
+        this._loadPrebuiltIndexes(sponsorData.index);
+      } else {
+        this._buildIndexes();
+      }
+
+      this.loaded = true;
+      console.log(`Loaded ${this.sponsors.size} sponsors with enhanced matching`);
+      
+    } catch (error) {
+      console.error('Error loading sponsor data:', error);
+      throw error;
+    }
+  }
+
+  _loadPrebuiltIndexes(indexData) {
+    if (indexData.byFirstWord) {
+      Object.entries(indexData.byFirstWord).forEach(([word, sponsorIds]) => {
+        this.indexes.byFirstWord.set(word.toLowerCase(), sponsorIds);
+      });
+    }
+
+    if (indexData.byNormalizedName) {
+      Object.entries(indexData.byNormalizedName).forEach(([normalizedName, sponsorId]) => {
+        this.indexes.byNormalizedName.set(normalizedName.toLowerCase(), sponsorId);
+      });
+    }
+
+    if (indexData.bySearchToken) {
+      Object.entries(indexData.bySearchToken).forEach(([token, sponsorIds]) => {
+        this.indexes.bySearchToken.set(token.toLowerCase(), sponsorIds);
+      });
+    }
+  }
+
+  _buildIndexes() {
+    // Build basic indexes from legacy data format
+    this.sponsors.forEach((record, sponsorId) => {
+      // Handle legacy format where record might be an array
+      if (Array.isArray(record)) {
+        // Convert legacy format to new format
+        const primaryName = record[0];
+        record = {
+          primaryName: primaryName,
+          aliases: record,
+          normalizedName: this._normalizeCompanyName(primaryName),
+          variations: record
+        };
+        this.sponsors.set(sponsorId, record);
+      }
+
+      // Index by first words
+      if (record.primaryName) {
+        const firstWord = record.primaryName.toLowerCase().split(/\s+/)[0];
+        if (firstWord && firstWord.length > 0) {
+          if (!this.indexes.byFirstWord.has(firstWord)) {
+            this.indexes.byFirstWord.set(firstWord, []);
+          }
+          this.indexes.byFirstWord.get(firstWord).push(sponsorId);
+        }
+      }
+
+      // Index by normalized name
+      if (record.normalizedName) {
+        this.indexes.byNormalizedName.set(record.normalizedName.toLowerCase(), sponsorId);
+      }
+    });
+  }
+
+  isRecognizedSponsor(companyName) {
+    if (!this.loaded || !companyName || typeof companyName !== 'string') {
+      return false;
+    }
+
+    const trimmedName = companyName.trim();
+    if (trimmedName.length === 0) {
+      return false;
+    }
+
+    // Check cache first
+    const cacheKey = trimmedName.toLowerCase();
+    if (this.matchCache.has(cacheKey)) {
+      return this.matchCache.get(cacheKey);
+    }
+
+    // Try different matching strategies
+    const result = this.checkExactMatch(trimmedName) ||
+                  this.checkNormalizedMatch(trimmedName) ||
+                  this.checkSubstringMatch(trimmedName);
+
+    // Cache the result
+    this.matchCache.set(cacheKey, result);
+    
+    return result;
+  }
+
+  checkExactMatch(companyName) {
+    const lowerName = companyName.toLowerCase();
+
+    for (const [, record] of this.sponsors) {
+      // Handle both new and legacy formats
+      if (Array.isArray(record)) {
+        // Legacy format: array of variations
+        for (const variation of record) {
+          if (variation.toLowerCase() === lowerName) {
+            return true;
+          }
+        }
+      } else {
+        // New format: object with structured data
+        if (record.primaryName && record.primaryName.toLowerCase() === lowerName) {
+          return true;
+        }
+        
+        if (record.aliases) {
+          for (const alias of record.aliases) {
+            if (alias.toLowerCase() === lowerName) {
+              return true;
+            }
+          }
+        }
+
+        if (record.variations) {
+          for (const variation of record.variations) {
+            if (variation.toLowerCase() === lowerName) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
+  checkNormalizedMatch(companyName) {
+    const normalized = this._normalizeCompanyName(companyName);
+    if (!normalized || normalized.length < 2) {
+      return false;
+    }
+
+    if (this.indexes.byNormalizedName.has(normalized)) {
+      return true;
+    }
+
+    // Fallback check
+    for (const [, record] of this.sponsors) {
+      if (record.normalizedName && record.normalizedName.toLowerCase() === normalized) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  checkSubstringMatch(companyName) {
+    const cleanName = this._normalizeCompanyName(companyName);
+    const lowerName = companyName.toLowerCase();
+
+    for (const [, record] of this.sponsors) {
+      if (Array.isArray(record)) {
+        // Legacy format
+        for (const variation of record) {
+          const cleanVariation = this._normalizeCompanyName(variation);
+          if (cleanName.includes(cleanVariation) || cleanVariation.includes(cleanName) ||
+              lowerName.includes(variation.toLowerCase()) || variation.toLowerCase().includes(lowerName)) {
+            return true;
+          }
+        }
+      } else {
+        // New format
+        const recordNames = [
+          record.primaryName,
+          ...(record.aliases || []),
+          ...(record.variations || [])
+        ].filter(Boolean);
+
+        for (const name of recordNames) {
+          const cleanRecordName = this._normalizeCompanyName(name);
+          if (cleanName.includes(cleanRecordName) || cleanRecordName.includes(cleanName) ||
+              lowerName.includes(name.toLowerCase()) || name.toLowerCase().includes(lowerName)) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
+  _normalizeCompanyName(name) {
+    if (!name || typeof name !== 'string') {
+      return '';
+    }
+
+    return name
+      .toLowerCase()
+      .trim()
+      .replace(/\b(bv|b\.v\.|ltd|limited|inc|corp|corporation|llc|gmbh|sa|nv|n\.v\.)\b/g, '')
+      .replace(/[^\w\s]/g, '')
+      .replace(/\s+/g, '')
+      .trim();
+  }
+
+  getStats() {
+    return {
+      loaded: this.loaded,
+      totalSponsors: this.sponsors.size,
+      cacheSize: this.matchCache.size,
+      indexSizes: {
+        byFirstWord: this.indexes.byFirstWord.size,
+        byNormalizedName: this.indexes.byNormalizedName.size,
+        bySearchToken: this.indexes.bySearchToken.size
+      }
+    };
+  }
+}
 
 // Main message handler for extension communication
 // Handles two types of messages:
 // 1. getJobsInfo: Collects job listing information from the page
 // 2. scrollToJob: Scrolls to and clicks a specific job listing
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "getJobsInfo") {
+  if (request.action === 'getJobsInfo') {
     const jobs = [];
-    
+
     // Expanded list of selectors for job cards
     const jobCardSelectors = [
       // LinkedIn selectors
@@ -40,7 +307,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
       '[data-testid="job-card"]',
       '.job_seen_beacon'
     ];
-    
+
     // Try each selector
     let jobCards = [];
     jobCardSelectors.forEach(selector => {
@@ -109,14 +376,14 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const companyName = fullCompanyName.split('·')[0].trim();
         const jobTitle = titleElement.textContent.trim();
         const url = titleElement.href || window.location.href;
-        
-        console.log('Found job:', { 
-          companyName, 
+
+        console.log('Found job:', {
+          companyName,
           jobTitle,
           cleanedName: cleanCompanyName(companyName),
           isSponsor: checkIfSponsor(companyName)
         });
-        
+
         jobs.push({
           companyName,
           jobTitle,
@@ -135,9 +402,9 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log('Sending response with jobs:', jobs.length);
     sendResponse({ jobs });
     return true;
-  } else if (request.action === "scrollToJob") {
+  } else if (request.action === 'scrollToJob') {
     console.log('Received scroll request:', request);
-    
+
     if (request.platform === 'indeed') {
       // Indeed-specific job card finding
       const jobCards = document.querySelectorAll('table.mainContentTable');
@@ -149,7 +416,12 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
           const cardUrl = titleLink.href;
           const cardTitle = titleLink.textContent.trim();
 
-          console.log('Checking card:', { cardUrl, cardTitle, requestUrl: request.url, requestTitle: request.title });
+          console.log('Checking card:', {
+            cardUrl,
+            cardTitle,
+            requestUrl: request.url,
+            requestTitle: request.title
+          });
 
           // Check both URL and title for matching
           if (cardUrl === request.url || cardTitle === request.title) {
@@ -161,7 +433,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (targetCard) {
         console.log('Found target card, scrolling...');
         targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        
+
         // Highlight the card temporarily
         const originalBackground = targetCard.style.backgroundColor;
         targetCard.style.backgroundColor = '#e8f0fe';
@@ -186,7 +458,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
       });
     }
-    
+
     sendResponse({ success: true });
     return true;
   }
@@ -197,9 +469,13 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 // This helps with matching variations of company names more accurately
 function cleanCompanyName(name) {
   if (!name) return '';
-  
-  return name.toLowerCase()
-    .replace(/b\.v\.|n\.v\.|inc\.|corp\.|corporation|ltd\.|holding|netherlands|trading|group|international/g, '')
+
+  return name
+    .toLowerCase()
+    .replace(
+      /b\.v\.|n\.v\.|inc\.|corp\.|corporation|ltd\.|holding|netherlands|trading|group|international/g,
+      ''
+    )
     .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '')
     .replace(/\s+/g, ' ')
     .trim();
@@ -209,16 +485,19 @@ function cleanCompanyName(name) {
 // Performs both exact and fuzzy matching to catch variations in company names
 function checkIfSponsor(companyName) {
   if (!companyName || recognizedSponsors.size === 0) return false;
-  
+
   const cleanName = cleanCompanyName(companyName);
   const originalName = companyName.trim();
 
   for (const [, variations] of recognizedSponsors) {
     // Check exact matches first (case insensitive)
-    if (variations.some(variant => 
-      variant.toLowerCase() === originalName.toLowerCase() ||
-      originalName.toLowerCase().includes(variant.toLowerCase())
-    )) {
+    if (
+      variations.some(
+        variant =>
+          variant.toLowerCase() === originalName.toLowerCase() ||
+          originalName.toLowerCase().includes(variant.toLowerCase())
+      )
+    ) {
       return true;
     }
 
@@ -241,7 +520,7 @@ function processPage() {
   processSponsors();
   processLanguages();
   markViewedJobs();
-  
+
   // And again after a short delay
   setTimeout(() => {
     processSponsors();
@@ -256,33 +535,37 @@ function processPage() {
 function processSponsors() {
   console.log('Processing sponsors...');
   // Add more specific Indeed selectors
-  const cards = document.querySelectorAll([
-    // LinkedIn selectors
-    '.job-card-container',
-    '[data-job-id]',
-    '.jobs-search-results__list-item',
-    // Indeed selectors
-    'table.mainContentTable',
-    'div[class*="job_seen_beacon"]',
-    'td.resultContent'
-  ].join(', '));
-  
+  const cards = document.querySelectorAll(
+    [
+      // LinkedIn selectors
+      '.job-card-container',
+      '[data-job-id]',
+      '.jobs-search-results__list-item',
+      // Indeed selectors
+      'table.mainContentTable',
+      'div[class*="job_seen_beacon"]',
+      'td.resultContent'
+    ].join(', ')
+  );
+
   console.log('Found cards:', cards.length);
-  
+
   cards.forEach(card => {
     // Updated company selectors for Indeed
-    const companyElement = card.querySelector([
-      // LinkedIn selectors
-      '.job-card-container__company-name',
-      '.artdeco-entity-lockup__subtitle',
-      '.job-card-container__primary-description',
-      '.company-name',
-      // Indeed selectors
-      '[data-testid="company-name"]',
-      'span[class*="companyName"]',
-      'div[class*="company_location"] span'
-    ].join(', '));
-    
+    const companyElement = card.querySelector(
+      [
+        // LinkedIn selectors
+        '.job-card-container__company-name',
+        '.artdeco-entity-lockup__subtitle',
+        '.job-card-container__primary-description',
+        '.company-name',
+        // Indeed selectors
+        '[data-testid="company-name"]',
+        'span[class*="companyName"]',
+        'div[class*="company_location"] span'
+      ].join(', ')
+    );
+
     if (companyElement) {
       const companyName = companyElement.textContent.split('·')[0].trim();
       console.log('Processing company:', companyName);
@@ -302,43 +585,49 @@ function processSponsors() {
 // - KM badge for Known Member (sponsor) companies
 // - EN badge for jobs posted in English
 function processLanguages() {
-  const cards = document.querySelectorAll([
-    // LinkedIn selectors
-    '.job-card-container',
-    '[data-job-id]',
-    '.jobs-search-results__list-item',
-    // Indeed selectors
-    'table.mainContentTable',
-    'div[class*="job_seen_beacon"]',
-    'td.resultContent'
-  ].join(', '));
-  
+  const cards = document.querySelectorAll(
+    [
+      // LinkedIn selectors
+      '.job-card-container',
+      '[data-job-id]',
+      '.jobs-search-results__list-item',
+      // Indeed selectors
+      'table.mainContentTable',
+      'div[class*="job_seen_beacon"]',
+      'td.resultContent'
+    ].join(', ')
+  );
+
   cards.forEach(card => {
     if (card.dataset.processed) return;
     card.dataset.processed = 'true';
 
     // Updated title selectors for Indeed
-    const titleElement = card.querySelector([
-      // LinkedIn selectors
-      '.job-card-container__link span',
-      '.job-card-list__title',
-      // Indeed selectors
-      '.jobTitle span[id^="jobTitle"]',
-      'h2.jobTitle a',
-      'a.jcs-JobTitle'
-    ].join(', '));
+    const titleElement = card.querySelector(
+      [
+        // LinkedIn selectors
+        '.job-card-container__link span',
+        '.job-card-list__title',
+        // Indeed selectors
+        '.jobTitle span[id^="jobTitle"]',
+        'h2.jobTitle a',
+        'a.jcs-JobTitle'
+      ].join(', ')
+    );
 
     if (titleElement && !titleElement.querySelector('.language-indicator')) {
       // Get company name for sponsor check
-      const companyElement = card.querySelector([
-        // LinkedIn selectors
-        '.job-card-container__company-name',
-        '.artdeco-entity-lockup__subtitle',
-        // Indeed selectors
-        '[data-testid="company-name"]',
-        'span[class*="companyName"]',
-        'div[class*="company_location"] span'
-      ].join(', '));
+      const companyElement = card.querySelector(
+        [
+          // LinkedIn selectors
+          '.job-card-container__company-name',
+          '.artdeco-entity-lockup__subtitle',
+          // Indeed selectors
+          '[data-testid="company-name"]',
+          'span[class*="companyName"]',
+          'div[class*="company_location"] span'
+        ].join(', ')
+      );
 
       const companyName = companyElement ? companyElement.textContent.split('·')[0].trim() : '';
       const isSponsor = checkIfSponsor(companyName);
@@ -401,13 +690,15 @@ function createBadge(text) {
 // Used to determine if a job posting is in English
 function isEnglishText(text, card) {
   // First try to find the job description
-  const descriptionElement = card.querySelector([
-    '.job-card-container__description',
-    '.job-description',
-    '.job-card-list__description',
-    '[data-job-description]',
-    '.show-more-less-html__markup'
-  ].join(', '));
+  const descriptionElement = card.querySelector(
+    [
+      '.job-card-container__description',
+      '.job-description',
+      '.job-card-list__description',
+      '[data-job-description]',
+      '.show-more-less-html__markup'
+    ].join(', ')
+  );
 
   // If we have a description, use that for language detection
   if (descriptionElement) {
@@ -425,20 +716,69 @@ function isEnglishText(text, card) {
 function checkEnglishWords(text) {
   const dutchWords = [
     // Common Dutch words (removed words that are also common in English)
-    'wij', 'zijn', 'zoeken', 'voor', 'een', 'met', 'het', 'van', 'naar',
-    'werkzaamheden', 'taken', 'vereisten', 'over', 'ons', 'bij',
-    'ervaring', 'kennis', 'binnen', 'als', 'wat',
-    'bieden', 'jouw', 'onze', 'deze', 'door', 'wordt', 'bent',
+    'wij',
+    'zijn',
+    'zoeken',
+    'voor',
+    'een',
+    'met',
+    'het',
+    'van',
+    'naar',
+    'werkzaamheden',
+    'taken',
+    'vereisten',
+    'over',
+    'ons',
+    'bij',
+    'ervaring',
+    'kennis',
+    'binnen',
+    'als',
+    'wat',
+    'bieden',
+    'jouw',
+    'onze',
+    'deze',
+    'door',
+    'wordt',
+    'bent',
     // Dutch-specific job titles
-    'medewerker', 'aangiftemedewerker', 'administratief', 'beheerder',
-    'adviseur', 'verkoper', 'directeur',
-    'ondersteuning', 'assistent', 'hoofd', 'leider', 'stagiair',
-    'vacature', 'gezocht', 'gevraagd',
+    'medewerker',
+    'aangiftemedewerker',
+    'administratief',
+    'beheerder',
+    'adviseur',
+    'verkoper',
+    'directeur',
+    'ondersteuning',
+    'assistent',
+    'hoofd',
+    'leider',
+    'stagiair',
+    'vacature',
+    'gezocht',
+    'gevraagd',
     // Add medical/healthcare specific Dutch words
-    'verpleegkundig', 'specialist', 'epilepsie', 'zorg', 'arts',
-    'behandelaar', 'therapeut', 'apotheek', 'huisarts', 'tandarts',
-    'verpleging', 'verzorging', 'patiënt', 'kliniek', 'ziekenhuis',
-    'medisch', 'paramedisch', 'fysiotherapeut', 'psycholoog'
+    'verpleegkundig',
+    'specialist',
+    'epilepsie',
+    'zorg',
+    'arts',
+    'behandelaar',
+    'therapeut',
+    'apotheek',
+    'huisarts',
+    'tandarts',
+    'verpleging',
+    'verzorging',
+    'patiënt',
+    'kliniek',
+    'ziekenhuis',
+    'medisch',
+    'paramedisch',
+    'fysiotherapeut',
+    'psycholoog'
   ];
 
   const dutchPatterns = [
@@ -453,11 +793,11 @@ function checkEnglishWords(text) {
     'programma',
     'werkstudent',
     'uur/week',
-    'ontwikkelaar',   // for Front-endontwikkelaar
-    'analist',        // for Data-analist
-    'consulent',      // for marketingconsulent
-    'etalagist',      // for Etalagiste
-    'centraal',       // for Centraal Nederland
+    'ontwikkelaar', // for Front-endontwikkelaar
+    'analist', // for Data-analist
+    'consulent', // for marketingconsulent
+    'etalagist', // for Etalagiste
+    'centraal', // for Centraal Nederland
     'consulent',
     'verpleeg',
     'kundig',
@@ -471,16 +811,15 @@ function checkEnglishWords(text) {
     'stafafdelingen'
   ];
 
-  const text_lower = text.toLowerCase()
-    .replace(/[\s\-\/]+/g, '');
-  
+  const text_lower = text.toLowerCase().replace(/[\s\-\/]+/g, '');
+
   if (dutchPatterns.some(pattern => text_lower.includes(pattern))) {
     return false;
   }
 
   const words = text_lower.split(/\s+/);
   const dutchWordCount = words.filter(word => dutchWords.includes(word)).length;
-  
+
   return dutchWordCount === 0;
 }
 
@@ -504,7 +843,7 @@ document.addEventListener('scroll', () => {
 
 // Observer for dynamic content
 let observerTimeout;
-const observer = new MutationObserver((mutations) => {
+const observer = new MutationObserver(mutations => {
   if (mutations.some(mutation => mutation.addedNodes.length > 0)) {
     if (observerTimeout) clearTimeout(observerTimeout);
     observerTimeout = setTimeout(() => {
@@ -535,53 +874,63 @@ document.addEventListener('scroll', () => {
 // Add this new function
 function markViewedJobs() {
   const currentUrl = window.location.href;
-  const cards = document.querySelectorAll([
-    // LinkedIn selectors
-    '.job-card-container',
-    '[data-job-id]',
-    '.jobs-search-results__list-item',
-    // Indeed selectors
-    'table.mainContentTable',
-    'div[class*="job_seen_beacon"]',
-    'td.resultContent'
-  ].join(', '));
-  
+  const cards = document.querySelectorAll(
+    [
+      // LinkedIn selectors
+      '.job-card-container',
+      '[data-job-id]',
+      '.jobs-search-results__list-item',
+      // Indeed selectors
+      'table.mainContentTable',
+      'div[class*="job_seen_beacon"]',
+      'td.resultContent'
+    ].join(', ')
+  );
+
   cards.forEach(card => {
     // Add click listener to each card
-    card.addEventListener('click', () => {
-      const titleElement = card.querySelector([
+    card.addEventListener(
+      'click',
+      () => {
+        const titleElement = card.querySelector(
+          [
+            // LinkedIn selectors
+            '.job-card-container__link',
+            '.job-card-list__title',
+            // Indeed selectors
+            '.jobTitle a',
+            'a.jcs-JobTitle'
+          ].join(', ')
+        );
+
+        if (titleElement?.href) {
+          const viewedJobs = JSON.parse(localStorage.getItem('viewedJobs') || '[]');
+          if (!viewedJobs.includes(titleElement.href)) {
+            viewedJobs.push(titleElement.href);
+            localStorage.setItem('viewedJobs', JSON.stringify(viewedJobs));
+          }
+
+          // Apply grey background immediately after click
+          const parentCard = card.closest('table.mainContentTable') || card;
+          if (!parentCard.style.backgroundColor.includes('rgb(230 243 234)')) {
+            parentCard.style.backgroundColor = '#f5f5f5';
+          }
+        }
+      },
+      { once: true }
+    ); // Ensure listener is only added once
+
+    // Also check if this card was previously viewed
+    const titleElement = card.querySelector(
+      [
         // LinkedIn selectors
         '.job-card-container__link',
         '.job-card-list__title',
         // Indeed selectors
         '.jobTitle a',
         'a.jcs-JobTitle'
-      ].join(', '));
-
-      if (titleElement?.href) {
-        const viewedJobs = JSON.parse(localStorage.getItem('viewedJobs') || '[]');
-        if (!viewedJobs.includes(titleElement.href)) {
-          viewedJobs.push(titleElement.href);
-          localStorage.setItem('viewedJobs', JSON.stringify(viewedJobs));
-        }
-        
-        // Apply grey background immediately after click
-        const parentCard = card.closest('table.mainContentTable') || card;
-        if (!parentCard.style.backgroundColor.includes('rgb(230 243 234)')) {
-          parentCard.style.backgroundColor = '#f5f5f5';
-        }
-      }
-    }, { once: true }); // Ensure listener is only added once
-
-    // Also check if this card was previously viewed
-    const titleElement = card.querySelector([
-      // LinkedIn selectors
-      '.job-card-container__link',
-      '.job-card-list__title',
-      // Indeed selectors
-      '.jobTitle a',
-      'a.jcs-JobTitle'
-    ].join(', '));
+      ].join(', ')
+    );
 
     const cardUrl = titleElement?.href;
     const viewedJobs = JSON.parse(localStorage.getItem('viewedJobs') || '[]');
@@ -607,11 +956,11 @@ new MutationObserver(() => {
 // Function to check and highlight Dutch-related content
 function highlightDutchContent(element) {
   if (!element) return;
-  
+
   const text = element.textContent.toLowerCase();
   const preferencesContainer = document.querySelector('.job-details-preferences-and-skills');
   const jobTitleContainer = document.querySelector('.jobs-unified-top-card__job-title');
-  
+
   if (text.includes('nederlandse') || text.includes('dutch')) {
     if (preferencesContainer) {
       let dutchPill = preferencesContainer.querySelector('.dutch-requirement-pill');
@@ -628,7 +977,7 @@ function highlightDutchContent(element) {
         `;
         preferencesContainer.appendChild(dutchPill);
       }
-      
+
       if (jobTitleContainer && !jobTitleContainer.querySelector('.dutch-indicator')) {
         const sidebarIndicator = document.createElement('span');
         sidebarIndicator.className = 'dutch-indicator';
@@ -660,36 +1009,36 @@ function highlightDutchContent(element) {
 }
 
 // Keep the existing observer setup
-const dutchContentObserver = new MutationObserver((mutations) => {
-  mutations.forEach((mutation) => {
-      if (mutation.target.closest('#job-details')) {
-          const jobDescription = document.querySelector('#job-details div p');
-          highlightDutchContent(jobDescription);
-      }
+const dutchContentObserver = new MutationObserver(mutations => {
+  mutations.forEach(mutation => {
+    if (mutation.target.closest('#job-details')) {
+      const jobDescription = document.querySelector('#job-details div p');
+      highlightDutchContent(jobDescription);
+    }
   });
 });
 
 function startObserving() {
   const targetNode = document.querySelector('#job-details');
   if (targetNode) {
-      dutchContentObserver.observe(targetNode, {
-          childList: true,
-          subtree: true,
-          characterData: true
-      });
-      
-      // Check initial content
-      const jobDescription = document.querySelector('#job-details div p');
-      highlightDutchContent(jobDescription);
+    dutchContentObserver.observe(targetNode, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+
+    // Check initial content
+    const jobDescription = document.querySelector('#job-details div p');
+    highlightDutchContent(jobDescription);
   }
 }
 
 // Initialize observer and add click handler
 document.addEventListener('DOMContentLoaded', startObserving);
 
-document.addEventListener('click', (event) => {
+document.addEventListener('click', event => {
   setTimeout(() => {
-      const jobDescription = document.querySelector('#job-details div p');
-      highlightDutchContent(jobDescription);
+    const jobDescription = document.querySelector('#job-details div p');
+    highlightDutchContent(jobDescription);
   }, 500);
 });

@@ -1,0 +1,45 @@
+{
+  "name": "kmatch-extension",
+  "version": "2.0.0",
+  "description": "Dutch Sponsor Job Finder Chrome Extension",
+  "main": "index.js",
+  "scripts": {
+    "process-sponsors": "node scripts/process-sponsors.js",
+    "compare-updates": "node scripts/compare-updates.js",
+    "validate-data": "node scripts/validate-data.js",
+    "build": "node scripts/build-extension.js",
+    "build:dev": "node scripts/build-extension.js --dev",
+    "test": "jest",
+    "lint": "eslint src/ scripts/",
+    "lint:fix": "eslint src/ scripts/ --fix",
+    "format": "prettier --write src/ scripts/",
+    "clean": "rimraf dist/"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5",
+    "fast-levenshtein": "^3.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "jest": "^29.0.0",
+    "rimraf": "^5.0.0"
+  },
+  "keywords": [
+    "chrome-extension",
+    "job-search",
+    "visa-sponsorship",
+    "netherlands",
+    "linkedin",
+    "indeed"
+  ],
+  "author": "KMatch Development Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AshZLee/KMatch.git"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+} 

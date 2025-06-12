@@ -380,7 +380,6 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         console.log('Found job:', {
           companyName,
           jobTitle,
-          cleanedName: cleanCompanyName(companyName),
           isSponsor: checkIfSponsor(companyName)
         });
 
@@ -465,51 +464,20 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   return true; // Keep the message channel open for async responses
 });
 
-// Cleans company names by removing common business suffixes and special characters
-// This helps with matching variations of company names more accurately
-function cleanCompanyName(name) {
-  if (!name) return '';
-
-  return name
-    .toLowerCase()
-    .replace(
-      /b\.v\.|n\.v\.|inc\.|corp\.|corporation|ltd\.|holding|netherlands|trading|group|international/g,
-      ''
-    )
-    .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
+// Legacy function removed - functionality now handled by SponsorMatcher class
 
 // Checks if a company is a recognized sponsor by comparing against loaded sponsor list
 // Performs both exact and fuzzy matching to catch variations in company names
 function checkIfSponsor(companyName) {
-  if (!companyName || recognizedSponsors.size === 0) return false;
-
-  const cleanName = cleanCompanyName(companyName);
-  const originalName = companyName.trim();
-
-  for (const [, variations] of recognizedSponsors) {
-    // Check exact matches first (case insensitive)
-    if (
-      variations.some(
-        variant =>
-          variant.toLowerCase() === originalName.toLowerCase() ||
-          originalName.toLowerCase().includes(variant.toLowerCase())
-      )
-    ) {
-      return true;
-    }
-
-    // Check cleaned variations
-    const matchedVariation = variations.some(variant => {
-      const cleanVariant = cleanCompanyName(variant);
-      return cleanName.includes(cleanVariant) || cleanVariant.includes(cleanName);
-    });
-
-    if (matchedVariation) return true;
+  // Use enhanced sponsor matcher if available
+  if (sponsorMatcher && sponsorMatcher.loaded) {
+    return sponsorMatcher.isRecognizedSponsor(companyName);
   }
 
+  // Fallback to basic checking if enhanced matcher not available
+  if (!companyName) return false;
+
+  console.warn('Enhanced sponsor matcher not available, using fallback method');
   return false;
 }
 

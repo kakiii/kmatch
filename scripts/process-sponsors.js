@@ -1,39 +1,48 @@
 #!/usr/bin/env node
 
-const XLSX = require('xlsx');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const fastCsv = require('fast-csv');
 
 /**
- * Read Excel file and return parsed data
- * @param {string} filePath - Path to Excel file
- * @returns {Array} Array of company data objects
+ * Read CSV file and return parsed data using fast-csv
+ * @param {string} filePath - Path to CSV file
+ * @returns {Promise<Array>} Promise resolving to array of company data objects
  */
-function readExcelFile(filePath) {
-  try {
-    console.log(`Reading Excel file: ${filePath}`);
-    const workbook = XLSX.readFile(filePath);
-    const sheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[sheetName];
+function readCSVFile(filePath) {
+  return new Promise((resolve, reject) => {
+    console.log(`Reading CSV file: ${filePath}`);
+    const dataRows = [];
     
-    // Convert to JSON with header row
-    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-    
-    // Skip header row and filter out empty rows
-    const dataRows = jsonData.slice(1).filter(row => row && row.length > 0 && row[0]);
-    
-    console.log(`Processed ${dataRows.length} companies from Excel`);
-    return dataRows;
-  } catch (error) {
-    console.error(`Error reading Excel file ${filePath}:`, error.message);
-    throw error;
-  }
+    fs.createReadStream(filePath)
+      .pipe(fastCsv.parse({ 
+        headers: true,  // First row contains headers
+        trim: true,     // Trim whitespace
+        skipEmptyLines: true
+      }))
+      .on('data', (row) => {
+        // Convert row object to array format (for compatibility with existing code)
+        // Assuming first column is 'Organisation'
+        const companyName = row.Organisation || Object.values(row)[0];
+        if (companyName) {
+          dataRows.push([companyName.toString().trim()]);
+        }
+      })
+      .on('end', () => {
+        console.log(`Processed ${dataRows.length} companies from CSV`);
+        resolve(dataRows);
+      })
+      .on('error', (error) => {
+        console.error(`Error reading CSV file ${filePath}:`, error.message);
+        reject(error);
+      });
+  });
 }
 
 /**
- * Process raw Excel data into structured company records
- * @param {Array} rawData - Raw Excel data rows
+ * Process raw CSV data into structured company records
+ * @param {Array} rawData - Raw CSV data rows
  * @returns {Object} Processed sponsor records
  */
 function processCompanyData(rawData) {
@@ -44,7 +53,7 @@ function processCompanyData(rawData) {
   
   rawData.forEach((row, index) => {
     try {
-      // Assuming first column contains company name
+      // First column contains company name
       const companyName = row[0]?.toString().trim();
       
       if (!companyName || processed.has(companyName.toLowerCase())) {
@@ -72,14 +81,13 @@ function processCompanyData(rawData) {
 }
 
 /**
- * Generate a sponsor record with aliases and search optimizations
+ * Generate a simplified sponsor record with essential fuzzy search features
  * @param {string} companyName - Primary company name
  * @returns {Object} Sponsor record object
  */
 function generateSponsorRecord(companyName) {
   const normalizedName = normalizeCompanyName(companyName);
-  const aliases = generateAliases(companyName);
-  const searchTokens = tokenizeCompanyName(companyName);
+  const aliases = generateBasicAliases(companyName);
   const firstWords = extractFirstWords(companyName);
   
   return {
@@ -87,21 +95,19 @@ function generateSponsorRecord(companyName) {
     aliases: aliases,
     normalizedName: normalizedName,
     firstWords: firstWords,
-    searchTokens: searchTokens,
     variations: [...new Set([companyName, ...aliases])]
   };
 }
 
 /**
- * Build search indexes for optimized matching
+ * Build simplified search indexes for optimized matching
  * @param {Object} sponsors - Sponsor records
  * @returns {Object} Search indexes
  */
 function buildSearchIndexes(sponsors) {
   const indexes = {
     byFirstWord: {},
-    byNormalizedName: {},
-    bySearchToken: {}
+    byNormalizedName: {}
   };
   
   console.log('Building search indexes...');
@@ -119,17 +125,9 @@ function buildSearchIndexes(sponsors) {
     if (record.normalizedName) {
       indexes.byNormalizedName[record.normalizedName] = sponsorId;
     }
-    
-    // Index by search tokens
-    record.searchTokens.forEach(token => {
-      if (!indexes.bySearchToken[token]) {
-        indexes.bySearchToken[token] = [];
-      }
-      indexes.bySearchToken[token].push(sponsorId);
-    });
   });
   
-  console.log(`Created indexes: ${Object.keys(indexes.byFirstWord).length} first words, ${Object.keys(indexes.byNormalizedName).length} normalized names, ${Object.keys(indexes.bySearchToken).length} search tokens`);
+  console.log(`Created indexes: ${Object.keys(indexes.byFirstWord).length} first words, ${Object.keys(indexes.byNormalizedName).length} normalized names`);
   
   return indexes;
 }
@@ -189,11 +187,11 @@ function normalizeCompanyName(name) {
 }
 
 /**
- * Generate company name aliases
+ * Generate basic company name aliases (simplified version)
  * @param {string} primaryName - Primary company name
  * @returns {Array} Array of name variations
  */
-function generateAliases(primaryName) {
+function generateBasicAliases(primaryName) {
   const aliases = new Set();
   
   // Add original name
@@ -205,14 +203,11 @@ function generateAliases(primaryName) {
     aliases.add(withoutSuffix);
   }
   
-  // Add with different suffix variations
+  // Add with common suffix variations
   const baseName = withoutSuffix;
-  ['BV', 'B.V.', 'Ltd', 'Limited'].forEach(suffix => {
+  ['BV', 'B.V.'].forEach(suffix => {
     aliases.add(`${baseName} ${suffix}`);
   });
-  
-  // Add without special characters
-  aliases.add(primaryName.replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim());
   
   return Array.from(aliases).filter(alias => alias && alias.length > 0);
 }
@@ -246,47 +241,18 @@ function extractFirstWords(name) {
 }
 
 /**
- * Tokenize company name for search
- * @param {string} name - Company name
- * @returns {Array} Array of search tokens
- */
-function tokenizeCompanyName(name) {
-  if (!name) return [];
-  
-  const tokens = new Set();
-  
-  // Split by common separators
-  const words = name.toLowerCase()
-    .replace(/[^\w\s]/g, ' ')
-    .split(/\s+/)
-    .filter(word => word.length > 1);
-  
-  words.forEach(word => {
-    tokens.add(word);
-    
-    // Add word without common business suffixes
-    const cleaned = word.replace(/^(bv|ltd|inc|corp|llc|gmbh|sa|nv)$/, '');
-    if (cleaned && cleaned !== word) {
-      tokens.add(cleaned);
-    }
-  });
-  
-  return Array.from(tokens);
-}
-
-/**
- * Find latest Excel file in data directory
+ * Find latest CSV file in data directory
  * @param {string} dataDir - Data directory path
- * @returns {string} Path to latest Excel file
+ * @returns {string} Path to latest CSV file
  */
-function findLatestExcelFile(dataDir) {
+function findLatestCSVFile(dataDir) {
   const files = fs.readdirSync(dataDir)
-    .filter(file => file.match(/^KMatch - \d{2}_\d{2}_\d{4}\.xlsx$/))
+    .filter(file => file.match(/^KMatch - \d{2}_\d{2}_\d{4}\.csv$/))
     .sort()
     .reverse();
   
   if (files.length === 0) {
-    throw new Error('No Excel files found in data directory');
+    throw new Error('No CSV files found in data directory');
   }
   
   return path.join(dataDir, files[0]);
@@ -302,12 +268,12 @@ async function main() {
     console.log(`Data directory: ${dataDir}`);
     console.log(`Output path: ${outputPath}`);
     
-    // Find latest Excel file
-    const excelFile = findLatestExcelFile(dataDir);
-    console.log(`Using Excel file: ${excelFile}`);
+    // Find latest CSV file
+    const csvFile = findLatestCSVFile(dataDir);
+    console.log(`Using CSV file: ${csvFile}`);
     
-    // Process the data
-    const rawData = readExcelFile(excelFile);
+    // Process the data (now async)
+    const rawData = await readCSVFile(csvFile);
     const sponsors = processCompanyData(rawData);
     const indexes = buildSearchIndexes(sponsors);
     
@@ -316,7 +282,7 @@ async function main() {
       lastUpdated: new Date().toISOString().split('T')[0],
       version: '2.0.0',
       totalSponsors: Object.keys(sponsors).length,
-      sourceFile: path.basename(excelFile),
+      sourceFile: path.basename(csvFile),
       sponsors: sponsors,
       index: indexes
     };
@@ -340,13 +306,13 @@ if (require.main === module) {
 }
 
 module.exports = {
-  readExcelFile,
+  readCSVFile,
   processCompanyData,
   generateSponsorRecord,
   buildSearchIndexes,
   writeSponsorData,
   normalizeCompanyName,
-  generateAliases,
+  generateBasicAliases,
   extractFirstWords,
-  tokenizeCompanyName
+  findLatestCSVFile
 };

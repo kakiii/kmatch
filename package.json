@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "archiver": "^7.0.1",
-    "fast-levenshtein": "^3.0.0",
-    "xlsx": "^0.18.5"
+    "fast-csv": "^5.0.2",
+    "fast-levenshtein": "^3.0.0"
   },
   "devDependencies": {
     "eslint": "^8.0.0",

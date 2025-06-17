@@ -13,3 +13,7 @@ dist/
 
 # git
 .gitconfig
+
+# cursor
+.cursorrules
+.cursor_plans/

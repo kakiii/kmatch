@@ -4,6 +4,15 @@ const fs = require('fs');
 const path = require('path');
 const archiver = require('archiver');
 
+// Import sponsor processing functions
+const {
+  readCSVFile,
+  processCompanyData,
+  buildSearchIndexes,
+  writeSponsorData,
+  findLatestCSVFile
+} = require('./process-sponsors.js');
+
 /**
  * Modern Extension Build Script
  * Replaces build.sh with JavaScript-based build process
@@ -95,10 +104,122 @@ function copyFiles(files, sourceDir = '.', targetDir = BUILD_CONFIG.distDir) {
 }
 
 /**
+ * Update sponsors data from latest CSV file
+ * @param {boolean} skipSponsors - Whether to skip sponsor update
+ * @returns {Promise<Object>} Sponsor update results
+ */
+async function updateSponsors(skipSponsors = false) {
+  if (skipSponsors) {
+    console.log('⏭ Skipping sponsor update (--skip-sponsors flag)');
+    return { skipped: true };
+  }
+
+  try {
+    console.log('🔄 Checking for sponsor updates...');
+    
+    const dataDir = path.join(__dirname, '..', 'data');
+    const sponsorsPath = path.join(__dirname, '..', 'sponsors.json');
+    
+    // Find latest CSV file
+    const latestCSV = findLatestCSVFile(dataDir);
+    console.log(`📁 Latest CSV: ${path.basename(latestCSV)}`);
+    
+    // Check if update is needed (compare file timestamps)
+    const csvStats = fs.statSync(latestCSV);
+    const sponsorsExists = fs.existsSync(sponsorsPath);
+    
+    let needsUpdate = true;
+    if (sponsorsExists) {
+      const sponsorsStats = fs.statSync(sponsorsPath);
+      needsUpdate = csvStats.mtime > sponsorsStats.mtime;
+      
+      if (!needsUpdate) {
+        console.log('✅ Sponsors data is up to date');
+        return { skipped: false, updated: false, reason: 'up-to-date' };
+      }
+    }
+    
+    console.log('📊 Processing sponsor data...');
+    
+    // Load existing sponsors for diff comparison
+    let existingSponsors = new Set();
+    if (sponsorsExists) {
+      try {
+        const existingData = JSON.parse(fs.readFileSync(sponsorsPath, 'utf8'));
+        existingSponsors = new Set(
+          Object.values(existingData.sponsors || {}).map(s => s.primaryName)
+        );
+      } catch (error) {
+        console.warn('⚠ Could not read existing sponsors for diff comparison');
+      }
+    }
+    
+    // Process new data
+    const rawData = await readCSVFile(latestCSV);
+    const sponsors = processCompanyData(rawData);
+    const indexes = buildSearchIndexes(sponsors);
+    
+    // Calculate diff
+    const newSponsors = new Set(
+      Object.values(sponsors).map(s => s.primaryName)
+    );
+    
+    const added = [...newSponsors].filter(name => !existingSponsors.has(name));
+    const removed = [...existingSponsors].filter(name => !newSponsors.has(name));
+    
+    // Prepare final data structure
+    const sponsorData = {
+      lastUpdated: new Date().toISOString().split('T')[0],
+      version: '2.0.0',
+      totalSponsors: Object.keys(sponsors).length,
+      sourceFile: path.basename(latestCSV),
+      sponsors: sponsors,
+      index: indexes
+    };
+    
+    // Write updated data
+    writeSponsorData(sponsorData, sponsorsPath);
+    
+    // Report changes
+    console.log('📈 Sponsor update summary:');
+    console.log(`   Total sponsors: ${sponsorData.totalSponsors}`);
+    console.log(`   Added: ${added.length} companies`);
+    console.log(`   Removed: ${removed.length} companies`);
+    
+    if (added.length > 0 && added.length <= 10) {
+      console.log(`   New companies: ${added.slice(0, 10).join(', ')}`);
+    } else if (added.length > 10) {
+      console.log(`   New companies: ${added.slice(0, 10).join(', ')} ... and ${added.length - 10} more`);
+    }
+    
+    if (removed.length > 0 && removed.length <= 10) {
+      console.log(`   Removed companies: ${removed.slice(0, 10).join(', ')}`);
+    } else if (removed.length > 10) {
+      console.log(`   Removed companies: ${removed.slice(0, 10).join(', ')} ... and ${removed.length - 10} more`);
+    }
+    
+    return {
+      skipped: false,
+      updated: true,
+      totalSponsors: sponsorData.totalSponsors,
+      added: added.length,
+      removed: removed.length,
+      sourceFile: path.basename(latestCSV)
+    };
+    
+  } catch (error) {
+    console.error('❌ Error updating sponsors:', error.message);
+    console.warn('⚠ Continuing build with existing sponsors.json...');
+    return { skipped: false, updated: false, error: error.message };
+  }
+}
+
+/**
  * Copy extension files to dist directory
  * @param {boolean} tempDir - Whether to use temporary directory for zip creation
+ * @param {boolean} skipSponsors - Whether to skip sponsor update
  */
-function copyExtensionFiles(tempDir = false) {
+async function copyExtensionFiles(tempDir = false, skipSponsors = false) {
   const targetDir = tempDir ? path.join(BUILD_CONFIG.distDir, 'temp') : BUILD_CONFIG.distDir;
   
   // Ensure target directory exists and is clean
@@ -106,6 +227,9 @@ function copyExtensionFiles(tempDir = false) {
     fs.rmSync(targetDir, { recursive: true, force: true });
   }
   fs.mkdirSync(targetDir, { recursive: true });
+  
+  // Update sponsors before copying files
+  await updateSponsors(skipSponsors);
   
   console.log('Copying extension files...');
   
@@ -259,12 +383,13 @@ function createZipArchive(manifest, isDev = false) {
 
 /**
  * Run development build
+ * @param {boolean} skipSponsors - Whether to skip sponsor update
  */
-async function runDevelopmentBuild() {
+async function runDevelopmentBuild(skipSponsors = false) {
   console.log('🔨 Starting Firefox development build...');
   
   try {
-    copyExtensionFiles();
+    await copyExtensionFiles(false, skipSponsors);
     const manifest = validateManifest();
     
     const config = BUILD_CONFIG.development;
@@ -290,8 +415,9 @@ async function runDevelopmentBuild() {
 
 /**
  * Run production build
+ * @param {boolean} skipSponsors - Whether to skip sponsor update
  */
-async function runProductionBuild() {
+async function runProductionBuild(skipSponsors = false) {
   console.log('🏭 Starting Firefox production build...');
   
   try {
@@ -304,7 +430,7 @@ async function runProductionBuild() {
     const config = BUILD_CONFIG.production;
     if (config.createZip) {
       // For production zip, use temp directory and create only zip
-      const tempPath = copyExtensionFiles(true);
+      const tempPath = await copyExtensionFiles(true, skipSponsors);
       
       // Validate manifest from temp directory
       const manifestPath = path.join(tempPath, 'manifest.json');
@@ -319,7 +445,7 @@ async function runProductionBuild() {
       return zipPath;
     } else {
       // For production files, copy directly to dist
-      copyExtensionFiles(false);
+      await copyExtensionFiles(false, skipSponsors);
       const manifest = validateManifest();
       console.log('\n🎉 Production build completed successfully!');
       console.log(`📁 Extension files ready in: ${BUILD_CONFIG.distDir}/`);
@@ -366,6 +492,7 @@ async function main() {
   const isDev = args.includes('--dev') || args.includes('-d');
   const isClean = args.includes('--clean') || args.includes('-c');
   const isInfo = args.includes('--info') || args.includes('-i');
+  const skipSponsors = args.includes('--skip-sponsors');
   
   console.log('🔧 KMatch Extension Build Tool\n');
   
@@ -381,9 +508,9 @@ async function main() {
   
   try {
     if (isDev) {
-      await runDevelopmentBuild();
+      await runDevelopmentBuild(skipSponsors);
     } else {
-      await runProductionBuild();
+      await runProductionBuild(skipSponsors);
     }
   } catch (error) {
     console.error('Build failed:', error.message);
@@ -404,6 +531,7 @@ if (require.main === module) {
 
 module.exports = {
   copyExtensionFiles,
+  updateSponsors,
   validateManifest,
   createZipArchive,
   runDevelopmentBuild,

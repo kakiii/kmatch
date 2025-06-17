@@ -1,6 +1,8 @@
 # KMatch - Dutch Sponsor Job Finder
 
-A [Chrome extension](https://chromewebstore.google.com/detail/kmatch-dutch-sponsor-job/jlchmhdkonkhmllpdcjomhboiednalmf) that helps you quickly identify recognized sponsors for highly skilled migrant visas while browsing LinkedIn and Indeed jobs in the Netherlands.
+A fork of [KMatch](https://github.com/AshZLee/kmatch).
+
+A Firefox extension that helps you quickly identify recognized sponsors for highly skilled migrant visas while browsing LinkedIn and Indeed jobs in the Netherlands.
 
 ## Features
 
@@ -13,9 +15,13 @@ A [Chrome extension](https://chromewebstore.google.com/detail/kmatch-dutch-spons
 
 ## Installation
 
-1. Visit the [Chrome Web Store](https://chromewebstore.google.com/detail/kmatch-dutch-sponsor-job/jlchmhdkonkhmllpdcjomhboiednalmf)
-2. Click "Add to Chrome"
-3. The extension will automatically activate when you visit LinkedIn and Indeed Jobs
+TODO
+
+For now you can run the following and import it locally to your firefox (or any other variations):
+```shell
+npm run install
+npm run build
+```
 
 ## How to Use
 
@@ -79,8 +85,7 @@ You have the right to:
 ### Contact
 
 For privacy concerns or questions:
-- [Open an issue](https://github.com/AshZLee/KMatch/issues) on our GitHub repository
-- Email: ash.develope@gmail.com
+- [Open an issue](https://github.com/kakiii/KMatch/issues) on our GitHub repository
 
 ## Contributing
 
@@ -104,8 +109,6 @@ To contribute:
 
 Found it helpful?
 - Please share with fellow job seekers 🔗
-- Leave a [review](https://chromewebstore.google.com/detail/kmatch-dutch-sponsor-job/jlchmhdkonkhmllpdcjomhboiednalmf)!🌟🌟🌟🌟🌟
-- [Buy me a coffee](https://buymeacoffee.com/ash.develope?new=1) for future development ☕️
 
 ## License
 
@@ -114,5 +117,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## Acknowledgments
 
 - Data source: IND's public register of recognized sponsors. You can find the complete list at [https://ind.nl/en/public-register-recognised-sponsors](https://ind.nl/en/public-register-recognised-sponsors/public-register-regular-labour-and-highly-skilled-migrants)
-- Built with Chrome Extensions Manifest V3
 - Uses LinkedIn and Indeed's public job listings interface

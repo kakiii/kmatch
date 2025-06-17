@@ -11,7 +11,7 @@ const archiver = require('archiver');
 
 // Build configuration
 const BUILD_CONFIG = {
-  extensionName: 'kmatch-extension',
+  extensionName: 'kmatch-firefox',
   distDir: 'dist',
   srcDir: 'src',
   
@@ -47,13 +47,17 @@ const BUILD_CONFIG = {
   development: {
     minify: false,
     sourceMaps: true,
-    optimization: false
+    optimization: false,
+    createZip: false,  // For dev, just copy files
+    target: 'firefox'
   },
   
   production: {
     minify: true,
     sourceMaps: false,
-    optimization: true
+    optimization: true,
+    createZip: true,   // For production, create zip for Firefox Add-ons store
+    target: 'firefox'
   }
 };
 
@@ -92,28 +96,30 @@ function copyFiles(files, sourceDir = '.', targetDir = BUILD_CONFIG.distDir) {
 
 /**
  * Copy extension files to dist directory
+ * @param {boolean} tempDir - Whether to use temporary directory for zip creation
  */
-function copyExtensionFiles() {
-  const distPath = BUILD_CONFIG.distDir;
+function copyExtensionFiles(tempDir = false) {
+  const targetDir = tempDir ? path.join(BUILD_CONFIG.distDir, 'temp') : BUILD_CONFIG.distDir;
   
-  // Ensure dist directory exists and is clean
-  if (fs.existsSync(distPath)) {
-    fs.rmSync(distPath, { recursive: true, force: true });
+  // Ensure target directory exists and is clean
+  if (fs.existsSync(targetDir)) {
+    fs.rmSync(targetDir, { recursive: true, force: true });
   }
-  fs.mkdirSync(distPath, { recursive: true });
+  fs.mkdirSync(targetDir, { recursive: true });
   
   console.log('Copying extension files...');
   
   // Copy root files
-  copyFiles(BUILD_CONFIG.rootFiles, '.', distPath);
+  copyFiles(BUILD_CONFIG.rootFiles, '.', targetDir);
   
   // Copy image files
-  copyFiles(BUILD_CONFIG.imageFiles, '.', distPath);
+  copyFiles(BUILD_CONFIG.imageFiles, '.', targetDir);
   
   // Copy source files
-  copyFiles(BUILD_CONFIG.srcFiles, BUILD_CONFIG.srcDir, distPath);
+  copyFiles(BUILD_CONFIG.srcFiles, BUILD_CONFIG.srcDir, targetDir);
   
   console.log('✅ All extension files copied successfully');
+  return targetDir;
 }
 
 /**
@@ -139,6 +145,18 @@ function validateManifest() {
     
     if (missingFields.length > 0) {
       throw new Error(`Missing required manifest fields: ${missingFields.join(', ')}`);
+    }
+    
+    // Firefox-specific validation
+    if (BUILD_CONFIG.production.target === 'firefox' || BUILD_CONFIG.development.target === 'firefox') {
+      if (!manifest.browser_specific_settings || !manifest.browser_specific_settings.gecko || !manifest.browser_specific_settings.gecko.id) {
+        console.warn('⚠ Firefox target detected but browser_specific_settings.gecko.id is missing');
+        console.warn('  This is required for Firefox Add-ons store submission');
+      }
+      
+      if (manifest.background && manifest.background.service_worker) {
+        console.warn('⚠ service_worker detected in background - Firefox uses scripts array');
+      }
     }
     
     // Validate file references
@@ -200,6 +218,13 @@ function createZipArchive(manifest, isDev = false) {
     output.on('close', () => {
       const sizeKB = (archive.pointer() / 1024).toFixed(2);
       console.log(`✅ Archive created: ${zipFileName} (${sizeKB} KB)`);
+      
+      // Clean up temp directory
+      const tempDir = path.join(BUILD_CONFIG.distDir, 'temp');
+      if (fs.existsSync(tempDir)) {
+        fs.rmSync(tempDir, { recursive: true, force: true });
+      }
+      
       resolve(zipPath);
     });
     
@@ -212,10 +237,11 @@ function createZipArchive(manifest, isDev = false) {
     archive.pipe(output);
     
     // Add files to archive (excluding the zip file itself)
-    const distFiles = fs.readdirSync(BUILD_CONFIG.distDir);
+    const sourceDir = path.join(BUILD_CONFIG.distDir, 'temp');
+    const distFiles = fs.readdirSync(sourceDir);
     distFiles.forEach(file => {
       if (!file.endsWith('.zip')) {
-        const filePath = path.join(BUILD_CONFIG.distDir, file);
+        const filePath = path.join(sourceDir, file);
         const stats = fs.statSync(filePath);
         
         if (stats.isFile()) {
@@ -235,18 +261,26 @@ function createZipArchive(manifest, isDev = false) {
  * Run development build
  */
 async function runDevelopmentBuild() {
-  console.log('🔨 Starting development build...');
+  console.log('🔨 Starting Firefox development build...');
   
   try {
     copyExtensionFiles();
     const manifest = validateManifest();
-    const zipPath = await createZipArchive(manifest, true);
     
-    console.log('\n🎉 Development build completed successfully!');
-    console.log(`📦 Package: ${path.basename(zipPath)}`);
-    console.log(`📁 Location: ${BUILD_CONFIG.distDir}/`);
-    
-    return zipPath;
+    const config = BUILD_CONFIG.development;
+    if (config.createZip) {
+      const zipPath = await createZipArchive(manifest, true);
+      console.log('\n🎉 Development build completed successfully!');
+      console.log(`📦 Package: ${path.basename(zipPath)}`);
+      console.log(`📁 Location: ${BUILD_CONFIG.distDir}/`);
+      return zipPath;
+    } else {
+      console.log('\n🎉 Development build completed successfully!');
+      console.log(`📁 Extension files ready in: ${BUILD_CONFIG.distDir}/`);
+      console.log('🦊 Ready for Firefox development testing!');
+      console.log(`   Load extension from: ${path.resolve(BUILD_CONFIG.distDir)}`);
+      return BUILD_CONFIG.distDir;
+    }
     
   } catch (error) {
     console.error('\n💥 Development build failed:', error.message);
@@ -258,25 +292,40 @@ async function runDevelopmentBuild() {
  * Run production build
  */
 async function runProductionBuild() {
-  console.log('🏭 Starting production build...');
+  console.log('🏭 Starting Firefox production build...');
   
   try {
-    copyExtensionFiles();
+    // Ensure dist directory exists and is clean
+    if (fs.existsSync(BUILD_CONFIG.distDir)) {
+      fs.rmSync(BUILD_CONFIG.distDir, { recursive: true, force: true });
+    }
+    fs.mkdirSync(BUILD_CONFIG.distDir, { recursive: true });
     
-    // Additional production optimizations could go here
-    // - Minification
-    // - Dead code elimination
-    // - Asset optimization
-    
-    const manifest = validateManifest();
-    const zipPath = await createZipArchive(manifest, false);
-    
-    console.log('\n🎉 Production build completed successfully!');
-    console.log(`📦 Package: ${path.basename(zipPath)}`);
-    console.log(`📁 Location: ${BUILD_CONFIG.distDir}/`);
-    console.log('🚀 Ready for Chrome Web Store upload!');
-    
-    return zipPath;
+    const config = BUILD_CONFIG.production;
+    if (config.createZip) {
+      // For production zip, use temp directory and create only zip
+      const tempPath = copyExtensionFiles(true);
+      
+      // Validate manifest from temp directory
+      const manifestPath = path.join(tempPath, 'manifest.json');
+      const manifestContent = fs.readFileSync(manifestPath, 'utf8');
+      const manifest = JSON.parse(manifestContent);
+      
+      const zipPath = await createZipArchive(manifest, false);
+      console.log('\n🎉 Production build completed successfully!');
+      console.log(`📦 Package: ${path.basename(zipPath)}`);
+      console.log(`📁 Location: ${BUILD_CONFIG.distDir}/`);
+      console.log('🦊 Ready for Firefox Add-ons store upload!');
+      return zipPath;
+    } else {
+      // For production files, copy directly to dist
+      copyExtensionFiles(false);
+      const manifest = validateManifest();
+      console.log('\n🎉 Production build completed successfully!');
+      console.log(`📁 Extension files ready in: ${BUILD_CONFIG.distDir}/`);
+      console.log('🦊 Ready for Firefox production deployment!');
+      return BUILD_CONFIG.distDir;
+    }
     
   } catch (error) {
     console.error('\n💥 Production build failed:', error.message);

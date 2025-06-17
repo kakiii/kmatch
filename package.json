@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "process-sponsors": "node scripts/process-sponsors.js",
-    "compare-updates": "node scripts/compare-updates.js",
     "validate-data": "node scripts/validate-data.js",
     "build": "node scripts/build-extension.js",
     "build:dev": "node scripts/build-extension.js --dev",

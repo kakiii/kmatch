@@ -18,6 +18,7 @@ A Firefox extension that helps you quickly identify recognized sponsors for high
 TODO
 
 For now you can run the following and import it locally to your firefox (or any other variations):
+
 ```shell
 npm run install
 npm run build
@@ -28,8 +29,8 @@ npm run build
 1. Visit LinkedIn and Indeed's job section
 2. Browse job listings as normal
 3. Look for highlighted jobs with:
-   - "KM" badge: Company is a recognized sponsor
-   - "EN" badge: Job posting is in English
+    - "KM" badge: Company is a recognized sponsor
+    - "EN" badge: Job posting is in English
 4. Click on any job in the extension popup to view details
 
 ## Privacy Policy
@@ -37,12 +38,14 @@ npm run build
 ### Data Collection and Usage
 
 #### What We Collect
+
 - **Job Listings**: We scan visible job postings on LinkedIn and Indeed pages you visit
 - **Company Names**: We process company names to check against our sponsor database
 - **Job Titles**: We analyze job titles for language detection
 - **URLs**: We store LinkedIn and Indeed job posting URLs temporarily for functionality
 
 #### What We Don't Collect
+
 - Personal information
 - Login credentials
 - Browser history
@@ -67,6 +70,7 @@ npm run build
 ### User Rights
 
 You have the right to:
+
 - Disable the extension at any time
 - Clear local storage through Chrome settings
 
@@ -85,6 +89,7 @@ You have the right to:
 ### Contact
 
 For privacy concerns or questions:
+
 - [Open an issue](https://github.com/kakiii/KMatch/issues) on our GitHub repository
 
 ## Contributing
@@ -92,15 +97,19 @@ For privacy concerns or questions:
 We welcome contributions to make KMatch better! Here's how you can help:
 
 ### Feature Improvements
+
 Found a bug or have a feature idea? Check out `content.js` and submit a PR or open an issue.
 
 ### UI Enhancements
+
 Want to improve the popup interface? Take a look at `popup.js` and show us your ideas.
 
 ### Dataset Accuracy
+
 Notice missing sponsors or incorrect data? Help us maintain `sponsor.json` by submitting updates.
 
 To contribute:
+
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
@@ -108,6 +117,7 @@ To contribute:
 5. Open a Pull Request
 
 Found it helpful?
+
 - Please share with fellow job seekers 🔗
 
 ## License

@@ -1,52 +1,59 @@
 {
-  "name": "kmatch-extension-firefox",
-  "version": "1.0.0",
-  "description": "Dutch Sponsor Job Finder Firefox Extension",
-  "main": "index.js",
-  "scripts": {
-    "process-sponsors": "node scripts/process-sponsors.js",
-    "validate-data": "node scripts/validate-data.js",
-    "build": "node scripts/build-extension.js",
-    "build:dev": "node scripts/build-extension.js --dev",
-    "test": "jest",
-    "lint": "eslint src/ scripts/",
-    "lint:ci": "eslint src/ scripts/ --max-warnings 999",
-    "lint:fix": "eslint src/ scripts/ --fix",
-    "format": "prettier --write src/ scripts/",
-    "clean": "rimraf dist/",
-    "update-sponsors-auto": "node scripts/update-sponsors-auto.js",
-    "fetch-sponsors": "node scripts/fetch-sponsors.js",
-    "compare-data": "node scripts/compare-data.js"
-  },
-  "dependencies": {
-    "archiver": "^7.0.1",
-    "fast-csv": "^5.0.2",
-    "fast-levenshtein": "^3.0.0",
-    "cheerio": "^1.0.0-rc.12",
-    "axios": "^1.6.0",
-    "@octokit/rest": "^20.0.0"
-  },
-  "devDependencies": {
-    "eslint": "^8.0.0",
-    "jest": "^29.0.0",
-    "prettier": "^3.0.0",
-    "rimraf": "^5.0.0"
-  },
-  "keywords": [
-    "chrome-extension",
-    "job-search",
-    "visa-sponsorship",
-    "netherlands",
-    "linkedin",
-    "indeed"
-  ],
-  "author": "KMatch Development Team",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/AshZLee/KMatch.git"
-  },
-  "engines": {
-    "node": ">=16.0.0"
-  }
+	"name": "kmatch-extension-firefox",
+	"version": "1.8.6",
+	"description": "Dutch Sponsor Job Finder Firefox Extension",
+	"main": "index.js",
+	"scripts": {
+		"process-sponsors": "node scripts/process-sponsors.js",
+		"validate-data": "node scripts/validate-data.js",
+		"build": "node scripts/build-extension.js",
+		"build:dev": "node scripts/build-extension.js --dev",
+		"test": "jest",
+		"lint": "eslint src/ scripts/",
+		"lint:ci": "eslint src/ scripts/ --max-warnings 999",
+		"lint:fix": "eslint src/ scripts/ --fix",
+		"format": "prettier --write src/ scripts/",
+		"clean": "rimraf dist/",
+		"update-sponsors-auto": "node scripts/update-sponsors-auto.js",
+		"fetch-sponsors": "node scripts/fetch-sponsors.js",
+		"compare-data": "node scripts/compare-data.js",
+		"validate-version": "node scripts/validate-version.js",
+		"generate-changelog": "node scripts/generate-changelog.js",
+		"sync-version": "node scripts/validate-version.js --sync"
+	},
+	"dependencies": {
+		"@octokit/rest": "^20.0.0",
+		"archiver": "^7.0.1",
+		"axios": "^1.6.0",
+		"cheerio": "^1.0.0-rc.12",
+		"fast-csv": "^5.0.2",
+		"fast-levenshtein": "^3.0.0",
+		"semver": "^7.6.0"
+	},
+	"devDependencies": {
+		"eslint": "^8.57.1",
+		"eslint-config-prettier": "^10.1.5",
+		"eslint-plugin-prettier": "^5.5.0",
+		"jest": "^29.0.0",
+		"prettier": "^3.5.3",
+		"prettier-eslint": "^16.4.2",
+		"rimraf": "^5.0.0"
+	},
+	"keywords": [
+		"chrome-extension",
+		"job-search",
+		"visa-sponsorship",
+		"netherlands",
+		"linkedin",
+		"indeed"
+	],
+	"author": "KMatch Development Team",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/AshZLee/KMatch.git"
+	},
+	"engines": {
+		"node": ">=16.0.0"
+	}
 }

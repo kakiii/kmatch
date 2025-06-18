@@ -1,0 +1,255 @@
+name: Release
+
+on:
+    push:
+        tags:
+            - 'v*.*.*' # Trigger on semantic version tags like v1.8.6, v2.0.0
+
+env:
+    NODE_VERSION: '20'
+
+jobs:
+    # Job 1: Version Validation and Sync
+    version-validation:
+        name: Version Validation & Sync
+        runs-on: ubuntu-latest
+
+        permissions:
+            contents: write # Required to push version sync commits
+
+        outputs:
+            version: ${{ steps.validate.outputs.version }}
+            needs_sync: ${{ steps.validate.outputs.needs_sync }}
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  fetch-depth: 0 # Full history for proper tag detection
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Extract version from tag
+              id: extract
+              run: |
+                  TAG_NAME=${GITHUB_REF#refs/tags/}
+                  echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
+                  echo "Extracted tag: $TAG_NAME"
+
+            - name: Validate version and sync files
+              id: validate
+              run: |
+                  echo "🔍 Starting version validation for tag: ${{ steps.extract.outputs.tag }}"
+
+                  # Run version validation with sync
+                  npm run validate-version -- ${{ steps.extract.outputs.tag }} --sync
+
+                  # Extract clean version number
+                  VERSION=$(echo "${{ steps.extract.outputs.tag }}" | sed 's/^v//')
+                  echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+                  # Check if git has changes (indicating sync was needed)
+                  if [ -n "$(git status --porcelain)" ]; then
+                    echo "needs_sync=true" >> $GITHUB_OUTPUT
+                    echo "📝 Version sync changes detected"
+                  else
+                    echo "needs_sync=false" >> $GITHUB_OUTPUT
+                    echo "✅ No version sync needed"
+                  fi
+
+            - name: Commit version sync changes
+              if: steps.validate.outputs.needs_sync == 'true'
+              run: |
+                  git config --global user.name 'KMatch Release Bot'
+                  git config --global user.email 'noreply@github.com'
+
+                  git add package.json manifest.json
+                  git commit -m "chore: sync versions to ${{ steps.extract.outputs.tag }}"
+                  git push origin HEAD:main
+
+                  echo "✅ Version sync changes committed and pushed"
+
+    # Job 2: Build and Release
+    build-and-release:
+        name: Build & Release
+        runs-on: ubuntu-latest
+        needs: version-validation
+
+        permissions:
+            contents: write # Required to create releases
+            pull-requests: read # Required for changelog generation
+
+        steps:
+            - name: Checkout code (including sync commits)
+              uses: actions/checkout@v4
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  fetch-depth: 0
+                  ref: main # Ensure we get the latest main with sync commits
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Run quality checks
+              run: |
+                  echo "::group::ESLint Check"
+                  npm run lint
+                  echo "::endgroup::"
+
+                  echo "::group::Test Suite"
+                  npm test
+                  echo "::endgroup::"
+
+                  echo "::group::Data Validation"
+                  npm run validate-data
+                  echo "::endgroup::"
+
+            - name: Generate changelog
+              id: changelog
+              run: |
+                  echo "📝 Generating changelog for v${{ needs.version-validation.outputs.version }}"
+
+                  # Generate changelog and save to file
+                  npm run generate-changelog -- ${{ needs.version-validation.outputs.version }} > changelog.md
+
+                  # Also output for GitHub release (escape newlines)
+                  CHANGELOG_CONTENT=$(cat changelog.md)
+                  echo "content<<EOF" >> $GITHUB_OUTPUT
+                  echo "$CHANGELOG_CONTENT" >> $GITHUB_OUTPUT
+                  echo "EOF" >> $GITHUB_OUTPUT
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Build extension
+              run: |
+                  echo "🔨 Building extension for v${{ needs.version-validation.outputs.version }}"
+
+                  # Run production build
+                  npm run build
+
+                  # Verify build output
+                  if [ ! -f "dist/kmatch-firefox.zip" ]; then
+                    echo "❌ Build failed: extension zip not found"
+                    exit 1
+                  fi
+
+                  # Rename with version for release
+                  mv dist/kmatch-firefox.zip dist/kmatch-firefox-v${{ needs.version-validation.outputs.version }}.zip
+
+                  echo "✅ Extension built successfully"
+
+            - name: Create source archive
+              run: |
+                  echo "📦 Creating source code archive"
+
+                  # Create clean source archive (exclude build artifacts and git)
+                  tar -czf dist/kmatch-source-v${{ needs.version-validation.outputs.version }}.tar.gz \
+                    --exclude='.git' \
+                    --exclude='node_modules' \
+                    --exclude='dist' \
+                    --exclude='.cursor_plans' \
+                    .
+
+                  echo "✅ Source archive created"
+
+            - name: Validate release assets
+              run: |
+                  echo "🔍 Validating release assets"
+
+                  EXTENSION_FILE="dist/kmatch-firefox-v${{ needs.version-validation.outputs.version }}.zip"
+                  SOURCE_FILE="dist/kmatch-source-v${{ needs.version-validation.outputs.version }}.tar.gz"
+
+                  # Check files exist
+                  if [ ! -f "$EXTENSION_FILE" ]; then
+                    echo "❌ Extension file not found: $EXTENSION_FILE"
+                    exit 1
+                  fi
+
+                  if [ ! -f "$SOURCE_FILE" ]; then
+                    echo "❌ Source file not found: $SOURCE_FILE"
+                    exit 1
+                  fi
+
+                  # Check file sizes
+                  EXT_SIZE=$(stat -f%z "$EXTENSION_FILE" 2>/dev/null || stat -c%s "$EXTENSION_FILE")
+                  SRC_SIZE=$(stat -f%z "$SOURCE_FILE" 2>/dev/null || stat -c%s "$SOURCE_FILE")
+
+                  echo "📊 Extension package: $(du -h "$EXTENSION_FILE" | cut -f1)"
+                  echo "📊 Source archive: $(du -h "$SOURCE_FILE" | cut -f1)"
+
+                  # Validate reasonable file sizes
+                  if [ $EXT_SIZE -lt 10000 ]; then  # Less than 10KB
+                    echo "❌ Extension file seems too small"
+                    exit 1
+                  fi
+
+                  if [ $SRC_SIZE -lt 50000 ]; then  # Less than 50KB
+                    echo "❌ Source archive seems too small"
+                    exit 1
+                  fi
+
+                  echo "✅ Release assets validated"
+
+            - name: Create GitHub Release
+              uses: actions/create-release@v1
+              id: create_release
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  tag_name: ${{ github.ref_name }}
+                  release_name: KMatch v${{ needs.version-validation.outputs.version }}
+                  body: ${{ steps.changelog.outputs.content }}
+                  draft: false
+                  prerelease: false
+
+            - name: Upload Extension Package
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ steps.create_release.outputs.upload_url }}
+                  asset_path: ./dist/kmatch-firefox-v${{ needs.version-validation.outputs.version }}.zip
+                  asset_name: kmatch-firefox-v${{ needs.version-validation.outputs.version }}.zip
+                  asset_content_type: application/zip
+
+            - name: Upload Source Archive
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ steps.create_release.outputs.upload_url }}
+                  asset_path: ./dist/kmatch-source-v${{ needs.version-validation.outputs.version }}.tar.gz
+                  asset_name: kmatch-source-v${{ needs.version-validation.outputs.version }}.tar.gz
+                  asset_content_type: application/gzip
+
+            - name: Release Summary
+              run: |
+                  echo "## 🎉 Release Completed Successfully!" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  echo "**Version**: v${{ needs.version-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+                  echo "**Release URL**: ${{ steps.create_release.outputs.html_url }}" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  echo "### 📦 Release Assets" >> $GITHUB_STEP_SUMMARY
+                  echo "- 🔌 **Extension Package**: \`kmatch-firefox-v${{ needs.version-validation.outputs.version }}.zip\`" >> $GITHUB_STEP_SUMMARY
+                  echo "- 📁 **Source Code**: \`kmatch-source-v${{ needs.version-validation.outputs.version }}.tar.gz\`" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  echo "### 🚀 Next Steps" >> $GITHUB_STEP_SUMMARY
+                  echo "1. Download the extension package from the release" >> $GITHUB_STEP_SUMMARY
+                  echo "2. Submit to Firefox Add-ons store (manual process)" >> $GITHUB_STEP_SUMMARY
+                  echo "3. Update any external documentation with new version" >> $GITHUB_STEP_SUMMARY
+
+                  echo "✅ Release workflow completed successfully!"

@@ -12,12 +12,18 @@
     "lint": "eslint src/ scripts/",
     "lint:fix": "eslint src/ scripts/ --fix",
     "format": "prettier --write src/ scripts/",
-    "clean": "rimraf dist/"
+    "clean": "rimraf dist/",
+    "update-sponsors-auto": "node scripts/update-sponsors-auto.js",
+    "fetch-sponsors": "node scripts/fetch-sponsors.js",
+    "compare-data": "node scripts/compare-data.js"
   },
   "dependencies": {
     "archiver": "^7.0.1",
     "fast-csv": "^5.0.2",
-    "fast-levenshtein": "^3.0.0"
+    "fast-levenshtein": "^3.0.0",
+    "cheerio": "^1.0.0-rc.12",
+    "axios": "^1.6.0",
+    "@octokit/rest": "^20.0.0"
   },
   "devDependencies": {
     "eslint": "^8.0.0",

@@ -1,0 +1,87 @@
+name: Update Sponsor Data
+
+on:
+  # Run at 4 PM UTC on the first Monday of each month
+  # Note: GitHub Actions doesn't support "first Monday" directly, so we use 1-7 range
+  # and check if it's Monday in the script
+  schedule:
+    - cron: '0 16 1-7 * 1'  # 4 PM UTC on Mondays in the first week
+  
+  # Allow manual triggering for testing
+  workflow_dispatch:
+    inputs:
+      force_update:
+        description: 'Force update even if no changes detected'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  update-sponsors:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Check if today is first Monday
+        id: check-date
+        run: |
+          # Get current date info
+          day_of_month=$(date +%d | sed 's/^0//')
+          day_of_week=$(date +%u)  # 1=Monday, 7=Sunday
+          
+          echo "Day of month: $day_of_month"
+          echo "Day of week: $day_of_week (1=Monday)"
+          
+          # Check if it's Monday (1) and in first week (1-7)
+          if [ "$day_of_week" -eq 1 ] && [ "$day_of_month" -le 7 ]; then
+            echo "is_first_monday=true" >> $GITHUB_OUTPUT
+            echo "✅ Today is the first Monday of the month"
+          else
+            echo "is_first_monday=false" >> $GITHUB_OUTPUT
+            echo "❌ Today is not the first Monday of the month"
+          fi
+      
+      - name: Run sponsor data update
+        id: update
+        if: steps.check-date.outputs.is_first_monday == 'true' || github.event.inputs.force_update == 'true'
+        run: |
+          echo "🚀 Starting automated sponsor data update..."
+          npm run update-sponsors-auto
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Skip execution
+        if: steps.check-date.outputs.is_first_monday == 'false' && github.event.inputs.force_update != 'true'
+        run: |
+          echo "⏭️ Skipping execution - not the first Monday of the month"
+          echo "Next execution will be on the first Monday of next month at 4 PM UTC"
+      
+      - name: Report success
+        if: success() && (steps.check-date.outputs.is_first_monday == 'true' || github.event.inputs.force_update == 'true')
+        run: |
+          echo "✅ Sponsor data update completed successfully"
+          echo "Check for any new pull requests in the repository"
+      
+      - name: Report failure
+        if: failure()
+        run: |
+          echo "❌ Sponsor data update failed"
+          echo "Check the logs above for error details"
+          exit 1 

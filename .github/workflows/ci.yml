@@ -1,0 +1,283 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths-ignore:
+      - '*.md'
+      - 'docs/**'
+      - '.github/FUNDING.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths-ignore:
+      - '*.md' 
+      - 'docs/**'
+      - '.github/FUNDING.yml'
+  workflow_dispatch:
+    inputs:
+      skip_cache:
+        description: 'Skip cache for debugging'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  NODE_VERSION_MATRIX: '[20, 22, 24]'
+  CACHE_VERSION: 'v1'
+
+jobs:
+  # Job 1: Code Quality Checks
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20]  # Use single version for quality checks
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run ESLint
+        run: |
+          echo "::group::ESLint Results"
+          npm run lint
+          echo "::endgroup::"
+          
+      - name: Check Prettier formatting
+        run: |
+          echo "::group::Prettier Check"
+          npm run format -- --check
+          echo "::endgroup::"
+          
+      - name: Run npm audit
+        run: |
+          echo "::group::Security Audit"
+          npm audit --audit-level=high
+          echo "::endgroup::"
+        continue-on-error: false
+
+  # Job 2: Testing
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20, 22, 24]
+        
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run tests with coverage
+        run: |
+          echo "::group::Test Results - Node.js ${{ matrix.node-version }}"
+          npm test -- --coverage --coverageReporters=text-lcov --coverageReporters=json-summary
+          echo "::endgroup::"
+          
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        if: matrix.node-version == '20'  # Only upload once
+        with:
+          name: coverage-reports
+          path: |
+            coverage/
+            !coverage/tmp/
+          retention-days: 7
+
+  # Job 3: Build Validation 
+  build-validation:
+    name: Build Validation
+    runs-on: ubuntu-latest
+    needs: [code-quality]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run development build
+        run: |
+          echo "::group::Development Build"
+          npm run build:dev
+          echo "::endgroup::"
+          
+      - name: Validate build output
+        run: |
+          echo "::group::Build Validation"
+          if [ ! -d "dist" ]; then
+            echo "❌ Build failed: dist directory not created"
+            exit 1
+          fi
+          
+          # Check for required files
+          required_files=("manifest.json" "background.js" "content.js" "popup.js" "popup.html")
+          for file in "${required_files[@]}"; do
+            if [ ! -f "dist/$file" ]; then
+              echo "❌ Missing required file: $file"
+              exit 1
+            else
+              echo "✅ Found: $file"
+            fi
+          done
+          
+          # Check sponsor data
+          if [ ! -f "dist/data/json/sponsors.json" ]; then
+            echo "❌ Missing sponsor data file"
+            exit 1
+          else
+            echo "✅ Found: sponsors.json"
+          fi
+          echo "::endgroup::"
+          
+      - name: Run data validation
+        run: |
+          echo "::group::Data Validation"
+          npm run validate-data
+          echo "::endgroup::"
+
+  # Job 4: Production Build (main branch only)
+  production-build:
+    name: Production Build
+    runs-on: ubuntu-latest
+    needs: [test, build-validation]
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run production build
+        run: |
+          echo "::group::Production Build"
+          npm run build
+          echo "::endgroup::"
+          
+      - name: Generate build info
+        run: |
+          echo "::group::Build Information"
+          echo "Build Date: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" > dist/BUILD_INFO.txt
+          echo "Git Commit: ${{ github.sha }}" >> dist/BUILD_INFO.txt
+          echo "Git Branch: ${{ github.ref_name }}" >> dist/BUILD_INFO.txt
+          echo "Workflow: ${{ github.workflow }}" >> dist/BUILD_INFO.txt
+          echo "Run ID: ${{ github.run_id }}" >> dist/BUILD_INFO.txt
+          cat dist/BUILD_INFO.txt
+          echo "::endgroup::"
+          
+      - name: Calculate bundle size
+        run: |
+          echo "::group::Bundle Size Analysis"
+          if [ -f "dist/kmatch-firefox.zip" ]; then
+            size=$(du -h dist/kmatch-firefox.zip | cut -f1)
+            echo "📦 Extension package size: $size"
+            
+            # Check if size is reasonable (under 5MB)
+            size_bytes=$(stat -c%s dist/kmatch-firefox.zip)
+            max_size=$((5 * 1024 * 1024))  # 5MB
+            
+            if [ $size_bytes -gt $max_size ]; then
+              echo "⚠️ Warning: Extension package is larger than 5MB ($size)"
+            else
+              echo "✅ Extension package size is within limits"
+            fi
+          fi
+          echo "::endgroup::"
+          
+      - name: Upload production artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: kmatch-firefox-extension
+          path: |
+            dist/
+            !dist/tmp/
+          retention-days: 30
+          
+      - name: Upload extension package
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: kmatch-firefox-package
+          path: dist/*.zip
+          retention-days: 90
+
+  # Job 5: Summary Report
+  summary:
+    name: Pipeline Summary
+    runs-on: ubuntu-latest
+    needs: [code-quality, test, build-validation, production-build]
+    if: always()
+    
+    steps:
+      - name: Generate summary
+        run: |
+          echo "## 🚀 CI/CD Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Status badges
+          if [ "${{ needs.code-quality.result }}" == "success" ]; then
+            echo "✅ Code Quality: Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Code Quality: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ needs.test.result }}" == "success" ]; then
+            echo "✅ Tests: Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Tests: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ needs.build-validation.result }}" == "success" ]; then
+            echo "✅ Build Validation: Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Build Validation: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ needs.production-build.result }}" == "success" ]; then
+            echo "✅ Production Build: Passed" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ needs.production-build.result }}" == "skipped" ]; then
+            echo "⏭️ Production Build: Skipped (not main branch)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Production Build: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Pipeline Details" >> $GITHUB_STEP_SUMMARY
+          echo "- **Trigger**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Run ID**: ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY 

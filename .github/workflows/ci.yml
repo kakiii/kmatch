@@ -30,6 +30,8 @@ jobs:
     code-quality:
         name: Code Quality
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
         strategy:
             matrix:
                 node-version: [20] # Use single version for quality checks
@@ -64,6 +66,8 @@ jobs:
     test:
         name: Test Suite
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
         strategy:
             matrix:
                 node-version: [20, 22, 24]

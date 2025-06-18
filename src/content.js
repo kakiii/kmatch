@@ -11,27 +11,32 @@ let sponsorMatcher = null;
 const jobLanguageCache = new Map();
 
 // Load sponsors from JSON file with enhanced matching
-fetch(browser.runtime.getURL('sponsors.json'))
-  .then(response => response.json())
-  .then(data => {
-    console.log('Loading sponsor data with enhanced matcher...');
+async function init() {
+  try {
+    console.log('Initializing KMatch content script');
     
-    // Initialize the enhanced sponsor matcher
-    try {
-      sponsorMatcher = new SponsorMatcher(data);
-      console.log('Enhanced sponsor matcher loaded successfully');
-      console.log('Matcher stats:', sponsorMatcher.getStats());
-    } catch (error) {
-      console.error('Error initializing sponsor matcher:', error);
-      // Fallback to simple matching if enhanced matcher fails
-      console.log('Falling back to simple sponsor matching');
-      sponsorMatcher = null;
+    // Load sponsor data
+    const response = await fetch(browser.runtime.getURL('data/json/sponsors.json'));
+    if (!response.ok) {
+      throw new Error(`Failed to load sponsor data: ${response.status}`);
     }
-  })
-  .catch(error => {
-    console.error('Error loading sponsors:', error);
-    sponsorMatcher = null;
-  });
+    
+    const sponsorData = await response.json();
+    sponsorMatcher = new SponsorMatcher(sponsorData);
+    
+    console.log('KMatch initialized successfully');
+    
+    // Process page immediately if it's already loaded
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => processPage());
+    } else {
+      processPage();
+    }
+    
+  } catch (error) {
+    console.error('Failed to initialize KMatch:', error);
+  }
+}
 
 // Enhanced SponsorMatcher class (inline implementation)
 // TODO: Move to separate module when implementing proper bundling

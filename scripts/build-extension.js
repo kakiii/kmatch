@@ -28,7 +28,7 @@ const BUILD_CONFIG = {
   // Files to copy to extension root
   rootFiles: [
     'manifest.json',
-    'sponsors.json',
+    'data/json/sponsors.json',
     'LICENSE',
     'README.md',
     'popup.html',
@@ -118,20 +118,19 @@ async function updateSponsors(skipSponsors = false) {
   try {
     logger.info('🔄 Checking for sponsor updates...');
     
-    const dataDir = path.join(__dirname, '..', 'data');
-    const sponsorsPath = path.join(__dirname, '..', 'sponsors.json');
+    const CONFIG = require('./config');
     
     // Find latest CSV file
-    const latestCSV = findLatestCSVFile(dataDir);
+    const latestCSV = findLatestCSVFile(CONFIG.CSV_DIR);
     logger.info(`📁 Latest CSV: ${path.basename(latestCSV)}`);
     
     // Check if update is needed (compare file timestamps)
     const csvStats = fs.statSync(latestCSV);
-    const sponsorsExists = fs.existsSync(sponsorsPath);
+    const sponsorsExists = fs.existsSync(CONFIG.SPONSORS_JSON_PATH);
     
     let needsUpdate = true;
     if (sponsorsExists) {
-      const sponsorsStats = fs.statSync(sponsorsPath);
+      const sponsorsStats = fs.statSync(CONFIG.SPONSORS_JSON_PATH);
       needsUpdate = csvStats.mtime > sponsorsStats.mtime;
       
       if (!needsUpdate) {
@@ -146,7 +145,7 @@ async function updateSponsors(skipSponsors = false) {
     let existingSponsors = new Set();
     if (sponsorsExists) {
       try {
-        const existingData = JSON.parse(fs.readFileSync(sponsorsPath, 'utf8'));
+        const existingData = JSON.parse(fs.readFileSync(CONFIG.SPONSORS_JSON_PATH, 'utf8'));
         existingSponsors = new Set(
           Object.values(existingData.sponsors || {}).map(s => s.primaryName)
         );
@@ -179,7 +178,7 @@ async function updateSponsors(skipSponsors = false) {
     };
     
     // Write updated data
-    writeSponsorData(sponsorData, sponsorsPath);
+    writeSponsorData(sponsorData, CONFIG.SPONSORS_JSON_PATH);
     
     // Report changes
     logger.info('📈 Sponsor update summary:');

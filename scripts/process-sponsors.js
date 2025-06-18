@@ -144,7 +144,16 @@ function writeSponsorData(data, outputPath) {
     
     // Create backup of existing file if it exists
     if (fs.existsSync(outputPath)) {
-      const backupPath = outputPath.replace('.json', `.backup.${Date.now()}.json`);
+      const CONFIG = require('./config');
+      const backupFilename = `sponsors.backup.${Date.now()}.json`;
+      const backupPath = path.join(CONFIG.BACKUP_DIR, backupFilename);
+      
+      // Ensure backup directory exists
+      if (!fs.existsSync(CONFIG.BACKUP_DIR)) {
+        fs.mkdirSync(CONFIG.BACKUP_DIR, { recursive: true });
+        logger.info('Created backup directory');
+      }
+      
       fs.copyFileSync(outputPath, backupPath);
       logger.info(`Created backup: ${backupPath}`);
     }
@@ -262,15 +271,14 @@ function findLatestCSVFile(dataDir) {
 // Main execution
 async function main() {
   try {
-    const dataDir = path.join(__dirname, '..', 'data');
-    const outputPath = path.join(__dirname, '..', 'sponsors.json');
+    const CONFIG = require('./config');
     
     logger.info('Starting sponsor data processing...');
-    logger.info(`Data directory: ${dataDir}`);
-    logger.info(`Output path: ${outputPath}`);
+    logger.info(`CSV directory: ${CONFIG.CSV_DIR}`);
+    logger.info(`Output path: ${CONFIG.SPONSORS_JSON_PATH}`);
     
     // Find latest CSV file
-    const csvFile = findLatestCSVFile(dataDir);
+    const csvFile = findLatestCSVFile(CONFIG.CSV_DIR);
     logger.info(`Using CSV file: ${csvFile}`);
     
     // Process the data (now async)
@@ -289,11 +297,11 @@ async function main() {
     };
     
     // Write to file
-    writeSponsorData(sponsorData, outputPath);
+    writeSponsorData(sponsorData, CONFIG.SPONSORS_JSON_PATH);
     
     logger.info('\n✅ Sponsor processing completed successfully!');
     logger.info(`📊 Processed ${sponsorData.totalSponsors} sponsors`);
-    logger.info(`📁 Output: ${outputPath}`);
+    logger.info(`📁 Output: ${CONFIG.SPONSORS_JSON_PATH}`);
     
   } catch (error) {
     logger.error('\n❌ Error processing sponsors:', error.message);

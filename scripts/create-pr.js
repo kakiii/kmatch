@@ -268,8 +268,8 @@ function generatePRDescription(changeSummary, csvFileName) {
 
     lines.push('');
     lines.push('## 📋 Files Updated');
-    lines.push('- 📄 New CSV file in `data/` directory');
-    lines.push('- 📊 Updated `sponsors.json` with processed data');
+    lines.push('- 📄 New CSV file in `data/csv/` directory');
+    lines.push('- 📊 Updated `data/json/sponsors.json` with processed data');
     lines.push('- 🔍 Updated search indexes for the browser extension');
     lines.push('');
     lines.push('## ✅ Automated Checks Completed');
@@ -369,11 +369,11 @@ async function main({ csvFilePath, jsonFilePath, changeSummary }) {
         // Prepare files for commit
         const files = [
             {
-                path: `data/${path.basename(csvFilePath)}`,
+                path: `data/csv/${path.basename(csvFilePath)}`,
                 content: csvContent
             },
             {
-                path: 'sponsors.json',
+                path: 'data/json/sponsors.json',
                 content: jsonContent
             }
         ];

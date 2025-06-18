@@ -362,17 +362,17 @@ function generateValidationReport(validation, duplicates, missingFields) {
 // Main execution
 async function main() {
   try {
-    const sponsorsPath = path.join(__dirname, '..', 'sponsors.json');
+    const CONFIG = require('./config');
     
     logger.info('Starting data validation...');
-    logger.info(`Sponsors file: ${sponsorsPath}`);
+    logger.info(`Sponsors file: ${CONFIG.SPONSORS_JSON_PATH}`);
     
-    if (!fs.existsSync(sponsorsPath)) {
-      throw new Error(`Sponsors file not found: ${sponsorsPath}`);
+    if (!fs.existsSync(CONFIG.SPONSORS_JSON_PATH)) {
+      throw new Error(`Sponsors file not found: ${CONFIG.SPONSORS_JSON_PATH}`);
     }
     
     // Load and parse data
-    const rawData = fs.readFileSync(sponsorsPath, 'utf8');
+    const rawData = fs.readFileSync(CONFIG.SPONSORS_JSON_PATH, 'utf8');
     const data = JSON.parse(rawData);
     
     logger.info(`Data loaded successfully (${(rawData.length / 1024).toFixed(2)} KB)`);

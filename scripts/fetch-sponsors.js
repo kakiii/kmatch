@@ -172,13 +172,13 @@ function generateFilename() {
 function saveCSVFile(csvContent) {
   try {
     // Ensure data directory exists
-    if (!fs.existsSync(CONFIG.DATA_DIR)) {
-      fs.mkdirSync(CONFIG.DATA_DIR, { recursive: true });
-      logger.info('Created data directory');
+    if (!fs.existsSync(CONFIG.CSV_DIR)) {
+      fs.mkdirSync(CONFIG.CSV_DIR, { recursive: true });
+      logger.info('Created CSV directory');
     }
     
     const filename = generateFilename();
-    const filePath = path.join(CONFIG.DATA_DIR, filename);
+    const filePath = path.join(CONFIG.CSV_DIR, filename);
     
     logger.info(`Saving CSV to: ${filePath}`);
     

@@ -36,14 +36,22 @@ function validateEnvironment() {
     logger.info('PR creation will be skipped - set GITHUB_TOKEN to enable');
   }
   
-  // Check if we can access the data directory
+  // Check if we can access the data directories
   try {
     if (!fs.existsSync(CONFIG.DATA_DIR)) {
       fs.mkdirSync(CONFIG.DATA_DIR, { recursive: true });
       logger.info('Created data directory');
     }
+    if (!fs.existsSync(CONFIG.CSV_DIR)) {
+      fs.mkdirSync(CONFIG.CSV_DIR, { recursive: true });
+      logger.info('Created CSV directory');
+    }
+    if (!fs.existsSync(CONFIG.JSON_DIR)) {
+      fs.mkdirSync(CONFIG.JSON_DIR, { recursive: true });
+      logger.info('Created JSON directory');
+    }
   } catch (error) {
-    errors.push(`Cannot access data directory: ${error.message}`);
+    errors.push(`Cannot access data directories: ${error.message}`);
   }
   
   // Check if existing sponsors.json file exists

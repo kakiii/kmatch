@@ -12,7 +12,10 @@ const CONFIG = {
   
   // File Paths
   DATA_DIR: path.join(__dirname, '..', 'data'),
-  SPONSORS_JSON_PATH: path.join(__dirname, '..', 'sponsors.json'),
+  CSV_DIR: path.join(__dirname, '..', 'data', 'csv'),
+  JSON_DIR: path.join(__dirname, '..', 'data', 'json'),
+  SPONSORS_JSON_PATH: path.join(__dirname, '..', 'data', 'json', 'sponsors.json'),
+  BACKUP_DIR: path.join(__dirname, '..', 'data', 'json', 'backups'),
   HASH_FILE_PATH: path.join(__dirname, '..', 'data', '.last-update-hash'),
   
   // CSV Configuration

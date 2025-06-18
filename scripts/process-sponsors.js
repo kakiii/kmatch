@@ -138,37 +138,139 @@ function buildSearchIndexes(sponsors) {
 }
 
 /**
- * Write processed sponsor data to JSON file
+ * Write processed sponsor data to split JSON files for Firefox compatibility
  * @param {Object} data - Complete sponsor data with indexes
- * @param {string} outputPath - Output file path
+ * @param {string} outputPath - Output file path (used for directory determination)
  */
 function writeSponsorData(data, outputPath) {
 	try {
-		logger.info(`Writing sponsor data to: ${outputPath}`);
+		const outputDir = path.dirname(outputPath);
+		logger.info(`Writing sponsor data to split files in: ${outputDir}`);
 
-		// Create backup of existing file if it exists
-		if (fs.existsSync(outputPath)) {
-			const CONFIG = require('./config');
-			const backupFilename = `sponsors.backup.${Date.now()}.json`;
-			const backupPath = path.join(CONFIG.BACKUP_DIR, backupFilename);
+		// Create backup of existing files if they exist
+		const splitFiles = ['sponsors-a-h.json', 'sponsors-i-p.json', 'sponsors-q-z.json'];
 
-			// Ensure backup directory exists
-			if (!fs.existsSync(CONFIG.BACKUP_DIR)) {
-				fs.mkdirSync(CONFIG.BACKUP_DIR, { recursive: true });
-				logger.info('Created backup directory');
+		splitFiles.forEach(filename => {
+			const filePath = path.join(outputDir, filename);
+			if (fs.existsSync(filePath)) {
+				const CONFIG = require('./config');
+				const backupFilename = `${filename.replace('.json', '')}.backup.${Date.now()}.json`;
+				const backupPath = path.join(CONFIG.BACKUP_DIR, backupFilename);
+
+				// Ensure backup directory exists
+				if (!fs.existsSync(CONFIG.BACKUP_DIR)) {
+					fs.mkdirSync(CONFIG.BACKUP_DIR, { recursive: true });
+					logger.info('Created backup directory');
+				}
+
+				fs.copyFileSync(filePath, backupPath);
+				logger.info(`Created backup: ${backupPath}`);
 			}
+		});
 
-			fs.copyFileSync(outputPath, backupPath);
-			logger.info(`Created backup: ${backupPath}`);
-		}
+		// Convert sponsors to array and sort alphabetically
+		const sponsorEntries = Object.entries(data.sponsors);
+		sponsorEntries.sort((a, b) => {
+			const nameA = a[1].primaryName.toLowerCase();
+			const nameB = b[1].primaryName.toLowerCase();
+			return nameA.localeCompare(nameB);
+		});
 
-		const jsonString = JSON.stringify(data, null, 2);
-		fs.writeFileSync(outputPath, jsonString, 'utf8');
+		// Split into three groups
+		const totalEntries = sponsorEntries.length;
+		const splitSize = Math.ceil(totalEntries / 3);
+
+		const groups = [
+			sponsorEntries.slice(0, splitSize), // A-H approximately
+			sponsorEntries.slice(splitSize, splitSize * 2), // I-P approximately
+			sponsorEntries.slice(splitSize * 2) // Q-Z approximately
+		];
 
 		logger.info(
-			`Successfully wrote ${Object.keys(data.sponsors).length} sponsors to ${outputPath}`
+			`Split ${totalEntries} sponsors into groups: ${groups[0].length}, ${groups[1].length}, ${groups[2].length}`
 		);
-		logger.info(`File size: ${(jsonString.length / 1024).toFixed(2)} KB`);
+
+		// Determine alphabetical boundaries
+		const boundaries = [
+			{
+				file: 'sponsors-a-h.json',
+				start: groups[0][0][1].primaryName[0].toUpperCase(),
+				end: groups[0][groups[0].length - 1][1].primaryName[0].toUpperCase()
+			},
+			{
+				file: 'sponsors-i-p.json',
+				start: groups[1][0][1].primaryName[0].toUpperCase(),
+				end: groups[1][groups[1].length - 1][1].primaryName[0].toUpperCase()
+			},
+			{
+				file: 'sponsors-q-z.json',
+				start: groups[2][0][1].primaryName[0].toUpperCase(),
+				end: groups[2][groups[2].length - 1][1].primaryName[0].toUpperCase()
+			}
+		];
+
+		// Create split files
+		groups.forEach((group, index) => {
+			// Convert array back to object
+			const groupSponsors = {};
+			group.forEach(([id, sponsor]) => {
+				groupSponsors[id] = sponsor;
+			});
+
+			// Create file data with metadata
+			const fileData = {
+				lastUpdated: data.lastUpdated,
+				version: data.version,
+				totalSponsors: group.length,
+				sourceFile: data.sourceFile,
+				splitInfo: {
+					part: index + 1,
+					of: 3,
+					range: `${boundaries[index].start}-${boundaries[index].end}`,
+					originalTotal: data.totalSponsors
+				},
+				sponsors: groupSponsors
+			};
+
+			// Write to file
+			const fileName = boundaries[index].file;
+			const filePath = path.join(outputDir, fileName);
+			const jsonString = JSON.stringify(fileData, null, 2);
+			fs.writeFileSync(filePath, jsonString, 'utf8');
+
+			// Check file size
+			const stats = fs.statSync(filePath);
+			const fileSizeMB = (stats.size / 1024 / 1024).toFixed(2);
+
+			logger.info(`Created ${fileName}: ${fileSizeMB}MB (${group.length} sponsors)`);
+
+			if (stats.size > 5 * 1024 * 1024) {
+				logger.warn(`WARNING: ${fileName} is larger than 5MB!`);
+			}
+		});
+
+		// Create lookup index
+		const lookupIndex = {
+			lastUpdated: data.lastUpdated,
+			version: data.version,
+			files: boundaries.map((boundary, index) => ({
+				file: boundary.file,
+				range: `${boundary.start}-${boundary.end}`,
+				count: groups[index].length
+			}))
+		};
+
+		const indexPath = path.join(outputDir, 'sponsors-index.json');
+		fs.writeFileSync(indexPath, JSON.stringify(lookupIndex, null, 2));
+		logger.info('Created sponsors-index.json for file lookup');
+
+		// Also write the original single file for backward compatibility
+		const originalJsonString = JSON.stringify(data, null, 2);
+		fs.writeFileSync(outputPath, originalJsonString, 'utf8');
+		logger.info(`Also created original format file: ${path.basename(outputPath)}`);
+
+		logger.info(`Successfully wrote ${data.totalSponsors} sponsors to split files`);
+		logger.info('Total files created: 4 split files + 1 original format');
 	} catch (error) {
 		logger.error('Error writing sponsor data:', error.message);
 		throw error;

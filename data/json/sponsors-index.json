@@ -1,0 +1,21 @@
+{
+  "lastUpdated": "2025-06-18",
+  "version": "2.0.0",
+  "files": [
+    {
+      "file": "sponsors-a-h.json",
+      "range": "'-F",
+      "count": 3978
+    },
+    {
+      "file": "sponsors-i-p.json",
+      "range": "F-P",
+      "count": 3978
+    },
+    {
+      "file": "sponsors-q-z.json",
+      "range": "P-Z",
+      "count": 3977
+    }
+  ]
+}

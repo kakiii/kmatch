@@ -6,21 +6,52 @@ console.log('Content script loaded');
 
 // Enhanced sponsor matcher instance
 let sponsorMatcher = null;
-// Load sponsors from JSON file with enhanced matching
+// Load sponsors from split JSON files with enhanced matching
 async function init() {
 	try {
 		console.log('Initializing KMatch content script');
 
-		// Load sponsor data
-		const response = await fetch(browser.runtime.getURL('data/json/sponsors.json'));
-		if (!response.ok) {
-			throw new Error(`Failed to load sponsor data: ${response.status}`);
-		}
+		// Load all split sponsor data files
+		const sponsorFiles = [
+			'data/json/sponsors-a-h.json',
+			'data/json/sponsors-i-p.json',
+			'data/json/sponsors-q-z.json'
+		];
 
-		const sponsorData = await response.json();
-		sponsorMatcher = new SponsorMatcher(sponsorData);
+		console.log('Loading sponsor data from split files...');
+		const responses = await Promise.all(
+			sponsorFiles.map(async file => {
+				const response = await fetch(browser.runtime.getURL(file));
+				if (!response.ok) {
+					throw new Error(`Failed to load ${file}: ${response.status}`);
+				}
+				return response.json();
+			})
+		);
 
-		console.log('KMatch initialized successfully');
+		// Combine all sponsor data
+		const combinedSponsorData = {
+			lastUpdated: responses[0].lastUpdated,
+			version: responses[0].version,
+			totalSponsors: responses.reduce((total, data) => total + data.totalSponsors, 0),
+			sourceFile: responses[0].sourceFile,
+			sponsors: {},
+			index: null // Will be rebuilt by SponsorMatcher
+		};
+
+		// Merge sponsors from all files
+		responses.forEach((data, index) => {
+			console.log(`Merging ${data.totalSponsors} sponsors from file ${index + 1}/3`);
+			Object.assign(combinedSponsorData.sponsors, data.sponsors);
+		});
+
+		console.log(
+			`Combined ${combinedSponsorData.totalSponsors} sponsors from ${responses.length} files`
+		);
+
+		sponsorMatcher = new SponsorMatcher(combinedSponsorData);
+
+		console.log('KMatch initialized successfully with split files');
 
 		// Process page immediately if it's already loaded
 		if (document.readyState === 'loading') {
@@ -30,6 +61,19 @@ async function init() {
 		}
 	} catch (error) {
 		console.error('Failed to initialize KMatch:', error);
+
+		// Fallback: Try to load from original file if split files fail
+		try {
+			console.log('Attempting fallback to original sponsors.json...');
+			const response = await fetch(browser.runtime.getURL('data/json/sponsors.json'));
+			if (response.ok) {
+				const sponsorData = await response.json();
+				sponsorMatcher = new SponsorMatcher(sponsorData);
+				console.log('KMatch initialized with fallback file');
+			}
+		} catch (fallbackError) {
+			console.error('Fallback initialization also failed:', fallbackError);
+		}
 	}
 }
 

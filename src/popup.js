@@ -1,3 +1,90 @@
+// Helper function to remove duplicated text
+function removeDuplicateText(text) {
+  if (!text) {
+    return '';
+  }
+
+  // First clean the text
+  const cleanText = text
+    .trim()
+    .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+    .replace(/\([^)]*\)/g, '') // Remove content in parentheses
+    .replace(/·.*$/, '') // Remove everything after ·
+    .replace(/,.*$/, '') // Remove everything after comma
+    .replace(/EN/g, '') // Remove 'EN' from the text
+    .replace(/KM/g, '') // Remove 'KM' from the text
+    .replace(/with verification/g, '') // Remove 'with verification'
+    .trim();
+
+  // Split into words and remove duplicates
+  const words = cleanText.split(' ');
+  const uniqueWords = [...new Set(words)];
+
+  // If we removed duplicates, use the unique words
+  if (uniqueWords.length < words.length) {
+    return uniqueWords.join(' ');
+  }
+
+  // If no word-level duplicates, check for repeated phrases
+  const halfLength = Math.floor(words.length / 2);
+  const firstHalf = words.slice(0, halfLength).join(' ').toLowerCase();
+  const secondHalf = words.slice(halfLength).join(' ').toLowerCase();
+
+  if (firstHalf === secondHalf) {
+    return words.slice(0, halfLength).join(' ');
+  }
+
+  return cleanText;
+}
+
+// Function to perform language detection
+function performLanguageDetection(text) {
+  // Your language detection logic here
+  // For example, return a dummy language based on the text length
+  return text.length > 50 ? 'English' : 'Unknown'; // Simplified example
+}
+
+// Function to perform initial language detection on job titles
+function detectLanguageFromTitles(jobs) {
+  jobs.forEach(job => {
+    const title = job.jobTitle; // Assuming job has a jobTitle property
+    const detectedLanguage = performLanguageDetection(title); // Your language detection logic
+    console.log(`Detected language for title "${title}": ${detectedLanguage}`);
+  });
+}
+
+// Placeholder function to fetch job description
+function fetchJobDescription(url) {
+  return new Promise((resolve, _reject) => {
+    // Simulate an asynchronous fetch operation
+    setTimeout(() => {
+      // Replace this with actual fetching logic
+      const fetchedDescription = 'Sample job description for ' + url; // Simulated description
+      resolve(fetchedDescription);
+    }, 1000);
+  });
+}
+
+// Function to handle job card click
+function handleJobClick(job, descriptionCache) {
+  const jobUrl = job.url; // Assuming job.url contains the job's URL
+
+  // Check if the description is already cached
+  if (descriptionCache.has(jobUrl)) {
+    const cachedDescription = descriptionCache.get(jobUrl);
+    const detectedLanguage = performLanguageDetection(cachedDescription); // Use the cached description
+    console.log(`Detected language for cached description: ${detectedLanguage}`);
+  } else {
+    // Fetch the job description (this is a placeholder for your actual fetching logic)
+    fetchJobDescription(jobUrl).then(description => {
+      // Store the fetched description in the cache
+      descriptionCache.set(jobUrl, description);
+      const detectedLanguage = performLanguageDetection(description); // Use the newly fetched description
+      console.log(`Detected language for newly fetched description: ${detectedLanguage}`);
+    });
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   try {
     // Query tabs in a more specific way
@@ -45,95 +132,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    // Helper function to remove duplicated text
-    function removeDuplicateText(text) {
-      if (!text) {
-        return '';
-      }
-
-      // First clean the text
-      const cleanText = text
-        .trim()
-        .replace(/\s+/g, ' ') // Replace multiple spaces with single space
-        .replace(/\([^)]*\)/g, '') // Remove content in parentheses
-        .replace(/·.*$/, '') // Remove everything after ·
-        .replace(/,.*$/, '') // Remove everything after comma
-        .replace(/EN/g, '') // Remove 'EN' from the text
-        .replace(/KM/g, '') // Remove 'KM' from the text
-        .replace(/with verification/g, '') // Remove 'with verification'
-        .trim();
-
-      // Split into words and remove duplicates
-      const words = cleanText.split(' ');
-      const uniqueWords = [...new Set(words)];
-
-      // If we removed duplicates, use the unique words
-      if (uniqueWords.length < words.length) {
-        return uniqueWords.join(' ');
-      }
-
-      // If no word-level duplicates, check for repeated phrases
-      const halfLength = Math.floor(words.length / 2);
-      const firstHalf = words.slice(0, halfLength).join(' ').toLowerCase();
-      const secondHalf = words.slice(halfLength).join(' ').toLowerCase();
-
-      if (firstHalf === secondHalf) {
-        return words.slice(0, halfLength).join(' ');
-      }
-
-      return cleanText;
-    }
-
     // Cache object to store job descriptions
     const descriptionCache = new Map();
-
-    // Function to perform initial language detection on job titles
-    function detectLanguageFromTitles(jobs) {
-      jobs.forEach(job => {
-        const title = job.jobTitle; // Assuming job has a jobTitle property
-        const detectedLanguage = performLanguageDetection(title); // Your language detection logic
-        console.log(`Detected language for title "${title}": ${detectedLanguage}`);
-      });
-    }
-
-    // Function to handle job card click
-    function handleJobClick(job) {
-      const jobUrl = job.url; // Assuming job.url contains the job's URL
-
-      // Check if the description is already cached
-      if (descriptionCache.has(jobUrl)) {
-        const cachedDescription = descriptionCache.get(jobUrl);
-        const detectedLanguage = performLanguageDetection(cachedDescription); // Use the cached description
-        console.log(`Detected language for cached description: ${detectedLanguage}`);
-      } else {
-        // Fetch the job description (this is a placeholder for your actual fetching logic)
-        fetchJobDescription(jobUrl).then(description => {
-          // Store the fetched description in the cache
-          descriptionCache.set(jobUrl, description);
-          const detectedLanguage = performLanguageDetection(description); // Use the newly fetched description
-          console.log(`Detected language for newly fetched description: ${detectedLanguage}`);
-        });
-      }
-    }
-
-    // Placeholder function to fetch job description
-    function fetchJobDescription(url) {
-      return new Promise((resolve, reject) => {
-        // Simulate an asynchronous fetch operation
-        setTimeout(() => {
-          // Replace this with actual fetching logic
-          const fetchedDescription = 'Sample job description for ' + url; // Simulated description
-          resolve(fetchedDescription);
-        }, 1000);
-      });
-    }
-
-    // Function to perform language detection
-    function performLanguageDetection(text) {
-      // Your language detection logic here
-      // For example, return a dummy language based on the text length
-      return text.length > 50 ? 'English' : 'Unknown'; // Simplified example
-    }
 
     // Example job data (this would typically come from your job fetching logic)
     const jobs = [
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     detectLanguageFromTitles(jobs);
 
     // Simulate a job card click
-    handleJobClick(jobs[0]); // Click on the first job
+    handleJobClick(jobs[0], descriptionCache); // Click on the first job
 
     try {
       const response = await browser.tabs.sendMessage(tab.id, { action: 'getJobsInfo' });
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           `Found ${sponsorJobs.length} out of ${response.jobs.length} jobs with visa sponsorship.<br>Scroll down the webpage to see more.`;
 
         const companyListElement = document.getElementById('company-list');
-        response.jobs.forEach((job, index) => {
+        response.jobs.forEach((job, _index) => {
           // Clean up company name
           const cleanCompanyName = job.companyName
             .split('·')[0]

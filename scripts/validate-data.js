@@ -24,7 +24,7 @@ function validateSponsorData(data) {
   // Required fields
   const requiredFields = ['lastUpdated', 'version', 'sponsors'];
   requiredFields.forEach(field => {
-    if (!data.hasOwnProperty(field)) {
+    if (!Object.prototype.hasOwnProperty.call(data, field)) {
       issues.push(`Missing required field: ${field}`);
     }
   });
@@ -93,7 +93,7 @@ function validateSponsorRecord(sponsorId, record, issues, warnings) {
   // Required fields for sponsor record
   const requiredFields = ['primaryName', 'aliases', 'normalizedName'];
   requiredFields.forEach(field => {
-    if (!record.hasOwnProperty(field)) {
+    if (!Object.prototype.hasOwnProperty.call(record, field)) {
       issues.push(`Sponsor ${sponsorId}: Missing required field '${field}'`);
     }
   });
@@ -148,9 +148,9 @@ function validateSponsorRecord(sponsorId, record, issues, warnings) {
  * @param {Object} indexes - Index object
  * @param {Object} sponsors - Sponsors object
  * @param {Array} issues - Issues array to append to
- * @param {Array} warnings - Warnings array to append to
+ * @param {Array} _warnings - Warnings array to append to
  */
-function validateIndexes(indexes, sponsors, issues, warnings) {
+function validateIndexes(indexes, sponsors, issues, _warnings) {
   logger.info('Validating search indexes...');
 
   if (!indexes || typeof indexes !== 'object') {
@@ -281,7 +281,7 @@ function checkMissingFields(sponsors) {
   const requiredFields = ['primaryName', 'aliases', 'normalizedName'];
 
   Object.entries(sponsors).forEach(([id, record]) => {
-    const missing = requiredFields.filter(field => !record.hasOwnProperty(field));
+    const missing = requiredFields.filter(field => !Object.prototype.hasOwnProperty.call(record, field));
 
     if (missing.length > 0) {
       missingFields.push({

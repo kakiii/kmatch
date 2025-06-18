@@ -10,6 +10,7 @@
     "build:dev": "node scripts/build-extension.js --dev",
     "test": "jest",
     "lint": "eslint src/ scripts/",
+    "lint:ci": "eslint src/ scripts/ --max-warnings 999",
     "lint:fix": "eslint src/ scripts/ --fix",
     "format": "prettier --write src/ scripts/",
     "clean": "rimraf dist/",

@@ -50,7 +50,7 @@ jobs:
       - name: Run ESLint
         run: |
           echo "::group::ESLint Results"
-          npm run lint
+          npm run lint:ci
           echo "::endgroup::"
           
       - name: Check Prettier formatting

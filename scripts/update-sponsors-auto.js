@@ -68,9 +68,9 @@ function validateEnvironment() {
 
 /**
  * Clean up temporary files and handle errors
- * @param {Object} tempFiles - Object with paths to temporary files
+ * @param {Object} _tempFiles - Object with paths to temporary files
  */
-async function cleanup(tempFiles = {}) {
+async function cleanup(_tempFiles = {}) {
   logger.info('Performing cleanup...');
 
   // We don't delete the CSV files as they're permanent data

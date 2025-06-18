@@ -144,7 +144,7 @@ function validateVersionConsistency(expectedVersion = null) {
  * @returns {boolean} - True if target version is valid for release
  */
 function validateVersionUpgrade(targetVersion) {
-	const { package: packageVersion, manifest: manifestVersion } = getFileVersions();
+	const { manifest: manifestVersion } = getFileVersions();
 
 	const currentVersion = manifestVersion; // manifest.json is source of truth for extensions
 

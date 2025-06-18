@@ -28,7 +28,10 @@ const BUILD_CONFIG = {
 	// Files to copy to extension root
 	rootFiles: [
 		'manifest.json',
-		'data/json/sponsors.json',
+		'data/json/sponsors-a-h.json',
+		'data/json/sponsors-i-p.json', 
+		'data/json/sponsors-q-z.json',
+		'data/json/sponsors-index.json',
 		'LICENSE',
 		'README.md',
 		'popup.html',

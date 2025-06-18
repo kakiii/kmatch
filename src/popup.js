@@ -1,3 +1,147 @@
+// Secure DOM helper functions to replace innerHTML usage
+
+/**
+ * Create welcome message using secure DOM APIs
+ * @param {HTMLElement} summaryElement - The summary container element
+ */
+function createWelcomeMessage(summaryElement) {
+	// Clear existing content
+	summaryElement.textContent = '';
+
+	const jobSites = [
+		{ name: 'LinkedIn', url: 'https://www.linkedin.com/jobs/collections/' },
+		{ name: 'Indeed', url: 'https://www.indeed.com' }
+	];
+
+	// Create welcome text
+	const welcomeText = document.createTextNode('Welcome to the KMatch extension.');
+	summaryElement.appendChild(welcomeText);
+
+	// Add line breaks
+	summaryElement.appendChild(document.createElement('br'));
+	summaryElement.appendChild(document.createElement('br'));
+
+	// Add "To use the extension, please visit" text
+	const instructionText = document.createTextNode('To use the extension, please visit ');
+	summaryElement.appendChild(instructionText);
+
+	// Create job site links
+	jobSites.forEach((site, index) => {
+		const link = document.createElement('a');
+		link.href = site.url;
+		link.target = '_blank';
+		link.textContent = site.name;
+		summaryElement.appendChild(link);
+
+		if (index < jobSites.length - 1) {
+			summaryElement.appendChild(document.createTextNode(' or '));
+		}
+	});
+
+	// Add line breaks before sponsor list
+	summaryElement.appendChild(document.createElement('br'));
+	summaryElement.appendChild(document.createElement('br'));
+
+	// Add sponsor list text and link
+	const sponsorText = document.createTextNode('Complete sponsor list:');
+	summaryElement.appendChild(sponsorText);
+	summaryElement.appendChild(document.createElement('br'));
+	summaryElement.appendChild(document.createTextNode(' '));
+
+	const sponsorLink = document.createElement('a');
+	sponsorLink.href =
+		'https://ind.nl/en/public-register-recognised-sponsors/public-register-regular-labour-and-highly-skilled-migrants';
+	sponsorLink.target = '_blank';
+	sponsorLink.textContent = sponsorLink.href;
+	summaryElement.appendChild(sponsorLink);
+}
+
+/**
+ * Create job summary using secure DOM APIs
+ * @param {number} sponsorJobsCount - Number of sponsor jobs found
+ * @param {number} totalJobsCount - Total number of jobs found
+ */
+function createJobSummary(sponsorJobsCount, totalJobsCount) {
+	const summaryElement = document.getElementById('summary');
+	summaryElement.textContent = '';
+
+	const summaryText = document.createTextNode(
+		`Found ${sponsorJobsCount} out of ${totalJobsCount} jobs with visa sponsorship.`
+	);
+	summaryElement.appendChild(summaryText);
+	summaryElement.appendChild(document.createElement('br'));
+
+	const scrollText = document.createTextNode('Scroll down the webpage to see more.');
+	summaryElement.appendChild(scrollText);
+}
+
+/**
+ * Create job element using secure DOM APIs
+ * @param {Object} job - Job data object
+ * @param {string} roleType - Cleaned job title
+ * @param {string} cleanCompanyName - Cleaned company name
+ * @returns {HTMLElement} The created job element
+ */
+function createJobElement(job, roleType, cleanCompanyName) {
+	const jobElement = document.createElement('div');
+	jobElement.className = `job-item ${job.isSponsor ? 'sponsor' : 'not-sponsor'}`;
+	jobElement.style.position = 'relative';
+
+	// Create job header div
+	const jobHeader = document.createElement('div');
+	jobHeader.className = 'job-header';
+
+	// Create company info div with flex layout
+	const companyInfo = document.createElement('div');
+	companyInfo.className = 'company-info';
+	companyInfo.style.cssText =
+		'display: flex; justify-content: space-between; align-items: center;';
+
+	// Create job title div
+	const jobTitle = document.createElement('div');
+	jobTitle.className = 'job-title';
+	jobTitle.style.cssText = `color: ${job.isSponsor ? '#000' : '#666'}; font-weight: 700; font-size: 14px;`;
+	jobTitle.textContent = roleType;
+
+	// Create badges container
+	const badgesContainer = document.createElement('div');
+	badgesContainer.style.cssText = 'display: flex; gap: 4px;';
+
+	// Add KM badge if sponsor
+	if (job.isSponsor) {
+		const kmBadge = document.createElement('span');
+		kmBadge.style.cssText =
+			'background-color: #0a66c2; color: white; padding: 1px 3px; border-radius: 2px; vertical-align: top; position: relative; top: 0px; border: 1px solid #0a66c2; font-weight: bold; font-size: 9px;';
+		kmBadge.textContent = 'KM';
+		badgesContainer.appendChild(kmBadge);
+	}
+
+	// Add EN badge if English
+	if (job.isEnglish) {
+		const enBadge = document.createElement('span');
+		enBadge.style.cssText =
+			'background-color: white; color: #0a66c2; padding: 1px 3px; border-radius: 2px; vertical-align: top; position: relative; top: 0px; border: 1px solid #0a66c2; font-weight: bold; font-size: 9px;';
+		enBadge.textContent = 'EN';
+		badgesContainer.appendChild(enBadge);
+	}
+
+	// Assemble company info
+	companyInfo.appendChild(jobTitle);
+	companyInfo.appendChild(badgesContainer);
+	jobHeader.appendChild(companyInfo);
+
+	// Create company name div
+	const companyNameDiv = document.createElement('div');
+	companyNameDiv.style.cssText = `color: ${job.isSponsor ? '#000' : '#666'}; font-size: 13px; margin-top: 4px;`;
+	companyNameDiv.textContent = cleanCompanyName;
+
+	// Assemble job element
+	jobElement.appendChild(jobHeader);
+	jobElement.appendChild(companyNameDiv);
+
+	return jobElement;
+}
+
 // Helper function to remove duplicated text
 function removeDuplicateText(text) {
 	if (!text) {
@@ -105,24 +249,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 		// Update URL check for both LinkedIn and Indeed
 		if (!tab.url || !(tab.url.includes('linkedin.com') || tab.url.includes('indeed.com'))) {
 			const summaryElement = document.getElementById('summary');
-			const jobSites = [
-				{ name: 'LinkedIn', url: 'https://www.linkedin.com/jobs/collections/' },
-				{ name: 'Indeed', url: 'https://www.indeed.com' }
-			];
 
-			const siteLinks = jobSites
-				.map(site => `<a href="${site.url}" target="_blank">${site.name}</a>`)
-				.join(' or ');
-
-			const message = `Welcome to the KMatch extension.<br><br>To use the extension, please visit ${siteLinks}`;
-			const sponsorListLink =
-				'https://ind.nl/en/public-register-recognised-sponsors/public-register-regular-labour-and-highly-skilled-migrants';
-			const linkText = 'Complete sponsor list';
-
-			summaryElement.innerHTML = `
-        ${message}<br><br>
-        ${linkText}:<br> <a href="${sponsorListLink}" target="_blank">${sponsorListLink}</a>
-      `;
+			// Create welcome message using secure DOM APIs
+			createWelcomeMessage(summaryElement);
 			return;
 		}
 
@@ -152,8 +281,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 			if (response && response.jobs) {
 				const sponsorJobs = response.jobs.filter(job => job.isSponsor);
 
-				document.getElementById('summary').innerHTML =
-					`Found ${sponsorJobs.length} out of ${response.jobs.length} jobs with visa sponsorship.<br>Scroll down the webpage to see more.`;
+				// Create job summary using secure DOM APIs
+				createJobSummary(sponsorJobs.length, response.jobs.length);
 
 				const companyListElement = document.getElementById('company-list');
 				response.jobs.forEach((job, _index) => {
@@ -169,26 +298,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 					// Clean up job title
 					const roleType = removeDuplicateText(job.jobTitle || '');
 
-					const jobElement = document.createElement('div');
-					jobElement.className = `job-item ${job.isSponsor ? 'sponsor' : 'not-sponsor'}`;
-					jobElement.style.position = 'relative';
-
-					jobElement.innerHTML = `
-    <div class="job-header">
-      <div class="company-info" style="display: flex; justify-content: space-between; align-items: center;">
-        <div class="job-title" style="color: ${job.isSponsor ? '#000' : '#666'}; font-weight: 700; font-size: 14px;">
-          ${roleType}
-        </div>
-        <div style="display: flex; gap: 4px;">
-          ${job.isSponsor ? '<span style="background-color: #0a66c2; color: white; padding: 1px 3px; border-radius: 2px; vertical-align: top; position: relative; top: 0px; border: 1px solid #0a66c2; font-weight: bold; font-size: 9px;">KM</span>' : ''}
-          ${job.isEnglish ? '<span style="background-color: white; color: #0a66c2; padding: 1px 3px; border-radius: 2px; vertical-align: top; position: relative; top: 0px; border: 1px solid #0a66c2; font-weight: bold; font-size: 9px;">EN</span>' : ''}
-        </div>
-      </div>
-    </div>
-    <div style="color: ${job.isSponsor ? '#000' : '#666'}; font-size: 13px; margin-top: 4px;">
-      ${cleanCompanyName}
-    </div>
-  `;
+					// Create job element using secure DOM APIs
+					const jobElement = createJobElement(job, roleType, cleanCompanyName);
 
 					jobElement.addEventListener('click', async () => {
 						// Get the job URL from the job object

@@ -14,25 +14,24 @@ const jobLanguageCache = new Map();
 async function init() {
   try {
     console.log('Initializing KMatch content script');
-    
+
     // Load sponsor data
     const response = await fetch(browser.runtime.getURL('data/json/sponsors.json'));
     if (!response.ok) {
       throw new Error(`Failed to load sponsor data: ${response.status}`);
     }
-    
+
     const sponsorData = await response.json();
     sponsorMatcher = new SponsorMatcher(sponsorData);
-    
+
     console.log('KMatch initialized successfully');
-    
+
     // Process page immediately if it's already loaded
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => processPage());
     } else {
       processPage();
     }
-    
   } catch (error) {
     console.error('Failed to initialize KMatch:', error);
   }
@@ -50,7 +49,7 @@ class SponsorMatcher {
     };
     this.matchCache = new Map();
     this.loaded = false;
-    
+
     if (sponsorData) {
       this.loadSponsorData(sponsorData);
     }
@@ -81,7 +80,6 @@ class SponsorMatcher {
 
       this.loaded = true;
       console.log(`Loaded ${this.sponsors.size} sponsors with enhanced matching`);
-      
     } catch (error) {
       console.error('Error loading sponsor data:', error);
       throw error;
@@ -159,13 +157,14 @@ class SponsorMatcher {
     }
 
     // Try different matching strategies
-    const result = this.checkExactMatch(trimmedName) ||
-                  this.checkNormalizedMatch(trimmedName) ||
-                  this.checkSubstringMatch(trimmedName);
+    const result =
+      this.checkExactMatch(trimmedName) ||
+      this.checkNormalizedMatch(trimmedName) ||
+      this.checkSubstringMatch(trimmedName);
 
     // Cache the result
     this.matchCache.set(cacheKey, result);
-    
+
     return result;
   }
 
@@ -186,7 +185,7 @@ class SponsorMatcher {
         if (record.primaryName && record.primaryName.toLowerCase() === lowerName) {
           return true;
         }
-        
+
         if (record.aliases) {
           for (const alias of record.aliases) {
             if (alias.toLowerCase() === lowerName) {
@@ -237,8 +236,12 @@ class SponsorMatcher {
         // Legacy format
         for (const variation of record) {
           const cleanVariation = this._normalizeCompanyName(variation);
-          if (cleanName.includes(cleanVariation) || cleanVariation.includes(cleanName) ||
-              lowerName.includes(variation.toLowerCase()) || variation.toLowerCase().includes(lowerName)) {
+          if (
+            cleanName.includes(cleanVariation) ||
+            cleanVariation.includes(cleanName) ||
+            lowerName.includes(variation.toLowerCase()) ||
+            variation.toLowerCase().includes(lowerName)
+          ) {
             return true;
           }
         }
@@ -252,8 +255,12 @@ class SponsorMatcher {
 
         for (const name of recordNames) {
           const cleanRecordName = this._normalizeCompanyName(name);
-          if (cleanName.includes(cleanRecordName) || cleanRecordName.includes(cleanName) ||
-              lowerName.includes(name.toLowerCase()) || name.toLowerCase().includes(lowerName)) {
+          if (
+            cleanName.includes(cleanRecordName) ||
+            cleanRecordName.includes(cleanName) ||
+            lowerName.includes(name.toLowerCase()) ||
+            name.toLowerCase().includes(lowerName)
+          ) {
             return true;
           }
         }

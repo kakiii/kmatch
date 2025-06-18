@@ -45,7 +45,7 @@ function saveLastHash(hash) {
     if (!fs.existsSync(CONFIG.DATA_DIR)) {
       fs.mkdirSync(CONFIG.DATA_DIR, { recursive: true });
     }
-    
+
     fs.writeFileSync(CONFIG.HASH_FILE_PATH, hash, 'utf8');
     logger.debug('Saved new hash:', hash);
   } catch (error) {
@@ -62,7 +62,7 @@ function saveLastHash(hash) {
 function parseCSV(csvContent) {
   const lines = csvContent.split('\n').filter(line => line.trim());
   const records = [];
-  
+
   // Skip header row
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i].trim();
@@ -71,10 +71,10 @@ function parseCSV(csvContent) {
       const fields = [];
       let current = '';
       let inQuotes = false;
-      
+
       for (let j = 0; j < line.length; j++) {
         const char = line[j];
-        
+
         if (char === '"') {
           if (inQuotes && line[j + 1] === '"') {
             // Escaped quote
@@ -92,10 +92,10 @@ function parseCSV(csvContent) {
           current += char;
         }
       }
-      
+
       // Add last field
       fields.push(current.trim());
-      
+
       if (fields.length >= 2) {
         records.push({
           organisation: fields[0],
@@ -104,7 +104,7 @@ function parseCSV(csvContent) {
       }
     }
   }
-  
+
   return records;
 }
 
@@ -117,18 +117,19 @@ function findLatestCSVFile() {
     if (!fs.existsSync(CONFIG.DATA_DIR)) {
       return null;
     }
-    
-    const files = fs.readdirSync(CONFIG.DATA_DIR)
+
+    const files = fs
+      .readdirSync(CONFIG.DATA_DIR)
       .filter(file => file.match(/^KMatch - \d{2}_\d{2}_\d{4}\.csv$/))
       .sort()
       .reverse();
-    
+
     if (files.length === 0) {
       return null;
     }
-    
+
     return path.join(CONFIG.DATA_DIR, files[0]);
-      } catch (error) {
+  } catch (error) {
     logger.error('Failed to find latest CSV file:', error.message);
     return null;
   }
@@ -142,29 +143,29 @@ function findLatestCSVFile() {
  */
 function compareData(oldRecords, newRecords) {
   logger.info('Performing detailed data comparison');
-  
+
   // Create maps for efficient lookup
   const oldMap = new Map();
   const newMap = new Map();
-  
+
   oldRecords.forEach(record => {
     oldMap.set(record.organisation.toLowerCase(), record);
   });
-  
+
   newRecords.forEach(record => {
     newMap.set(record.organisation.toLowerCase(), record);
   });
-  
+
   // Find additions and removals
   const added = [];
   const removed = [];
   const modified = [];
-  
+
   // Check for new organizations
   newRecords.forEach(newRecord => {
     const key = newRecord.organisation.toLowerCase();
     const oldRecord = oldMap.get(key);
-    
+
     if (!oldRecord) {
       added.push(newRecord);
     } else if (oldRecord.kvk !== newRecord.kvk) {
@@ -175,7 +176,7 @@ function compareData(oldRecords, newRecords) {
       });
     }
   });
-  
+
   // Check for removed organizations
   oldRecords.forEach(oldRecord => {
     const key = oldRecord.organisation.toLowerCase();
@@ -183,7 +184,7 @@ function compareData(oldRecords, newRecords) {
       removed.push(oldRecord);
     }
   });
-  
+
   const summary = {
     totalOld: oldRecords.length,
     totalNew: newRecords.length,
@@ -192,9 +193,9 @@ function compareData(oldRecords, newRecords) {
     modified: modified,
     hasChanges: added.length > 0 || removed.length > 0 || modified.length > 0
   };
-  
+
   logger.info(`Comparison complete: +${added.length} -${removed.length} ~${modified.length}`);
-  
+
   return summary;
 }
 
@@ -205,14 +206,16 @@ function compareData(oldRecords, newRecords) {
  */
 function generateChangeSummary(changeSummary) {
   const lines = [];
-  
+
   lines.push('## Sponsor Data Update Summary');
   lines.push('');
   lines.push(`- **Previous total**: ${changeSummary.totalOld} organizations`);
   lines.push(`- **New total**: ${changeSummary.totalNew} organizations`);
-  lines.push(`- **Net change**: ${changeSummary.totalNew - changeSummary.totalOld >= 0 ? '+' : ''}${changeSummary.totalNew - changeSummary.totalOld}`);
+  lines.push(
+    `- **Net change**: ${changeSummary.totalNew - changeSummary.totalOld >= 0 ? '+' : ''}${changeSummary.totalNew - changeSummary.totalOld}`
+  );
   lines.push('');
-  
+
   if (changeSummary.added.length > 0) {
     lines.push(`### ✅ Added Organizations (${changeSummary.added.length})`);
     changeSummary.added.slice(0, 10).forEach(record => {
@@ -223,7 +226,7 @@ function generateChangeSummary(changeSummary) {
     }
     lines.push('');
   }
-  
+
   if (changeSummary.removed.length > 0) {
     lines.push(`### ❌ Removed Organizations (${changeSummary.removed.length})`);
     changeSummary.removed.slice(0, 10).forEach(record => {
@@ -234,7 +237,7 @@ function generateChangeSummary(changeSummary) {
     }
     lines.push('');
   }
-  
+
   if (changeSummary.modified.length > 0) {
     lines.push(`### 🔄 Modified Organizations (${changeSummary.modified.length})`);
     changeSummary.modified.slice(0, 10).forEach(record => {
@@ -245,10 +248,12 @@ function generateChangeSummary(changeSummary) {
     }
     lines.push('');
   }
-  
+
   lines.push('---');
-  lines.push('*This update was generated automatically by the KMatch sponsor data automation system.*');
-  
+  lines.push(
+    '*This update was generated automatically by the KMatch sponsor data automation system.*'
+  );
+
   return lines.join('\n');
 }
 
@@ -260,13 +265,13 @@ function generateChangeSummary(changeSummary) {
 async function checkForChanges(newCSVContent) {
   try {
     logger.info('Starting change detection process');
-    
+
     const newHash = generateHash(newCSVContent);
     const lastHash = loadLastHash();
-    
+
     logger.debug('New hash:', newHash);
     logger.debug('Last hash:', lastHash);
-    
+
     // Quick hash comparison first
     if (lastHash === newHash) {
       logger.info('No changes detected (hash match)');
@@ -275,17 +280,17 @@ async function checkForChanges(newCSVContent) {
         newHash: newHash
       };
     }
-    
+
     logger.info('Hash difference detected, performing detailed comparison');
-    
+
     // Parse new data
     const newRecords = parseCSV(newCSVContent);
     logger.debug(`Parsed ${newRecords.length} new records`);
-    
+
     // Get old data for comparison
     let oldRecords = [];
     const latestCSVFile = findLatestCSVFile();
-    
+
     if (latestCSVFile && fs.existsSync(latestCSVFile)) {
       const oldCSVContent = fs.readFileSync(latestCSVFile, 'utf8');
       oldRecords = parseCSV(oldCSVContent);
@@ -293,10 +298,10 @@ async function checkForChanges(newCSVContent) {
     } else {
       logger.info('No previous CSV file found - treating as initial data');
     }
-    
+
     // Perform detailed comparison
     const changeSummary = compareData(oldRecords, newRecords);
-    
+
     if (!changeSummary.hasChanges) {
       logger.info('No actual changes detected despite hash difference');
       return {
@@ -305,15 +310,14 @@ async function checkForChanges(newCSVContent) {
         newHash: newHash
       };
     }
-    
+
     logger.info('✅ Changes detected in sponsor data');
-    
+
     return {
       hasChanges: true,
       changeSummary: changeSummary,
       newHash: newHash
     };
-    
   } catch (error) {
     logger.error('Change detection failed:', error.message);
     throw new Error(`Failed to check for changes: ${error.message}`);
@@ -327,19 +331,18 @@ async function main() {
   try {
     // This is mainly for testing - in production, this will be called by the main automation script
     const latestCSVFile = findLatestCSVFile();
-    
+
     if (!latestCSVFile) {
       logger.error('No CSV files found for testing');
       return;
     }
-    
+
     logger.info(`Testing change detection with: ${path.basename(latestCSVFile)}`);
-    
+
     const csvContent = fs.readFileSync(latestCSVFile, 'utf8');
     const result = await checkForChanges(csvContent);
-    
+
     logger.info('Change detection result:', result);
-    
   } catch (error) {
     logger.error('Test failed:', error.message);
     process.exit(1);
@@ -361,4 +364,4 @@ module.exports = {
 // Run if called directly
 if (require.main === module) {
   main();
-} 
+}

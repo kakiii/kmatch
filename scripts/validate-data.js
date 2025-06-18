@@ -12,15 +12,15 @@ const logger = require('./logger');
 function validateSponsorData(data) {
   const issues = [];
   const warnings = [];
-  
+
   logger.info('Validating sponsor data structure...');
-  
+
   // Check top-level structure
   if (!data || typeof data !== 'object') {
     issues.push('Data is not a valid object');
     return { valid: false, issues, warnings };
   }
-  
+
   // Required fields
   const requiredFields = ['lastUpdated', 'version', 'sponsors'];
   requiredFields.forEach(field => {
@@ -28,7 +28,7 @@ function validateSponsorData(data) {
       issues.push(`Missing required field: ${field}`);
     }
   });
-  
+
   // Validate lastUpdated
   if (data.lastUpdated) {
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
@@ -36,7 +36,7 @@ function validateSponsorData(data) {
       issues.push('lastUpdated field must be in YYYY-MM-DD format');
     }
   }
-  
+
   // Validate version
   if (data.version) {
     const versionRegex = /^\d+\.\d+\.\d+$/;
@@ -44,7 +44,7 @@ function validateSponsorData(data) {
       warnings.push('Version field should follow semantic versioning (e.g., 2.0.0)');
     }
   }
-  
+
   // Validate sponsors object
   if (data.sponsors) {
     if (typeof data.sponsors !== 'object') {
@@ -52,28 +52,28 @@ function validateSponsorData(data) {
     } else {
       const sponsorCount = Object.keys(data.sponsors).length;
       logger.info(`Validating ${sponsorCount} sponsor records...`);
-      
+
       if (sponsorCount === 0) {
         warnings.push('No sponsors found in data');
       }
-      
+
       // Validate each sponsor record
       Object.entries(data.sponsors).forEach(([sponsorId, record]) => {
         validateSponsorRecord(sponsorId, record, issues, warnings);
       });
     }
   }
-  
+
   // Validate indexes if present
   if (data.index) {
     validateIndexes(data.index, data.sponsors, issues, warnings);
   }
-  
+
   const valid = issues.length === 0;
-  
+
   logger.info(`Validation complete: ${valid ? 'VALID' : 'INVALID'}`);
   logger.info(`Issues: ${issues.length}, Warnings: ${warnings.length}`);
-  
+
   return { valid, issues, warnings };
 }
 
@@ -89,7 +89,7 @@ function validateSponsorRecord(sponsorId, record, issues, warnings) {
     issues.push(`Sponsor ${sponsorId}: Record is not a valid object`);
     return;
   }
-  
+
   // Required fields for sponsor record
   const requiredFields = ['primaryName', 'aliases', 'normalizedName'];
   requiredFields.forEach(field => {
@@ -97,14 +97,14 @@ function validateSponsorRecord(sponsorId, record, issues, warnings) {
       issues.push(`Sponsor ${sponsorId}: Missing required field '${field}'`);
     }
   });
-  
+
   // Validate primaryName
   if (record.primaryName) {
     if (typeof record.primaryName !== 'string' || record.primaryName.trim().length === 0) {
       issues.push(`Sponsor ${sponsorId}: primaryName must be a non-empty string`);
     }
   }
-  
+
   // Validate aliases
   if (record.aliases) {
     if (!Array.isArray(record.aliases)) {
@@ -119,7 +119,7 @@ function validateSponsorRecord(sponsorId, record, issues, warnings) {
       });
     }
   }
-  
+
   // Validate normalizedName
   if (record.normalizedName) {
     if (typeof record.normalizedName !== 'string') {
@@ -128,16 +128,16 @@ function validateSponsorRecord(sponsorId, record, issues, warnings) {
       issues.push(`Sponsor ${sponsorId}: normalizedName should not contain spaces`);
     }
   }
-  
+
   // Validate optional fields
   if (record.firstWords && !Array.isArray(record.firstWords)) {
     issues.push(`Sponsor ${sponsorId}: firstWords must be an array`);
   }
-  
+
   if (record.searchTokens && !Array.isArray(record.searchTokens)) {
     issues.push(`Sponsor ${sponsorId}: searchTokens must be an array`);
   }
-  
+
   if (record.variations && !Array.isArray(record.variations)) {
     issues.push(`Sponsor ${sponsorId}: variations must be an array`);
   }
@@ -152,14 +152,14 @@ function validateSponsorRecord(sponsorId, record, issues, warnings) {
  */
 function validateIndexes(indexes, sponsors, issues, warnings) {
   logger.info('Validating search indexes...');
-  
+
   if (!indexes || typeof indexes !== 'object') {
     issues.push('Index must be an object');
     return;
   }
-  
+
   const sponsorIds = new Set(Object.keys(sponsors || {}));
-  
+
   // Validate byFirstWord index
   if (indexes.byFirstWord) {
     if (typeof indexes.byFirstWord !== 'object') {
@@ -178,7 +178,7 @@ function validateIndexes(indexes, sponsors, issues, warnings) {
       });
     }
   }
-  
+
   // Validate byNormalizedName index
   if (indexes.byNormalizedName) {
     if (typeof indexes.byNormalizedName !== 'object') {
@@ -191,7 +191,7 @@ function validateIndexes(indexes, sponsors, issues, warnings) {
       });
     }
   }
-  
+
   // Validate bySearchToken index
   if (indexes.bySearchToken) {
     if (typeof indexes.bySearchToken !== 'object') {
@@ -219,23 +219,23 @@ function validateIndexes(indexes, sponsors, issues, warnings) {
  */
 function findDuplicates(sponsors) {
   logger.info('Checking for duplicate sponsors...');
-  
+
   const duplicates = [];
   const nameToIds = new Map();
   const normalizedToIds = new Map();
-  
+
   // Group by primary name and normalized name
   Object.entries(sponsors).forEach(([id, record]) => {
     const primaryName = record.primaryName?.toLowerCase();
     const normalizedName = record.normalizedName;
-    
+
     if (primaryName) {
       if (!nameToIds.has(primaryName)) {
         nameToIds.set(primaryName, []);
       }
       nameToIds.get(primaryName).push({ id, record });
     }
-    
+
     if (normalizedName) {
       if (!normalizedToIds.has(normalizedName)) {
         normalizedToIds.set(normalizedName, []);
@@ -243,7 +243,7 @@ function findDuplicates(sponsors) {
       normalizedToIds.get(normalizedName).push({ id, record });
     }
   });
-  
+
   // Find groups with multiple entries
   nameToIds.forEach((group, name) => {
     if (group.length > 1) {
@@ -254,7 +254,7 @@ function findDuplicates(sponsors) {
       });
     }
   });
-  
+
   normalizedToIds.forEach((group, normalizedName) => {
     if (group.length > 1) {
       duplicates.push({
@@ -264,7 +264,7 @@ function findDuplicates(sponsors) {
       });
     }
   });
-  
+
   logger.info(`Found ${duplicates.length} potential duplicate groups`);
   return duplicates;
 }
@@ -276,13 +276,13 @@ function findDuplicates(sponsors) {
  */
 function checkMissingFields(sponsors) {
   logger.info('Checking for missing required fields...');
-  
+
   const missingFields = [];
   const requiredFields = ['primaryName', 'aliases', 'normalizedName'];
-  
+
   Object.entries(sponsors).forEach(([id, record]) => {
     const missing = requiredFields.filter(field => !record.hasOwnProperty(field));
-    
+
     if (missing.length > 0) {
       missingFields.push({
         sponsorId: id,
@@ -291,7 +291,7 @@ function checkMissingFields(sponsors) {
       });
     }
   });
-  
+
   logger.info(`Found ${missingFields.length} sponsors with missing fields`);
   return missingFields;
 }
@@ -306,17 +306,17 @@ function checkMissingFields(sponsors) {
 function generateValidationReport(validation, duplicates, missingFields) {
   let report = `# Data Validation Report\n\n`;
   report += `Generated: ${new Date().toISOString()}\n\n`;
-  
+
   // Overall status
   report += `## Overall Status: ${validation.valid ? '✅ VALID' : '❌ INVALID'}\n\n`;
-  
+
   // Summary
   report += `## Summary\n`;
   report += `- **Issues**: ${validation.issues.length}\n`;
   report += `- **Warnings**: ${validation.warnings.length}\n`;
   report += `- **Duplicate Groups**: ${duplicates.length}\n`;
   report += `- **Missing Fields**: ${missingFields.length}\n\n`;
-  
+
   // Issues
   if (validation.issues.length > 0) {
     report += `## Issues (${validation.issues.length})\n\n`;
@@ -325,7 +325,7 @@ function generateValidationReport(validation, duplicates, missingFields) {
     });
     report += `\n`;
   }
-  
+
   // Warnings
   if (validation.warnings.length > 0) {
     report += `## Warnings (${validation.warnings.length})\n\n`;
@@ -334,7 +334,7 @@ function generateValidationReport(validation, duplicates, missingFields) {
     });
     report += `\n`;
   }
-  
+
   // Duplicates
   if (duplicates.length > 0) {
     report += `## Potential Duplicates (${duplicates.length})\n\n`;
@@ -346,7 +346,7 @@ function generateValidationReport(validation, duplicates, missingFields) {
       report += `\n`;
     });
   }
-  
+
   // Missing fields
   if (missingFields.length > 0) {
     report += `## Missing Required Fields (${missingFields.length})\n\n`;
@@ -355,7 +355,7 @@ function generateValidationReport(validation, duplicates, missingFields) {
     });
     report += `\n`;
   }
-  
+
   return report;
 }
 
@@ -363,37 +363,41 @@ function generateValidationReport(validation, duplicates, missingFields) {
 async function main() {
   try {
     const CONFIG = require('./config');
-    
+
     logger.info('Starting data validation...');
     logger.info(`Sponsors file: ${CONFIG.SPONSORS_JSON_PATH}`);
-    
+
     if (!fs.existsSync(CONFIG.SPONSORS_JSON_PATH)) {
       throw new Error(`Sponsors file not found: ${CONFIG.SPONSORS_JSON_PATH}`);
     }
-    
+
     // Load and parse data
     const rawData = fs.readFileSync(CONFIG.SPONSORS_JSON_PATH, 'utf8');
     const data = JSON.parse(rawData);
-    
+
     logger.info(`Data loaded successfully (${(rawData.length / 1024).toFixed(2)} KB)`);
-    
+
     // Perform validations
     const validation = validateSponsorData(data);
     const duplicates = data.sponsors ? findDuplicates(data.sponsors) : [];
     const missingFields = data.sponsors ? checkMissingFields(data.sponsors) : [];
-    
+
     // Generate report
     const report = generateValidationReport(validation, duplicates, missingFields);
-    
+
     logger.info('\n' + '='.repeat(50));
     logger.info(report);
     logger.info('='.repeat(50));
-    
+
     // Save report
-    const reportPath = path.join(__dirname, '..', `validation_report_${new Date().toISOString().split('T')[0]}.md`);
+    const reportPath = path.join(
+      __dirname,
+      '..',
+      `validation_report_${new Date().toISOString().split('T')[0]}.md`
+    );
     fs.writeFileSync(reportPath, report);
     logger.info(`📄 Report saved to: ${path.basename(reportPath)}`);
-    
+
     // Exit with appropriate code
     if (!validation.valid) {
       logger.info('\n❌ Data validation failed!');
@@ -401,7 +405,6 @@ async function main() {
     } else {
       logger.info('\n✅ Data validation passed!');
     }
-    
   } catch (error) {
     logger.error('\n❌ Error during validation:', error.message);
     process.exit(1);
@@ -418,4 +421,4 @@ module.exports = {
   findDuplicates,
   checkMissingFields,
   generateValidationReport
-}; 
+};

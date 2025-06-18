@@ -1,6 +1,6 @@
 /**
  * Enhanced Sponsor Matcher
- * 
+ *
  * Provides sophisticated company name matching using multiple strategies:
  * - Exact matching
  * - Fuzzy matching with Levenshtein distance
@@ -10,7 +10,11 @@
  */
 
 const levenshtein = require('fast-levenshtein');
-const { normalizeCompanyName, extractFirstWords, tokenizeCompanyName } = require('./company-normalizer');
+const {
+  normalizeCompanyName,
+  extractFirstWords,
+  tokenizeCompanyName
+} = require('./company-normalizer');
 
 class SponsorMatcher {
   constructor(sponsorData = null) {
@@ -23,7 +27,7 @@ class SponsorMatcher {
     };
     this.matchCache = new Map();
     this.loaded = false;
-    
+
     if (sponsorData) {
       this.loadSponsorData(sponsorData);
     }
@@ -36,7 +40,7 @@ class SponsorMatcher {
   loadSponsorData(sponsorData) {
     try {
       console.log('Loading sponsor data...');
-      
+
       if (!sponsorData || !sponsorData.sponsors) {
         throw new Error('Invalid sponsor data format');
       }
@@ -60,7 +64,6 @@ class SponsorMatcher {
 
       this.loaded = true;
       console.log(`Loaded ${this.sponsors.size} sponsors with indexes`);
-      
     } catch (error) {
       console.error('Error loading sponsor data:', error);
       throw error;
@@ -172,14 +175,15 @@ class SponsorMatcher {
     }
 
     // Try different matching strategies in order of performance
-    const result = this.checkExactMatch(trimmedName) ||
-                  this.checkNormalizedMatch(trimmedName) ||
-                  this.checkTokenMatch(trimmedName) ||
-                  this.checkFuzzyMatch(trimmedName, 0.85);
+    const result =
+      this.checkExactMatch(trimmedName) ||
+      this.checkNormalizedMatch(trimmedName) ||
+      this.checkTokenMatch(trimmedName) ||
+      this.checkFuzzyMatch(trimmedName, 0.85);
 
     // Cache the result
     this.matchCache.set(cacheKey, result);
-    
+
     return result;
   }
 
@@ -295,11 +299,13 @@ class SponsorMatcher {
    * @private
    */
   _tokenOverlapMatch(queryTokens, record) {
-    const sponsorTokens = new Set([
-      ...(record.searchTokens || []),
-      ...(record.firstWords || []),
-      ...tokenizeCompanyName(record.primaryName || '')
-    ].map(token => token.toLowerCase()));
+    const sponsorTokens = new Set(
+      [
+        ...(record.searchTokens || []),
+        ...(record.firstWords || []),
+        ...tokenizeCompanyName(record.primaryName || '')
+      ].map(token => token.toLowerCase())
+    );
 
     if (sponsorTokens.size === 0) {
       return false;
@@ -312,7 +318,7 @@ class SponsorMatcher {
 
     // Require at least 60% overlap for longer names, 80% for shorter names
     const threshold = minTokens >= 3 ? 0.6 : 0.8;
-    
+
     return overlapRatio >= threshold;
   }
 
@@ -373,7 +379,7 @@ class SponsorMatcher {
     // Extract potential domain from company name
     const normalized = normalizeCompanyName(companyName);
     const words = normalized.split(/\s+/).filter(word => word.length > 2);
-    
+
     if (words.length === 0) {
       return false;
     }
@@ -406,7 +412,7 @@ class SponsorMatcher {
     }
 
     const trimmedName = companyName.trim();
-    
+
     const checks = {
       exact: this.checkExactMatch(trimmedName),
       normalized: this.checkNormalizedMatch(trimmedName),
@@ -416,7 +422,9 @@ class SponsorMatcher {
     };
 
     const matched = Object.values(checks).some(result => result);
-    const matchedTypes = Object.entries(checks).filter(([, result]) => result).map(([type]) => type);
+    const matchedTypes = Object.entries(checks)
+      .filter(([, result]) => result)
+      .map(([type]) => type);
 
     return {
       matched,
@@ -454,4 +462,4 @@ class SponsorMatcher {
   }
 }
 
-module.exports = SponsorMatcher; 
+module.exports = SponsorMatcher;

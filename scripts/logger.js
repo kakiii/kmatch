@@ -2,11 +2,11 @@
 
 /**
  * Shared logger utility for KMatch automation system
- * 
+ *
  * USAGE GUIDELINES:
  * - Use logger for: technical progress, debugging, error handling, internal state
  * - Use console for: user banners, final summaries, visual formatting, direct user communication
- * 
+ *
  * Examples:
  * - logger.info('Processing 150 records...') // Technical progress
  * - console.log('🎉 AUTOMATION COMPLETED!') // User-facing banner
@@ -42,11 +42,11 @@ class Logger {
    */
   static get COLORS() {
     return {
-      debug: '\x1b[36m',    // Cyan
-      info: '\x1b[32m',     // Green
-      warning: '\x1b[33m',  // Yellow
-      error: '\x1b[31m',    // Red
-      reset: '\x1b[0m'      // Reset
+      debug: '\x1b[36m', // Cyan
+      info: '\x1b[32m', // Green
+      warning: '\x1b[33m', // Yellow
+      error: '\x1b[31m', // Red
+      reset: '\x1b[0m' // Reset
     };
   }
 
@@ -92,7 +92,7 @@ class Logger {
     const timestamp = this.getTimestamp();
     const levelUpper = level.toUpperCase();
     const color = Logger.COLORS[level] || Logger.COLORS.reset;
-    
+
     const coloredLevel = this.colorize(`[${levelUpper}]`, color);
     const logMessage = `[${timestamp}] ${coloredLevel} ${message}`;
 
@@ -148,4 +148,4 @@ class Logger {
 const logger = new Logger();
 
 module.exports = logger;
-module.exports.Logger = Logger; 
+module.exports.Logger = Logger;

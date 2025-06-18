@@ -1,6 +1,6 @@
 /**
  * Company Name Normalizer Utility
- * 
+ *
  * Provides functions for normalizing, tokenizing, and generating variations
  * of company names to improve sponsor matching accuracy.
  */
@@ -16,16 +16,21 @@ function normalizeCompanyName(name) {
     return '';
   }
 
-  return name
-    .toLowerCase()
-    .trim()
-    // Remove common business suffixes (case insensitive)
-    .replace(/\b(bv|b\.?v\.?|ltd|limited|inc|corp|corporation|llc|l\.?l\.?c\.?|gmbh|sa|nv|n\.?v\.?|plc|pty|co|company|group|holding|international|intl)\b\.?/gi, '')
-    // Remove special characters and punctuation
-    .replace(/[^\w\s]/g, '')
-    // Replace multiple spaces with single space
-    .replace(/\s+/g, '')
-    .trim();
+  return (
+    name
+      .toLowerCase()
+      .trim()
+      // Remove common business suffixes (case insensitive)
+      .replace(
+        /\b(bv|b\.?v\.?|ltd|limited|inc|corp|corporation|llc|l\.?l\.?c\.?|gmbh|sa|nv|n\.?v\.?|plc|pty|co|company|group|holding|international|intl)\b\.?/gi,
+        ''
+      )
+      // Remove special characters and punctuation
+      .replace(/[^\w\s]/g, '')
+      // Replace multiple spaces with single space
+      .replace(/\s+/g, '')
+      .trim()
+  );
 }
 
 /**
@@ -41,31 +46,61 @@ function generateAliases(primaryName) {
 
   const aliases = new Set();
   const trimmedName = primaryName.trim();
-  
+
   // Add original name
   aliases.add(trimmedName);
 
   // Common business suffixes to work with
   const suffixes = [
-    'BV', 'B.V.', 'B.V', 'bv', 'b.v.', 'b.v',
-    'Ltd', 'Limited', 'ltd', 'limited',
-    'Inc', 'Incorporated', 'inc', 'incorporated',
-    'Corp', 'Corporation', 'corp', 'corporation',
-    'LLC', 'L.L.C.', 'llc', 'l.l.c.',
-    'GmbH', 'gmbh',
-    'SA', 'sa',
-    'NV', 'N.V.', 'N.V', 'nv', 'n.v.', 'n.v',
-    'PLC', 'plc',
-    'Co', 'Company', 'co', 'company',
-    'Group', 'group',
-    'Holding', 'holding'
+    'BV',
+    'B.V.',
+    'B.V',
+    'bv',
+    'b.v.',
+    'b.v',
+    'Ltd',
+    'Limited',
+    'ltd',
+    'limited',
+    'Inc',
+    'Incorporated',
+    'inc',
+    'incorporated',
+    'Corp',
+    'Corporation',
+    'corp',
+    'corporation',
+    'LLC',
+    'L.L.C.',
+    'llc',
+    'l.l.c.',
+    'GmbH',
+    'gmbh',
+    'SA',
+    'sa',
+    'NV',
+    'N.V.',
+    'N.V',
+    'nv',
+    'n.v.',
+    'n.v',
+    'PLC',
+    'plc',
+    'Co',
+    'Company',
+    'co',
+    'company',
+    'Group',
+    'group',
+    'Holding',
+    'holding'
   ];
 
   // Remove existing suffix and add variations
   let baseName = trimmedName;
   const suffixPattern = new RegExp(`\\s+(${suffixes.join('|').replace(/\./g, '\\.')})$`, 'i');
   const match = trimmedName.match(suffixPattern);
-  
+
   if (match) {
     baseName = trimmedName.replace(suffixPattern, '').trim();
     aliases.add(baseName);
@@ -78,8 +113,18 @@ function generateAliases(primaryName) {
   });
 
   // Add without punctuation
-  aliases.add(trimmedName.replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim());
-  aliases.add(baseName.replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim());
+  aliases.add(
+    trimmedName
+      .replace(/[^\w\s]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+  );
+  aliases.add(
+    baseName
+      .replace(/[^\w\s]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+  );
 
   // Add with different spacing around punctuation
   aliases.add(trimmedName.replace(/\./g, '. ').replace(/\s+/g, ' ').trim());
@@ -121,14 +166,14 @@ function extractDomain(companyName) {
 
   // Normalize the name first
   const normalized = normalizeCompanyName(companyName);
-  
+
   if (normalized.length < 2) {
     return null;
   }
 
   // For very short names or single words, add .com
   const words = normalized.split(/\s+/).filter(word => word.length > 0);
-  
+
   if (words.length === 1 && words[0].length >= 3) {
     return `${words[0]}.com`;
   }
@@ -139,7 +184,7 @@ function extractDomain(companyName) {
     if (words[0].length >= 3) {
       return `${words[0]}.com`;
     }
-    
+
     // Try first two words combined
     if (words[0].length + words[1].length >= 4) {
       return `${words[0]}${words[1]}.com`;
@@ -161,7 +206,7 @@ function tokenizeCompanyName(name) {
   }
 
   const tokens = new Set();
-  
+
   // Basic word tokenization
   const words = name
     .toLowerCase()
@@ -171,7 +216,7 @@ function tokenizeCompanyName(name) {
 
   words.forEach(word => {
     tokens.add(word);
-    
+
     // Remove common business suffixes from tokens
     const cleanWord = word.replace(/^(bv|ltd|inc|corp|llc|gmbh|sa|nv|plc|co)$/, '');
     if (cleanWord && cleanWord !== word && cleanWord.length > 1) {
@@ -209,9 +254,12 @@ function extractFirstWords(name) {
   }
 
   const firstWords = new Set();
-  
+
   // Get first word of the entire name
-  const allWords = name.toLowerCase().split(/\s+/).filter(word => word.length > 0);
+  const allWords = name
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(word => word.length > 0);
   if (allWords.length > 0) {
     const firstWord = allWords[0].replace(/[^\w]/g, '');
     if (firstWord.length > 0) {
@@ -288,7 +336,7 @@ function areNamesEquivalent(name1, name2) {
   // Normalized match
   const norm1 = normalizeCompanyName(name1);
   const norm2 = normalizeCompanyName(name2);
-  
+
   if (norm1 && norm2 && norm1 === norm2) {
     return true;
   }
@@ -305,7 +353,7 @@ function areNamesEquivalent(name1, name2) {
   // Check aliases
   const aliases1 = generateAliases(name1);
   const aliases2 = generateAliases(name2);
-  
+
   for (const alias1 of aliases1) {
     for (const alias2 of aliases2) {
       if (alias1.toLowerCase() === alias2.toLowerCase()) {
@@ -326,4 +374,4 @@ module.exports = {
   extractFirstWords,
   generateCompanyRecord,
   areNamesEquivalent
-}; 
+};

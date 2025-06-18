@@ -142,12 +142,15 @@ jobs:
                   done
 
                   # Check sponsor data
-                  if [ ! -f "dist/data/json/sponsors.json" ]; then
-                    echo "❌ Missing sponsor data file"
-                    exit 1
-                  else
-                    echo "✅ Found: sponsors.json"
-                  fi
+                  sponsor_files=("dist/data/json/sponsors-a-h.json" "dist/data/json/sponsors-i-p.json" "dist/data/json/sponsors-q-z.json" "dist/data/json/sponsors-index.json")
+                  for file in "${sponsor_files[@]}"; do
+                    if [ ! -f "$file" ]; then
+                      echo "❌ Missing sponsor data file: $file"
+                      exit 1
+                    else
+                      echo "✅ Found: $file"
+                    fi
+                  done
                   echo "::endgroup::"
 
             - name: Run data validation

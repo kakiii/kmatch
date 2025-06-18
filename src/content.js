@@ -1015,3 +1015,6 @@ document.addEventListener('click', event => {
     highlightDutchContent(jobDescription);
   }, 500);
 });
+
+// Initialize the content script
+init();

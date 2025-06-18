@@ -5,6 +5,9 @@
 node_modules
 dist/
 
+# automation
+data/.last-update-hash
+
 # vscode
 .vscode
 

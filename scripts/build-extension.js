@@ -284,7 +284,7 @@ function validateManifest() {
 
     // Validate file references
     if (manifest.content_scripts) {
-      manifest.content_scripts.forEach((script, index) => {
+      manifest.content_scripts.forEach((script, _index) => {
         if (script.js) {
           script.js.forEach(jsFile => {
             const filePath = path.join(BUILD_CONFIG.distDir, jsFile);
@@ -443,7 +443,7 @@ async function runProductionBuild(skipSponsors = false) {
     } else {
       // For production files, copy directly to dist
       await copyExtensionFiles(false, skipSponsors);
-      const manifest = validateManifest();
+      validateManifest();
       logger.info('\n🎉 Production build completed successfully!');
       logger.info(`📁 Extension files ready in: ${BUILD_CONFIG.distDir}/`);
       logger.info('🦊 Ready for Firefox production deployment!');

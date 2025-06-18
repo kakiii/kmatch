@@ -6,10 +6,6 @@ console.log('Content script loaded');
 
 // Enhanced sponsor matcher instance
 let sponsorMatcher = null;
-
-// Cache for storing language detection results to avoid redundant processing
-const jobLanguageCache = new Map();
-
 // Load sponsors from JSON file with enhanced matching
 async function init() {
   try {
@@ -487,7 +483,9 @@ function checkIfSponsor(companyName) {
   }
 
   // Fallback to basic checking if enhanced matcher not available
-  if (!companyName) return false;
+  if (!companyName) {
+    return false;
+  }
 
   console.warn('Enhanced sponsor matcher not available, using fallback method');
   return false;
@@ -579,7 +577,9 @@ function processLanguages() {
   );
 
   cards.forEach(card => {
-    if (card.dataset.processed) return;
+    if (card.dataset.processed) {
+      return;
+    }
     card.dataset.processed = 'true';
 
     // Updated title selectors for Indeed
@@ -791,7 +791,7 @@ function checkEnglishWords(text) {
     'stafafdelingen'
   ];
 
-  const text_lower = text.toLowerCase().replace(/[\s\-\/]+/g, '');
+  const text_lower = text.toLowerCase().replace(/[\s-]+/g, '');
 
   if (dutchPatterns.some(pattern => text_lower.includes(pattern))) {
     return false;
@@ -825,7 +825,9 @@ document.addEventListener('scroll', () => {
 let observerTimeout;
 const observer = new MutationObserver(mutations => {
   if (mutations.some(mutation => mutation.addedNodes.length > 0)) {
-    if (observerTimeout) clearTimeout(observerTimeout);
+    if (observerTimeout) {
+      clearTimeout(observerTimeout);
+    }
     observerTimeout = setTimeout(() => {
       processPage();
     }, 100);
@@ -845,7 +847,9 @@ processPage();
 // Process on scroll (debounced)
 let scrollTimeout;
 document.addEventListener('scroll', () => {
-  if (scrollTimeout) clearTimeout(scrollTimeout);
+  if (scrollTimeout) {
+    clearTimeout(scrollTimeout);
+  }
   scrollTimeout = setTimeout(() => {
     processLanguages();
   }, 100);
@@ -853,7 +857,6 @@ document.addEventListener('scroll', () => {
 
 // Add this new function
 function markViewedJobs() {
-  const currentUrl = window.location.href;
   const cards = document.querySelectorAll(
     [
       // LinkedIn selectors
@@ -935,7 +938,9 @@ new MutationObserver(() => {
 
 // Function to check and highlight Dutch-related content
 function highlightDutchContent(element) {
-  if (!element) return;
+  if (!element) {
+    return;
+  }
 
   const text = element.textContent.toLowerCase();
   const preferencesContainer = document.querySelector('.job-details-preferences-and-skills');
@@ -1016,7 +1021,7 @@ function startObserving() {
 // Initialize observer and add click handler
 document.addEventListener('DOMContentLoaded', startObserving);
 
-document.addEventListener('click', event => {
+document.addEventListener('click', () => {
   setTimeout(() => {
     const jobDescription = document.querySelector('#job-details div p');
     highlightDutchContent(jobDescription);

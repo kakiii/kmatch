@@ -170,7 +170,7 @@ function writeSponsorData(data, outputPath) {
     );
     logger.info(`File size: ${(jsonString.length / 1024).toFixed(2)} KB`);
   } catch (error) {
-    logger.error(`Error writing sponsor data:`, error.message);
+    logger.error('Error writing sponsor data:', error.message);
     throw error;
   }
 }
@@ -192,7 +192,9 @@ function generateUniqueId(companyName) {
  * @returns {string} Normalized name
  */
 function normalizeCompanyName(name) {
-  if (!name) return '';
+  if (!name) {
+    return '';
+  }
 
   return name
     .toLowerCase()
@@ -237,7 +239,9 @@ function generateBasicAliases(primaryName) {
  * @returns {Array} Array of first words (normalized)
  */
 function extractFirstWords(name) {
-  if (!name) return [];
+  if (!name) {
+    return [];
+  }
 
   const words = name
     .toLowerCase()
@@ -249,9 +253,8 @@ function extractFirstWords(name) {
   if (words.length > 0) {
     firstWords.add(words[0].replace(/[^\w]/g, ''));
   }
-
   // Add first word of each significant part (after common separators)
-  const parts = name.split(/[,\-\|]/);
+  const parts = name.split(/[,-|]/);
   parts.forEach(part => {
     const partWords = part.trim().toLowerCase().split(/\s+/);
     if (partWords.length > 0 && partWords[0].length > 1) {

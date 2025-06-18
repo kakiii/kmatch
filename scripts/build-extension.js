@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const archiver = require('archiver');
+const logger = require('./logger');
 
 // Import sponsor processing functions
 const {
@@ -77,7 +78,7 @@ const BUILD_CONFIG = {
  * @param {string} targetDir - Target directory
  */
 function copyFiles(files, sourceDir = '.', targetDir = BUILD_CONFIG.distDir) {
-  console.log(`Copying files from ${sourceDir} to ${targetDir}...`);
+  logger.info(`Copying files from ${sourceDir} to ${targetDir}...`);
   
   files.forEach(file => {
     const sourcePath = path.join(sourceDir, file);
@@ -92,13 +93,13 @@ function copyFiles(files, sourceDir = '.', targetDir = BUILD_CONFIG.distDir) {
         }
         
         fs.copyFileSync(sourcePath, targetPath);
-        console.log(`✓ Copied: ${file}`);
+        logger.info(`✓ Copied: ${file}`);
       } catch (error) {
-        console.error(`✗ Failed to copy ${file}:`, error.message);
+        logger.error(`✗ Failed to copy ${file}:`, error.message);
         throw error;
       }
     } else {
-      console.warn(`⚠ File not found: ${sourcePath}`);
+      logger.warn(`⚠ File not found: ${sourcePath}`);
     }
   });
 }
@@ -110,19 +111,19 @@ function copyFiles(files, sourceDir = '.', targetDir = BUILD_CONFIG.distDir) {
  */
 async function updateSponsors(skipSponsors = false) {
   if (skipSponsors) {
-    console.log('⏭ Skipping sponsor update (--skip-sponsors flag)');
+    logger.info('⏭ Skipping sponsor update (--skip-sponsors flag)');
     return { skipped: true };
   }
 
   try {
-    console.log('🔄 Checking for sponsor updates...');
+    logger.info('🔄 Checking for sponsor updates...');
     
     const dataDir = path.join(__dirname, '..', 'data');
     const sponsorsPath = path.join(__dirname, '..', 'sponsors.json');
     
     // Find latest CSV file
     const latestCSV = findLatestCSVFile(dataDir);
-    console.log(`📁 Latest CSV: ${path.basename(latestCSV)}`);
+    logger.info(`📁 Latest CSV: ${path.basename(latestCSV)}`);
     
     // Check if update is needed (compare file timestamps)
     const csvStats = fs.statSync(latestCSV);
@@ -134,12 +135,12 @@ async function updateSponsors(skipSponsors = false) {
       needsUpdate = csvStats.mtime > sponsorsStats.mtime;
       
       if (!needsUpdate) {
-        console.log('✅ Sponsors data is up to date');
+        logger.info('✅ Sponsors data is up to date');
         return { skipped: false, updated: false, reason: 'up-to-date' };
       }
     }
     
-    console.log('📊 Processing sponsor data...');
+    logger.info('📊 Processing sponsor data...');
     
     // Load existing sponsors for diff comparison
     let existingSponsors = new Set();
@@ -150,7 +151,7 @@ async function updateSponsors(skipSponsors = false) {
           Object.values(existingData.sponsors || {}).map(s => s.primaryName)
         );
       } catch (error) {
-        console.warn('⚠ Could not read existing sponsors for diff comparison');
+        logger.warning('⚠ Could not read existing sponsors for diff comparison');
       }
     }
     
@@ -181,21 +182,21 @@ async function updateSponsors(skipSponsors = false) {
     writeSponsorData(sponsorData, sponsorsPath);
     
     // Report changes
-    console.log('📈 Sponsor update summary:');
-    console.log(`   Total sponsors: ${sponsorData.totalSponsors}`);
-    console.log(`   Added: ${added.length} companies`);
-    console.log(`   Removed: ${removed.length} companies`);
+    logger.info('📈 Sponsor update summary:');
+    logger.info(`   Total sponsors: ${sponsorData.totalSponsors}`);
+    logger.info(`   Added: ${added.length} companies`);
+    logger.info(`   Removed: ${removed.length} companies`);
     
     if (added.length > 0 && added.length <= 10) {
-      console.log(`   New companies: ${added.slice(0, 10).join(', ')}`);
+      logger.info(`   New companies: ${added.slice(0, 10).join(', ')}`);
     } else if (added.length > 10) {
-      console.log(`   New companies: ${added.slice(0, 10).join(', ')} ... and ${added.length - 10} more`);
+      logger.info(`   New companies: ${added.slice(0, 10).join(', ')} ... and ${added.length - 10} more`);
     }
     
     if (removed.length > 0 && removed.length <= 10) {
-      console.log(`   Removed companies: ${removed.slice(0, 10).join(', ')}`);
+      logger.info(`   Removed companies: ${removed.slice(0, 10).join(', ')}`);
     } else if (removed.length > 10) {
-      console.log(`   Removed companies: ${removed.slice(0, 10).join(', ')} ... and ${removed.length - 10} more`);
+      logger.info(`   Removed companies: ${removed.slice(0, 10).join(', ')} ... and ${removed.length - 10} more`);
     }
     
     return {
@@ -208,8 +209,8 @@ async function updateSponsors(skipSponsors = false) {
     };
     
   } catch (error) {
-    console.error('❌ Error updating sponsors:', error.message);
-    console.warn('⚠ Continuing build with existing sponsors.json...');
+    logger.error('❌ Error updating sponsors:', error.message);
+    logger.warn('⚠ Continuing build with existing sponsors.json...');
     return { skipped: false, updated: false, error: error.message };
   }
 }
@@ -231,7 +232,7 @@ async function copyExtensionFiles(tempDir = false, skipSponsors = false) {
   // Update sponsors before copying files
   await updateSponsors(skipSponsors);
   
-  console.log('Copying extension files...');
+  logger.info('Copying extension files...');
   
   // Copy root files
   copyFiles(BUILD_CONFIG.rootFiles, '.', targetDir);
@@ -242,7 +243,7 @@ async function copyExtensionFiles(tempDir = false, skipSponsors = false) {
   // Copy source files
   copyFiles(BUILD_CONFIG.srcFiles, BUILD_CONFIG.srcDir, targetDir);
   
-  console.log('✅ All extension files copied successfully');
+  logger.info('✅ All extension files copied successfully');
   return targetDir;
 }
 
@@ -251,7 +252,7 @@ async function copyExtensionFiles(tempDir = false, skipSponsors = false) {
  * @returns {Object} Parsed manifest
  */
 function validateManifest() {
-  console.log('Validating manifest.json...');
+  logger.info('Validating manifest.json...');
   
   const manifestPath = path.join(BUILD_CONFIG.distDir, 'manifest.json');
   
@@ -274,12 +275,12 @@ function validateManifest() {
     // Firefox-specific validation
     if (BUILD_CONFIG.production.target === 'firefox' || BUILD_CONFIG.development.target === 'firefox') {
       if (!manifest.browser_specific_settings || !manifest.browser_specific_settings.gecko || !manifest.browser_specific_settings.gecko.id) {
-        console.warn('⚠ Firefox target detected but browser_specific_settings.gecko.id is missing');
-        console.warn('  This is required for Firefox Add-ons store submission');
+        logger.warn('⚠ Firefox target detected but browser_specific_settings.gecko.id is missing');
+        logger.warn('  This is required for Firefox Add-ons store submission');
       }
       
       if (manifest.background && manifest.background.service_worker) {
-        console.warn('⚠ service_worker detected in background - Firefox uses scripts array');
+        logger.warn('⚠ service_worker detected in background - Firefox uses scripts array');
       }
     }
     
@@ -290,7 +291,7 @@ function validateManifest() {
           script.js.forEach(jsFile => {
             const filePath = path.join(BUILD_CONFIG.distDir, jsFile);
             if (!fs.existsSync(filePath)) {
-              console.warn(`⚠ Content script file not found: ${jsFile}`);
+              logger.warn(`⚠ Content script file not found: ${jsFile}`);
             }
           });
         }
@@ -301,18 +302,18 @@ function validateManifest() {
       manifest.background.scripts.forEach(scriptFile => {
         const filePath = path.join(BUILD_CONFIG.distDir, scriptFile);
         if (!fs.existsSync(filePath)) {
-          console.warn(`⚠ Background script file not found: ${scriptFile}`);
+          logger.warn(`⚠ Background script file not found: ${scriptFile}`);
         }
       });
     }
     
-    console.log('✅ Manifest validation passed');
-    console.log(`Extension: ${manifest.name} v${manifest.version}`);
+    logger.info('✅ Manifest validation passed');
+    logger.info(`Extension: ${manifest.name} v${manifest.version}`);
     
     return manifest;
     
   } catch (error) {
-    console.error('✗ Manifest validation failed:', error.message);
+    logger.error('✗ Manifest validation failed:', error.message);
     throw error;
   }
 }
@@ -325,7 +326,7 @@ function validateManifest() {
  */
 function createZipArchive(manifest, isDev = false) {
   return new Promise((resolve, reject) => {
-    console.log('Creating extension archive...');
+    logger.info('Creating extension archive...');
     
     const version = manifest.version;
     const suffix = isDev ? '-dev' : '';
@@ -341,7 +342,7 @@ function createZipArchive(manifest, isDev = false) {
     // Handle events
     output.on('close', () => {
       const sizeKB = (archive.pointer() / 1024).toFixed(2);
-      console.log(`✅ Archive created: ${zipFileName} (${sizeKB} KB)`);
+      logger.info(`✅ Archive created: ${zipFileName} (${sizeKB} KB)`);
       
       // Clean up temp directory
       const tempDir = path.join(BUILD_CONFIG.distDir, 'temp');
@@ -353,7 +354,7 @@ function createZipArchive(manifest, isDev = false) {
     });
     
     archive.on('error', (err) => {
-      console.error('✗ Archive creation failed:', err.message);
+      logger.error('✗ Archive creation failed:', err.message);
       reject(err);
     });
     
@@ -386,7 +387,7 @@ function createZipArchive(manifest, isDev = false) {
  * @param {boolean} skipSponsors - Whether to skip sponsor update
  */
 async function runDevelopmentBuild(skipSponsors = false) {
-  console.log('🔨 Starting Firefox development build...');
+  logger.info('🔨 Starting Firefox development build...');
   
   try {
     await copyExtensionFiles(false, skipSponsors);
@@ -395,20 +396,20 @@ async function runDevelopmentBuild(skipSponsors = false) {
     const config = BUILD_CONFIG.development;
     if (config.createZip) {
       const zipPath = await createZipArchive(manifest, true);
-      console.log('\n🎉 Development build completed successfully!');
-      console.log(`📦 Package: ${path.basename(zipPath)}`);
-      console.log(`📁 Location: ${BUILD_CONFIG.distDir}/`);
+      logger.info('\n🎉 Development build completed successfully!');
+      logger.info(`📦 Package: ${path.basename(zipPath)}`);
+      logger.info(`📁 Location: ${BUILD_CONFIG.distDir}/`);
       return zipPath;
     } else {
-      console.log('\n🎉 Development build completed successfully!');
-      console.log(`📁 Extension files ready in: ${BUILD_CONFIG.distDir}/`);
-      console.log('🦊 Ready for Firefox development testing!');
-      console.log(`   Load extension from: ${path.resolve(BUILD_CONFIG.distDir)}`);
+      logger.info('\n🎉 Development build completed successfully!');
+      logger.info(`📁 Extension files ready in: ${BUILD_CONFIG.distDir}/`);
+      logger.info('🦊 Ready for Firefox development testing!');
+      logger.info(`   Load extension from: ${path.resolve(BUILD_CONFIG.distDir)}`);
       return BUILD_CONFIG.distDir;
     }
     
   } catch (error) {
-    console.error('\n💥 Development build failed:', error.message);
+    logger.error('\n💥 Development build failed:', error.message);
     process.exit(1);
   }
 }
@@ -418,7 +419,7 @@ async function runDevelopmentBuild(skipSponsors = false) {
  * @param {boolean} skipSponsors - Whether to skip sponsor update
  */
 async function runProductionBuild(skipSponsors = false) {
-  console.log('🏭 Starting Firefox production build...');
+  logger.info('🏭 Starting Firefox production build...');
   
   try {
     // Ensure dist directory exists and is clean
@@ -438,23 +439,23 @@ async function runProductionBuild(skipSponsors = false) {
       const manifest = JSON.parse(manifestContent);
       
       const zipPath = await createZipArchive(manifest, false);
-      console.log('\n🎉 Production build completed successfully!');
-      console.log(`📦 Package: ${path.basename(zipPath)}`);
-      console.log(`📁 Location: ${BUILD_CONFIG.distDir}/`);
-      console.log('🦊 Ready for Firefox Add-ons store upload!');
+      logger.info('\n🎉 Production build completed successfully!');
+      logger.info(`📦 Package: ${path.basename(zipPath)}`);
+      logger.info(`📁 Location: ${BUILD_CONFIG.distDir}/`);
+      logger.info('🦊 Ready for Firefox Add-ons store upload!');
       return zipPath;
     } else {
       // For production files, copy directly to dist
       await copyExtensionFiles(false, skipSponsors);
       const manifest = validateManifest();
-      console.log('\n🎉 Production build completed successfully!');
-      console.log(`📁 Extension files ready in: ${BUILD_CONFIG.distDir}/`);
-      console.log('🦊 Ready for Firefox production deployment!');
+      logger.info('\n🎉 Production build completed successfully!');
+      logger.info(`📁 Extension files ready in: ${BUILD_CONFIG.distDir}/`);
+      logger.info('🦊 Ready for Firefox production deployment!');
       return BUILD_CONFIG.distDir;
     }
     
   } catch (error) {
-    console.error('\n💥 Production build failed:', error.message);
+    logger.error('\n💥 Production build failed:', error.message);
     process.exit(1);
   }
 }
@@ -463,13 +464,13 @@ async function runProductionBuild(skipSponsors = false) {
  * Clean dist directory
  */
 function clean() {
-  console.log('🧹 Cleaning dist directory...');
+  logger.info('🧹 Cleaning dist directory...');
   
   if (fs.existsSync(BUILD_CONFIG.distDir)) {
     fs.rmSync(BUILD_CONFIG.distDir, { recursive: true, force: true });
-    console.log('✅ Dist directory cleaned');
+    logger.info('✅ Dist directory cleaned');
   } else {
-    console.log('ℹ Dist directory does not exist');
+    logger.info('ℹ Dist directory does not exist');
   }
 }
 
@@ -477,13 +478,13 @@ function clean() {
  * Show build information
  */
 function showInfo() {
-  console.log('\n📋 Build Configuration:');
-  console.log(`Extension Name: ${BUILD_CONFIG.extensionName}`);
-  console.log(`Source Directory: ${BUILD_CONFIG.srcDir}/`);
-  console.log(`Distribution Directory: ${BUILD_CONFIG.distDir}/`);
-  console.log(`Root Files: ${BUILD_CONFIG.rootFiles.length} files`);
-  console.log(`Source Files: ${BUILD_CONFIG.srcFiles.length} files`);
-  console.log(`Image Files: ${BUILD_CONFIG.imageFiles.length} files`);
+  logger.info('\n📋 Build Configuration:');
+  logger.info(`Extension Name: ${BUILD_CONFIG.extensionName}`);
+  logger.info(`Source Directory: ${BUILD_CONFIG.srcDir}/`);
+  logger.info(`Distribution Directory: ${BUILD_CONFIG.distDir}/`);
+  logger.info(`Root Files: ${BUILD_CONFIG.rootFiles.length} files`);
+  logger.info(`Source Files: ${BUILD_CONFIG.srcFiles.length} files`);
+  logger.info(`Image Files: ${BUILD_CONFIG.imageFiles.length} files`);
 }
 
 // Main execution
@@ -494,7 +495,7 @@ async function main() {
   const isInfo = args.includes('--info') || args.includes('-i');
   const skipSponsors = args.includes('--skip-sponsors');
   
-  console.log('🔧 KMatch Extension Build Tool\n');
+  logger.info('🔧 KMatch Extension Build Tool\n');
   
   if (isInfo) {
     showInfo();
@@ -513,14 +514,14 @@ async function main() {
       await runProductionBuild(skipSponsors);
     }
   } catch (error) {
-    console.error('Build failed:', error.message);
+    logger.error('Build failed:', error.message);
     process.exit(1);
   }
 }
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
   process.exit(1);
 });
 

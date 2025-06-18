@@ -4,20 +4,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const path = require('path');
 const CONFIG = require('./config');
-
-/**
- * Logger utility
- */
-function log(level, message, data = null) {
-  const timestamp = new Date().toISOString();
-  const logMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
-  
-  if (data) {
-    console.log(logMessage, data);
-  } else {
-    console.log(logMessage);
-  }
-}
+const logger = require('./logger');
 
 /**
  * Generate SHA256 hash of CSV content
@@ -36,14 +23,14 @@ function loadLastHash() {
   try {
     if (fs.existsSync(CONFIG.HASH_FILE_PATH)) {
       const hashData = fs.readFileSync(CONFIG.HASH_FILE_PATH, 'utf8').trim();
-      log('debug', 'Loaded last hash:', hashData);
+      logger.debug('Loaded last hash:', hashData);
       return hashData;
     } else {
-      log('info', 'No previous hash file found - treating as first run');
+      logger.info('No previous hash file found - treating as first run');
       return null;
     }
   } catch (error) {
-    log('error', 'Failed to load last hash:', error.message);
+    logger.error('Failed to load last hash:', error.message);
     return null;
   }
 }
@@ -60,9 +47,9 @@ function saveLastHash(hash) {
     }
     
     fs.writeFileSync(CONFIG.HASH_FILE_PATH, hash, 'utf8');
-    log('debug', 'Saved new hash:', hash);
+    logger.debug('Saved new hash:', hash);
   } catch (error) {
-    log('error', 'Failed to save hash:', error.message);
+    logger.error('Failed to save hash:', error.message);
     throw new Error(`Failed to save hash file: ${error.message}`);
   }
 }
@@ -141,8 +128,8 @@ function findLatestCSVFile() {
     }
     
     return path.join(CONFIG.DATA_DIR, files[0]);
-  } catch (error) {
-    log('error', 'Failed to find latest CSV file:', error.message);
+      } catch (error) {
+    logger.error('Failed to find latest CSV file:', error.message);
     return null;
   }
 }
@@ -154,7 +141,7 @@ function findLatestCSVFile() {
  * @returns {Object} Change summary
  */
 function compareData(oldRecords, newRecords) {
-  log('info', 'Performing detailed data comparison');
+  logger.info('Performing detailed data comparison');
   
   // Create maps for efficient lookup
   const oldMap = new Map();
@@ -206,7 +193,7 @@ function compareData(oldRecords, newRecords) {
     hasChanges: added.length > 0 || removed.length > 0 || modified.length > 0
   };
   
-  log('info', `Comparison complete: +${added.length} -${removed.length} ~${modified.length}`);
+  logger.info(`Comparison complete: +${added.length} -${removed.length} ~${modified.length}`);
   
   return summary;
 }
@@ -272,28 +259,28 @@ function generateChangeSummary(changeSummary) {
  */
 async function checkForChanges(newCSVContent) {
   try {
-    log('info', 'Starting change detection process');
+    logger.info('Starting change detection process');
     
     const newHash = generateHash(newCSVContent);
     const lastHash = loadLastHash();
     
-    log('debug', 'New hash:', newHash);
-    log('debug', 'Last hash:', lastHash);
+    logger.debug('New hash:', newHash);
+    logger.debug('Last hash:', lastHash);
     
     // Quick hash comparison first
     if (lastHash === newHash) {
-      log('info', 'No changes detected (hash match)');
+      logger.info('No changes detected (hash match)');
       return {
         hasChanges: false,
         newHash: newHash
       };
     }
     
-    log('info', 'Hash difference detected, performing detailed comparison');
+    logger.info('Hash difference detected, performing detailed comparison');
     
     // Parse new data
     const newRecords = parseCSV(newCSVContent);
-    log('debug', `Parsed ${newRecords.length} new records`);
+    logger.debug(`Parsed ${newRecords.length} new records`);
     
     // Get old data for comparison
     let oldRecords = [];
@@ -302,16 +289,16 @@ async function checkForChanges(newCSVContent) {
     if (latestCSVFile && fs.existsSync(latestCSVFile)) {
       const oldCSVContent = fs.readFileSync(latestCSVFile, 'utf8');
       oldRecords = parseCSV(oldCSVContent);
-      log('debug', `Parsed ${oldRecords.length} old records from ${path.basename(latestCSVFile)}`);
+      logger.debug(`Parsed ${oldRecords.length} old records from ${path.basename(latestCSVFile)}`);
     } else {
-      log('info', 'No previous CSV file found - treating as initial data');
+      logger.info('No previous CSV file found - treating as initial data');
     }
     
     // Perform detailed comparison
     const changeSummary = compareData(oldRecords, newRecords);
     
     if (!changeSummary.hasChanges) {
-      log('info', 'No actual changes detected despite hash difference');
+      logger.info('No actual changes detected despite hash difference');
       return {
         hasChanges: false,
         changeSummary: changeSummary,
@@ -319,7 +306,7 @@ async function checkForChanges(newCSVContent) {
       };
     }
     
-    log('info', '✅ Changes detected in sponsor data');
+    logger.info('✅ Changes detected in sponsor data');
     
     return {
       hasChanges: true,
@@ -328,7 +315,7 @@ async function checkForChanges(newCSVContent) {
     };
     
   } catch (error) {
-    log('error', 'Change detection failed:', error.message);
+    logger.error('Change detection failed:', error.message);
     throw new Error(`Failed to check for changes: ${error.message}`);
   }
 }
@@ -342,19 +329,19 @@ async function main() {
     const latestCSVFile = findLatestCSVFile();
     
     if (!latestCSVFile) {
-      log('error', 'No CSV files found for testing');
+      logger.error('No CSV files found for testing');
       return;
     }
     
-    log('info', `Testing change detection with: ${path.basename(latestCSVFile)}`);
+    logger.info(`Testing change detection with: ${path.basename(latestCSVFile)}`);
     
     const csvContent = fs.readFileSync(latestCSVFile, 'utf8');
     const result = await checkForChanges(csvContent);
     
-    log('info', 'Change detection result:', result);
+    logger.info('Change detection result:', result);
     
   } catch (error) {
-    log('error', 'Test failed:', error.message);
+    logger.error('Test failed:', error.message);
     process.exit(1);
   }
 }

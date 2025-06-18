@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const fastCsv = require('fast-csv');
+const logger = require('./logger');
 
 /**
  * Read CSV file and return parsed data using fast-csv
@@ -12,7 +13,7 @@ const fastCsv = require('fast-csv');
  */
 function readCSVFile(filePath) {
   return new Promise((resolve, reject) => {
-    console.log(`Reading CSV file: ${filePath}`);
+    logger.info(`Reading CSV file: ${filePath}`);
     const dataRows = [];
     
     fs.createReadStream(filePath)
@@ -30,11 +31,11 @@ function readCSVFile(filePath) {
         }
       })
       .on('end', () => {
-        console.log(`Processed ${dataRows.length} companies from CSV`);
+        logger.info(`Processed ${dataRows.length} companies from CSV`);
         resolve(dataRows);
       })
       .on('error', (error) => {
-        console.error(`Error reading CSV file ${filePath}:`, error.message);
+        logger.error(`Error reading CSV file ${filePath}:`, error.message);
         reject(error);
       });
   });
@@ -49,7 +50,7 @@ function processCompanyData(rawData) {
   const sponsors = {};
   const processed = new Set(); // Track processed companies to avoid duplicates
   
-  console.log('Processing company data...');
+  logger.info('Processing company data...');
   
   rawData.forEach((row, index) => {
     try {
@@ -68,15 +69,15 @@ function processCompanyData(rawData) {
       
       sponsors[uniqueId] = sponsorRecord;
       
-      if ((index + 1) % 100 === 0) {
-        console.log(`Processed ${index + 1} companies...`);
+      if (index % 50 === 0) {
+        logger.info(`Processed ${index + 1} companies...`);
       }
     } catch (error) {
-      console.warn(`Error processing row ${index + 1}:`, error.message);
+      logger.warning(`Error processing row ${index + 1}:`, error.message);
     }
   });
   
-  console.log(`Successfully processed ${Object.keys(sponsors).length} unique sponsors`);
+  logger.info(`Successfully processed ${Object.keys(sponsors).length} unique sponsors`);
   return sponsors;
 }
 
@@ -110,7 +111,7 @@ function buildSearchIndexes(sponsors) {
     byNormalizedName: {}
   };
   
-  console.log('Building search indexes...');
+  logger.info('Building search indexes...');
   
   Object.entries(sponsors).forEach(([sponsorId, record]) => {
     // Index by first words
@@ -127,7 +128,7 @@ function buildSearchIndexes(sponsors) {
     }
   });
   
-  console.log(`Created indexes: ${Object.keys(indexes.byFirstWord).length} first words, ${Object.keys(indexes.byNormalizedName).length} normalized names`);
+  logger.info(`Created indexes: ${Object.keys(indexes.byFirstWord).length} first words, ${Object.keys(indexes.byNormalizedName).length} normalized names`);
   
   return indexes;
 }
@@ -139,22 +140,22 @@ function buildSearchIndexes(sponsors) {
  */
 function writeSponsorData(data, outputPath) {
   try {
-    console.log(`Writing sponsor data to: ${outputPath}`);
+    logger.info(`Writing sponsor data to: ${outputPath}`);
     
     // Create backup of existing file if it exists
     if (fs.existsSync(outputPath)) {
       const backupPath = outputPath.replace('.json', `.backup.${Date.now()}.json`);
       fs.copyFileSync(outputPath, backupPath);
-      console.log(`Created backup: ${backupPath}`);
+      logger.info(`Created backup: ${backupPath}`);
     }
     
     const jsonString = JSON.stringify(data, null, 2);
     fs.writeFileSync(outputPath, jsonString, 'utf8');
     
-    console.log(`Successfully wrote ${Object.keys(data.sponsors).length} sponsors to ${outputPath}`);
-    console.log(`File size: ${(jsonString.length / 1024).toFixed(2)} KB`);
+    logger.info(`Successfully wrote ${Object.keys(data.sponsors).length} sponsors to ${outputPath}`);
+    logger.info(`File size: ${(jsonString.length / 1024).toFixed(2)} KB`);
   } catch (error) {
-    console.error(`Error writing sponsor data:`, error.message);
+    logger.error(`Error writing sponsor data:`, error.message);
     throw error;
   }
 }
@@ -264,13 +265,13 @@ async function main() {
     const dataDir = path.join(__dirname, '..', 'data');
     const outputPath = path.join(__dirname, '..', 'sponsors.json');
     
-    console.log('Starting sponsor data processing...');
-    console.log(`Data directory: ${dataDir}`);
-    console.log(`Output path: ${outputPath}`);
+    logger.info('Starting sponsor data processing...');
+    logger.info(`Data directory: ${dataDir}`);
+    logger.info(`Output path: ${outputPath}`);
     
     // Find latest CSV file
     const csvFile = findLatestCSVFile(dataDir);
-    console.log(`Using CSV file: ${csvFile}`);
+    logger.info(`Using CSV file: ${csvFile}`);
     
     // Process the data (now async)
     const rawData = await readCSVFile(csvFile);
@@ -290,12 +291,12 @@ async function main() {
     // Write to file
     writeSponsorData(sponsorData, outputPath);
     
-    console.log('\n✅ Sponsor processing completed successfully!');
-    console.log(`📊 Processed ${sponsorData.totalSponsors} sponsors`);
-    console.log(`📁 Output: ${outputPath}`);
+    logger.info('\n✅ Sponsor processing completed successfully!');
+    logger.info(`📊 Processed ${sponsorData.totalSponsors} sponsors`);
+    logger.info(`📁 Output: ${outputPath}`);
     
   } catch (error) {
-    console.error('\n❌ Error processing sponsors:', error.message);
+    logger.error('\n❌ Error processing sponsors:', error.message);
     process.exit(1);
   }
 }

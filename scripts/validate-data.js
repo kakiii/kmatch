@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const logger = require('./logger');
 
 /**
  * Validate sponsor data structure and content
@@ -12,7 +13,7 @@ function validateSponsorData(data) {
   const issues = [];
   const warnings = [];
   
-  console.log('Validating sponsor data structure...');
+  logger.info('Validating sponsor data structure...');
   
   // Check top-level structure
   if (!data || typeof data !== 'object') {
@@ -50,7 +51,7 @@ function validateSponsorData(data) {
       issues.push('Sponsors field must be an object');
     } else {
       const sponsorCount = Object.keys(data.sponsors).length;
-      console.log(`Validating ${sponsorCount} sponsor records...`);
+      logger.info(`Validating ${sponsorCount} sponsor records...`);
       
       if (sponsorCount === 0) {
         warnings.push('No sponsors found in data');
@@ -70,8 +71,8 @@ function validateSponsorData(data) {
   
   const valid = issues.length === 0;
   
-  console.log(`Validation complete: ${valid ? 'VALID' : 'INVALID'}`);
-  console.log(`Issues: ${issues.length}, Warnings: ${warnings.length}`);
+  logger.info(`Validation complete: ${valid ? 'VALID' : 'INVALID'}`);
+  logger.info(`Issues: ${issues.length}, Warnings: ${warnings.length}`);
   
   return { valid, issues, warnings };
 }
@@ -150,7 +151,7 @@ function validateSponsorRecord(sponsorId, record, issues, warnings) {
  * @param {Array} warnings - Warnings array to append to
  */
 function validateIndexes(indexes, sponsors, issues, warnings) {
-  console.log('Validating search indexes...');
+  logger.info('Validating search indexes...');
   
   if (!indexes || typeof indexes !== 'object') {
     issues.push('Index must be an object');
@@ -217,7 +218,7 @@ function validateIndexes(indexes, sponsors, issues, warnings) {
  * @returns {Array} Array of duplicate groups
  */
 function findDuplicates(sponsors) {
-  console.log('Checking for duplicate sponsors...');
+  logger.info('Checking for duplicate sponsors...');
   
   const duplicates = [];
   const nameToIds = new Map();
@@ -264,7 +265,7 @@ function findDuplicates(sponsors) {
     }
   });
   
-  console.log(`Found ${duplicates.length} potential duplicate groups`);
+  logger.info(`Found ${duplicates.length} potential duplicate groups`);
   return duplicates;
 }
 
@@ -274,7 +275,7 @@ function findDuplicates(sponsors) {
  * @returns {Array} Array of sponsors with missing fields
  */
 function checkMissingFields(sponsors) {
-  console.log('Checking for missing required fields...');
+  logger.info('Checking for missing required fields...');
   
   const missingFields = [];
   const requiredFields = ['primaryName', 'aliases', 'normalizedName'];
@@ -291,7 +292,7 @@ function checkMissingFields(sponsors) {
     }
   });
   
-  console.log(`Found ${missingFields.length} sponsors with missing fields`);
+  logger.info(`Found ${missingFields.length} sponsors with missing fields`);
   return missingFields;
 }
 
@@ -363,8 +364,8 @@ async function main() {
   try {
     const sponsorsPath = path.join(__dirname, '..', 'sponsors.json');
     
-    console.log('Starting data validation...');
-    console.log(`Sponsors file: ${sponsorsPath}`);
+    logger.info('Starting data validation...');
+    logger.info(`Sponsors file: ${sponsorsPath}`);
     
     if (!fs.existsSync(sponsorsPath)) {
       throw new Error(`Sponsors file not found: ${sponsorsPath}`);
@@ -374,7 +375,7 @@ async function main() {
     const rawData = fs.readFileSync(sponsorsPath, 'utf8');
     const data = JSON.parse(rawData);
     
-    console.log(`Data loaded successfully (${(rawData.length / 1024).toFixed(2)} KB)`);
+    logger.info(`Data loaded successfully (${(rawData.length / 1024).toFixed(2)} KB)`);
     
     // Perform validations
     const validation = validateSponsorData(data);
@@ -384,25 +385,25 @@ async function main() {
     // Generate report
     const report = generateValidationReport(validation, duplicates, missingFields);
     
-    console.log('\n' + '='.repeat(50));
-    console.log(report);
-    console.log('='.repeat(50));
+    logger.info('\n' + '='.repeat(50));
+    logger.info(report);
+    logger.info('='.repeat(50));
     
     // Save report
     const reportPath = path.join(__dirname, '..', `validation_report_${new Date().toISOString().split('T')[0]}.md`);
     fs.writeFileSync(reportPath, report);
-    console.log(`📄 Report saved to: ${path.basename(reportPath)}`);
+    logger.info(`📄 Report saved to: ${path.basename(reportPath)}`);
     
     // Exit with appropriate code
     if (!validation.valid) {
-      console.log('\n❌ Data validation failed!');
+      logger.info('\n❌ Data validation failed!');
       process.exit(1);
     } else {
-      console.log('\n✅ Data validation passed!');
+      logger.info('\n✅ Data validation passed!');
     }
     
   } catch (error) {
-    console.error('\n❌ Error during validation:', error.message);
+    logger.error('\n❌ Error during validation:', error.message);
     process.exit(1);
   }
 }

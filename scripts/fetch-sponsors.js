@@ -5,20 +5,7 @@ const cheerio = require('cheerio');
 const fs = require('fs');
 const path = require('path');
 const CONFIG = require('./config');
-
-/**
- * Logger utility
- */
-function log(level, message, data = null) {
-  const timestamp = new Date().toISOString();
-  const logMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
-  
-  if (data) {
-    console.log(logMessage, data);
-  } else {
-    console.log(logMessage);
-  }
-}
+const logger = require('./logger');
 
 /**
  * Sleep utility for retry delays
@@ -32,12 +19,12 @@ function sleep(ms) {
  * @returns {Promise<string>} HTML content
  */
 async function fetchSponsorData() {
-  log('info', 'Starting to fetch sponsor data from IND website');
-  log('debug', 'URL:', CONFIG.IND_URL);
+  logger.info('Starting to fetch sponsor data from IND website');
+  logger.debug('URL:', CONFIG.IND_URL);
   
   for (let attempt = 1; attempt <= CONFIG.RETRY_ATTEMPTS; attempt++) {
     try {
-      log('info', `Fetch attempt ${attempt}/${CONFIG.RETRY_ATTEMPTS}`);
+      logger.info(`Fetch attempt ${attempt}/${CONFIG.RETRY_ATTEMPTS}`);
       
       const response = await axios.get(CONFIG.IND_URL, {
         timeout: CONFIG.HTTP_TIMEOUT,
@@ -52,21 +39,21 @@ async function fetchSponsorData() {
       });
       
       if (response.status === 200 && response.data) {
-        log('info', 'Successfully fetched sponsor data');
-        log('debug', `Response size: ${response.data.length} characters`);
+        logger.info('Successfully fetched sponsor data');
+        logger.debug(`Response size: ${response.data.length} characters`);
         return response.data;
       } else {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
       
     } catch (error) {
-      log('error', `Fetch attempt ${attempt} failed:`, error.message);
+      logger.error(`Fetch attempt ${attempt} failed:`, error.message);
       
       if (attempt === CONFIG.RETRY_ATTEMPTS) {
         throw new Error(`Failed to fetch sponsor data after ${CONFIG.RETRY_ATTEMPTS} attempts: ${error.message}`);
       }
       
-      log('info', `Retrying in ${CONFIG.RETRY_DELAY}ms...`);
+      logger.info(`Retrying in ${CONFIG.RETRY_DELAY}ms...`);
       await sleep(CONFIG.RETRY_DELAY);
     }
   }
@@ -78,7 +65,7 @@ async function fetchSponsorData() {
  * @returns {Array<Array<string>>} Array of [Organisation, KVK number] pairs
  */
 function parseHTML(html) {
-  log('info', 'Parsing HTML content for sponsor table');
+  logger.info('Parsing HTML content for sponsor table');
   
   try {
     const $ = cheerio.load(html);
@@ -95,7 +82,7 @@ function parseHTML(html) {
       throw new Error('Could not find sponsor table in container');
     }
     
-    log('debug', 'Found sponsor table, extracting data...');
+    logger.debug('Found sponsor table, extracting data...');
     
     const data = [];
     const rows = table.find('tr');
@@ -115,7 +102,7 @@ function parseHTML(html) {
       }
     }
     
-    log('info', `Successfully parsed ${data.length} sponsor records`);
+    logger.info(`Successfully parsed ${data.length} sponsor records`);
     
     if (data.length === 0) {
       throw new Error('No sponsor data found in table');
@@ -124,7 +111,7 @@ function parseHTML(html) {
     return data;
     
   } catch (error) {
-    log('error', 'HTML parsing failed:', error.message);
+    logger.error('HTML parsing failed:', error.message);
     throw new Error(`Failed to parse sponsor data from HTML: ${error.message}`);
   }
 }
@@ -135,7 +122,7 @@ function parseHTML(html) {
  * @returns {string} CSV content
  */
 function convertToCSV(data) {
-  log('info', 'Converting sponsor data to CSV format');
+  logger.info('Converting sponsor data to CSV format');
   
   try {
     // Add headers
@@ -154,12 +141,12 @@ function convertToCSV(data) {
     });
     
     const csvContent = csvLines.join('\n');
-    log('debug', `Generated CSV with ${csvLines.length - 1} data rows`);
+    logger.debug(`Generated CSV with ${csvLines.length - 1} data rows`);
     
     return csvContent;
     
   } catch (error) {
-    log('error', 'CSV conversion failed:', error.message);
+    logger.error('CSV conversion failed:', error.message);
     throw new Error(`Failed to convert data to CSV: ${error.message}`);
   }
 }
@@ -187,23 +174,23 @@ function saveCSVFile(csvContent) {
     // Ensure data directory exists
     if (!fs.existsSync(CONFIG.DATA_DIR)) {
       fs.mkdirSync(CONFIG.DATA_DIR, { recursive: true });
-      log('info', 'Created data directory');
+      logger.info('Created data directory');
     }
     
     const filename = generateFilename();
     const filePath = path.join(CONFIG.DATA_DIR, filename);
     
-    log('info', `Saving CSV to: ${filePath}`);
+    logger.info(`Saving CSV to: ${filePath}`);
     
     fs.writeFileSync(filePath, csvContent, 'utf8');
     
-    log('info', `Successfully saved sponsor data to ${filename}`);
-    log('debug', `File size: ${(csvContent.length / 1024).toFixed(2)} KB`);
+    logger.info(`Successfully saved sponsor data to ${filename}`);
+    logger.debug(`File size: ${(csvContent.length / 1024).toFixed(2)} KB`);
     
     return filePath;
     
   } catch (error) {
-    log('error', 'File save failed:', error.message);
+    logger.error('File save failed:', error.message);
     throw new Error(`Failed to save CSV file: ${error.message}`);
   }
 }
@@ -214,7 +201,7 @@ function saveCSVFile(csvContent) {
  */
 async function main() {
   try {
-    log('info', 'Starting sponsor data fetch process');
+    logger.info('Starting sponsor data fetch process');
     
     // Step 1: Fetch HTML from IND website
     const html = await fetchSponsorData();
@@ -228,9 +215,9 @@ async function main() {
     // Step 4: Save to file
     const filePath = saveCSVFile(csvContent);
     
-    log('info', '✅ Sponsor data fetch completed successfully!');
-    log('info', `📊 Total records: ${sponsorData.length}`);
-    log('info', `📁 Saved to: ${path.basename(filePath)}`);
+    logger.info('✅ Sponsor data fetch completed successfully!');
+    logger.info(`📊 Total records: ${sponsorData.length}`);
+    logger.info(`📁 Saved to: ${path.basename(filePath)}`);
     
     return {
       filePath,
@@ -239,7 +226,7 @@ async function main() {
     };
     
   } catch (error) {
-    log('error', '❌ Sponsor data fetch failed:', error.message);
+    logger.error('❌ Sponsor data fetch failed:', error.message);
     throw error;
   }
 }
@@ -257,7 +244,7 @@ module.exports = {
 // Run if called directly
 if (require.main === module) {
   main().catch(error => {
-    console.error('Fatal error:', error.message);
+    logger.error('Fatal error:', error.message);
     process.exit(1);
   });
 } 

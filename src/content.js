@@ -4,6 +4,53 @@ console.log('Content script loaded');
 // Note: In a Chrome extension content script, we need to handle module imports differently
 // For now, we'll include the SponsorMatcher class inline until we implement proper bundling
 
+// Secure DOM helper functions for Dutch content indicators
+
+/**
+ * Create Dutch pill content using secure DOM APIs
+ * @param {HTMLElement} dutchPill - The Dutch pill container element
+ */
+function createDutchPillContent(dutchPill) {
+	// Create outer span with UI label classes
+	const labelSpan = document.createElement('span');
+	labelSpan.className = 'ui-label text-body-small';
+	labelSpan.style.cssText =
+		'background-color: #ffebee; color: #d32f2f; padding: 4px 8px; border-radius: 4px;';
+
+	// Create visible text span
+	const visibleSpan = document.createElement('span');
+	visibleSpan.setAttribute('aria-hidden', 'true');
+	const strongElement = document.createElement('strong');
+	strongElement.textContent = '⛔ Dutch Required';
+	visibleSpan.appendChild(strongElement);
+
+	// Create screen reader text span
+	const hiddenSpan = document.createElement('span');
+	hiddenSpan.className = 'visually-hidden';
+	hiddenSpan.textContent = 'Dutch language is required for this position';
+
+	// Assemble the pill
+	labelSpan.appendChild(visibleSpan);
+	labelSpan.appendChild(hiddenSpan);
+	dutchPill.appendChild(labelSpan);
+}
+
+/**
+ * Create sidebar indicator content using secure DOM APIs
+ * @param {HTMLElement} sidebarIndicator - The sidebar indicator container element
+ */
+function createSidebarIndicatorContent(sidebarIndicator) {
+	const indicatorSpan = document.createElement('span');
+	indicatorSpan.style.cssText =
+		'color: black; padding: 2px 6px; border-radius: 3px; font-size: 12px; margin-left: 8px;';
+
+	const strongElement = document.createElement('strong');
+	strongElement.textContent = '⛔ Dutch';
+	indicatorSpan.appendChild(strongElement);
+
+	sidebarIndicator.appendChild(indicatorSpan);
+}
+
 // Enhanced sponsor matcher instance
 let sponsorMatcher = null;
 // Load sponsors from split JSON files with enhanced matching
@@ -1004,29 +1051,16 @@ function highlightDutchContent(element) {
 					'job-details-preferences-and-skills__pill dutch-requirement-pill';
 				dutchPill.setAttribute('tabindex', '0');
 				dutchPill.setAttribute('role', 'presentation');
-				dutchPill.innerHTML = `
-          <span class="ui-label text-body-small" style="background-color: #ffebee; color: #d32f2f; padding: 4px 8px; border-radius: 4px;">
-            <span aria-hidden="true"><strong>⛔ Dutch Required</strong></span>
-            <span class="visually-hidden">Dutch language is required for this position</span>
-          </span>
-        `;
+				// Create Dutch pill content using secure DOM APIs
+				createDutchPillContent(dutchPill);
 				preferencesContainer.appendChild(dutchPill);
 			}
 
 			if (jobTitleContainer && !jobTitleContainer.querySelector('.dutch-indicator')) {
 				const sidebarIndicator = document.createElement('span');
 				sidebarIndicator.className = 'dutch-indicator';
-				sidebarIndicator.innerHTML = `
-          <span style="
-            color: black;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 12px;
-            margin-left: 8px;
-          ">
-            <strong>⛔ Dutch</strong>
-          </span>
-        `;
+				// Create sidebar indicator content using secure DOM APIs
+				createSidebarIndicatorContent(sidebarIndicator);
 				jobTitleContainer.appendChild(sidebarIndicator);
 			}
 		}

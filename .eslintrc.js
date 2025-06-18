@@ -22,22 +22,7 @@ module.exports = {
 		'no-var': 'error',
 		eqeqeq: 'error',
 		curly: 'error',
-		'brace-style': ['error', '1tbs'],
-		'comma-dangle': ['error', 'never'],
-		'object-curly-spacing': ['error', 'always'],
-		'array-bracket-spacing': ['error', 'never'],
-		'space-before-function-paren': [
-			'error',
-			{
-				anonymous: 'always',
-				named: 'never',
-				asyncArrow: 'always'
-			}
-		],
-		'keyword-spacing': 'error',
-		'space-infix-ops': 'error',
-		'no-trailing-spaces': 'error',
-		'eol-last': 'error'
+		'prettier/prettier': 'warn'
 	},
 	globals: {
 		browser: 'readonly',

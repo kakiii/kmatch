@@ -47,16 +47,10 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
-            - name: Run ESLint
+            - name: Run ESLint (includes Prettier)
               run: |
-                  echo "::group::ESLint Results"
+                  echo "::group::ESLint + Prettier Results"
                   npm run lint:ci
-                  echo "::endgroup::"
-
-            - name: Check Prettier formatting
-              run: |
-                  echo "::group::Prettier Check"
-                  npm run format -- --check
                   echo "::endgroup::"
 
             - name: Run npm audit

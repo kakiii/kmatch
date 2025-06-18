@@ -109,7 +109,7 @@ async function handleFatalError(error, context = {}, tempFiles = {}) {
  * Main automation function
  */
 async function main() {
-  let tempFiles = {};
+  const tempFiles = {};
 
   try {
     displayBanner();

@@ -304,14 +304,14 @@ function checkMissingFields(sponsors) {
  * @returns {string} Formatted report
  */
 function generateValidationReport(validation, duplicates, missingFields) {
-  let report = `# Data Validation Report\n\n`;
+  let report = '# Data Validation Report\n\n';
   report += `Generated: ${new Date().toISOString()}\n\n`;
 
   // Overall status
   report += `## Overall Status: ${validation.valid ? '✅ VALID' : '❌ INVALID'}\n\n`;
 
   // Summary
-  report += `## Summary\n`;
+  report += '## Summary\n';
   report += `- **Issues**: ${validation.issues.length}\n`;
   report += `- **Warnings**: ${validation.warnings.length}\n`;
   report += `- **Duplicate Groups**: ${duplicates.length}\n`;
@@ -323,7 +323,7 @@ function generateValidationReport(validation, duplicates, missingFields) {
     validation.issues.forEach((issue, index) => {
       report += `${index + 1}. ${issue}\n`;
     });
-    report += `\n`;
+    report += '\n';
   }
 
   // Warnings
@@ -332,7 +332,7 @@ function generateValidationReport(validation, duplicates, missingFields) {
     validation.warnings.forEach((warning, index) => {
       report += `${index + 1}. ${warning}\n`;
     });
-    report += `\n`;
+    report += '\n';
   }
 
   // Duplicates
@@ -343,7 +343,7 @@ function generateValidationReport(validation, duplicates, missingFields) {
       duplicate.sponsors.forEach(sponsor => {
         report += `- ID: ${sponsor.id}, Name: ${sponsor.record.primaryName}\n`;
       });
-      report += `\n`;
+      report += '\n';
     });
   }
 
@@ -353,7 +353,7 @@ function generateValidationReport(validation, duplicates, missingFields) {
     missingFields.forEach((item, index) => {
       report += `${index + 1}. **${item.sponsorId}**: Missing ${item.missingFields.join(', ')}\n`;
     });
-    report += `\n`;
+    report += '\n';
   }
 
   return report;

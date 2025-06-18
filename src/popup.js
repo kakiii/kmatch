@@ -47,10 +47,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Helper function to remove duplicated text
     function removeDuplicateText(text) {
-      if (!text) return '';
+      if (!text) {
+        return '';
+      }
 
       // First clean the text
-      let cleanText = text
+      const cleanText = text
         .trim()
         .replace(/\s+/g, ' ') // Replace multiple spaces with single space
         .replace(/\([^)]*\)/g, '') // Remove content in parentheses

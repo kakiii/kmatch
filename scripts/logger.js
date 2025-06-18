@@ -76,7 +76,9 @@ class Logger {
    * @returns {string} Colorized or plain text
    */
   colorize(text, color) {
-    if (!this.enableColors) return text;
+    if (!this.enableColors) {
+      return text;
+    }
     return `${color}${text}${Logger.COLORS.reset}`;
   }
 
@@ -87,7 +89,9 @@ class Logger {
    * @param {*} data - Optional data to log
    */
   log(level, message, data = null) {
-    if (!this.shouldLog(level)) return;
+    if (!this.shouldLog(level)) {
+      return;
+    }
 
     const timestamp = this.getTimestamp();
     const levelUpper = level.toUpperCase();

@@ -43,7 +43,7 @@ async function getRepositoryInfo() {
     const remoteUrl = execSync('git remote get-url origin', { encoding: 'utf8' }).trim();
 
     // Parse GitHub URL (both HTTPS and SSH formats)
-    let match = remoteUrl.match(/github\.com[:/]([^/]+)\/([^/.]+)/);
+    const match = remoteUrl.match(/github\.com[:/]([^/]+)\/([^/.]+)/);
     if (match) {
       const owner = match[1];
       const repo = match[2];
